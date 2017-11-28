@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ike_binding</string>
+    <string name="obtain">获取</string>
+    <string name="home_page">首页</string>
+    <string name="system">系统</string>
+    <string name="device">设备</string>
+</resources>

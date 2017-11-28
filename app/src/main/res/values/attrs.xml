@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="DataBindingLayout">
+        <attr name="index" format="integer" />
+        <attr name="holder_index" format="integer" />
+        <attr name="refresh" format="boolean" />
+        <attr name="enable" format="boolean" />
+        <attr name="page" format="boolean" />
+        <attr name="count" format="integer" />
+        <attr name="rotate" format="boolean" />
+        <attr name="loop" format="integer" />
+        <attr name="type">
+            <enum name="parseRecycler" value="0x00" />
+            <enum name="list" value="0x10" />
+            <enum name="grid" value="0x20" />
+            <enum name="pager" value="0x30" />
+            <enum name="frame" value="0x40" />
+            <enum name="gallery" value="0x50" />
+            <enum name="flow" value="0x60" />
+            <enum name="media" value="0x70" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="CompositeArrayLayout">
+        <attr name="holder" format="reference" />
+        <attr name="layout" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="DonutProgress">
+        <attr name="donut_progress" format="float"/>
+        <attr name="donut_max" format="integer"/>
+
+        <attr name="donut_unfinished_color" format="color"/>
+        <attr name="donut_finished_color" format="color"/>
+
+        <attr name="donut_finished_stroke_width" format="dimension"/>
+        <attr name="donut_unfinished_stroke_width" format="dimension"/>
+
+        <attr name="donut_text_size" format="dimension"/>
+        <attr name="donut_text_second_size" format="dimension"/>
+        <attr name="donut_text_color" format="color"/>
+        <attr name="donut_text_second_color" format="color"/>
+
+        <attr name="donut_prefix_text" format="string"/>
+        <attr name="donut_suffix_text" format="string"/>
+        <attr name="donut_text" format="string"/>
+        <attr name="donut_text_second" format="string"/>
+
+        <attr name="donut_background_color" format="color"/>
+
+        <attr name="donut_inner_bottom_text" format="string"/>
+        <attr name="donut_inner_bottom_text_size" format="dimension"/>
+        <attr name="donut_inner_bottom_text_color" format="color"/>
+
+        <attr name="donut_circle_starting_degree" format="integer" />
+        <attr name="donut_show_text" format="boolean"/>
+        <attr name="donut_inner_drawable" format="reference"/>
+    </declare-styleable>
+    <!--密码输入框-->
+    <declare-styleable name="PswText">
+        <!--密码长度-->
+        <attr name="pswLength" format="integer" />
+        <!--密码框颜色-->
+        <attr name="borderColor" format="color" />
+        <!--密码颜色-->
+        <attr name="pswColor" format="color" />
+        <!--输入时密码框颜色-->
+        <attr name="inputBorder_color" format="color" />
+        <!--输入时密码框阴影颜色-->
+        <attr name="borderShadow_color" format="color" />
+        <!--明文密码文字大小-->
+        <attr name="psw_textSize" format="dimension" />
+        <!--密码框圆角程度-->
+        <attr name="borderRadius" format="dimension" />
+        <!--是否使用图片绘制密码框-->
+        <attr name="isDrawBorderImg" format="boolean" />
+        <!--按back键时，是否需要绘制明文密码-->
+        <attr name="isShowTextPsw" format="boolean" />
+        <!--输入密码时密码框是否有阴影-->
+        <attr name="isShowBorderShadow" format="boolean" />
+        <!--密码框图片-->
+        <attr name="borderImg" format="reference" />
+        <!--输入时变化的密码框图片-->
+        <attr name="inputBorderImg" format="reference" />
+        <!--延迟绘制密码圆点的时间,1000 = 1s-->
+        <attr name="delayTime" format="integer" />
+        <!--是否只绘制明文密码-->
+        <attr name="clearTextPsw" format="boolean" />
+        <!--是否只绘制圆点-->
+        <attr name="darkPsw" format="boolean" />
+    </declare-styleable>
+
+    <!-- Declare custom theme attributes that allow changing which styles are
+         used for button bars depending on the API level.
+         ?android:attr/buttonBarStyle is new as of API 11 so this is
+         necessary to support previous API levels. -->
+    <declare-styleable name="ButtonBarContainerTheme">
+        <attr name="metaButtonBarStyle" format="reference"/>
+        <attr name="metaButtonBarButtonStyle" format="reference"/>
+    </declare-styleable>
+
+</resources>

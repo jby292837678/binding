@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_height">40dp</dimen>
+
+    <dimen name="text_normal">17sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_small">10sp</dimen>
+
+    <dimen name="margin_horizontal">20dp</dimen>
+    <dimen name="margin_vertical">10dp</dimen>
+    <dimen name="margin_start">30dp</dimen>
+
+    <dimen name="line_slender">1px</dimen>
+    <dimen name="line_normal">1dp</dimen>
+    <dimen name="line_coarse">12dp</dimen>
+
+    <dimen name="radius_small">2dp</dimen>
+    <dimen name="radius_normal">5dp</dimen>
+    <dimen name="radius_lager">8dp</dimen>
+    <dimen name="radius_full">100dp</dimen>
+
+</resources>
