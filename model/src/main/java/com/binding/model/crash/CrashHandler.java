@@ -60,7 +60,10 @@ public class CrashHandler implements UncaughtExceptionHandler {
      */
     public void init(Context context) {
         mContext = context;
-        this.srcDirPath = Environment.getExternalStorageDirectory() +File.separator + context.getPackageName().substring(srcDirPath.lastIndexOf("\\.")+1);
+        String packageName =context.getPackageName();
+        this.srcDirPath = Environment.getExternalStorageDirectory()
+                +File.separator
+                +packageName.substring(packageName.lastIndexOf("\\.")+1);
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
         Timber.d("TEST Crash:init");
