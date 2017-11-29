@@ -1,6 +1,4 @@
-package com.binding.model.data.http;
-
-import com.binding.model.data.entity.InfoEntity;
+package com.binding.demo.base.util;
 
 import java.util.ServiceConfigurationError;
 

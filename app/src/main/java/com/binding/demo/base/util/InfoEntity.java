@@ -1,4 +1,6 @@
-package com.binding.model.data.entity;
+package com.binding.demo.base.util;
+
+import com.binding.model.data.entity.BaseEntity;
 
 /**
  * project：cutv_ningbo
