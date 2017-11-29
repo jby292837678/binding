@@ -3,7 +3,7 @@ package com.binding.demo.ui.user;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.binding.library.data.save.SharePreferenceUtil;
+import com.binding.model.data.save.SharePreferenceUtil;
 
 
 /**

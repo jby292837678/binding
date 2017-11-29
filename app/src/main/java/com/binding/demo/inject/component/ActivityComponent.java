@@ -1,7 +1,7 @@
 package com.binding.demo.inject.component;
 
 
-import com.binding.library.inject.scope.ActivityScope;
+import com.binding.model.inject.scope.ActivityScope;
 import com.binding.demo.inject.module.ActivityModule;
 import com.binding.demo.ui.home.HomeActivity;
 import com.binding.demo.ui.start.StartupActivity;

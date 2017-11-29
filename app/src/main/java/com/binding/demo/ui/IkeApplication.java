@@ -2,7 +2,7 @@ package com.binding.demo.ui;
 
 import android.support.multidex.MultiDexApplication;
 
-import com.binding.library.App;
+import com.binding.model.App;
 import com.binding.demo.inject.component.AppComponent;
 import com.binding.demo.inject.component.DaggerAppComponent;
 import com.binding.demo.inject.module.AppModule;

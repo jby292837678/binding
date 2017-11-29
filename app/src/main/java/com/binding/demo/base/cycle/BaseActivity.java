@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.binding.library.cycle.ActivityContainer;
-import com.binding.library.cycle.DataBindingActivity;
-import com.binding.library.model.ViewModel;
-import com.binding.library.util.ReflectUtil;
+import com.binding.model.cycle.ActivityContainer;
+import com.binding.model.cycle.DataBindingActivity;
+import com.binding.model.model.ViewModel;
+import com.binding.model.util.ReflectUtil;
 import com.binding.demo.inject.component.ActivityComponent;
 import com.binding.demo.inject.component.DaggerActivityComponent;
 import com.binding.demo.inject.module.ActivityModule;

@@ -1,6 +1,6 @@
 package com.binding.demo.ui.user.register;
 
-import com.binding.library.data.encrypt.aes.AESParams;
+import com.binding.model.data.encrypt.aes.AESParams;
 
 /**
  * Created by arvin on 2017/11/28.

@@ -6,10 +6,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 
-import com.binding.library.inject.qualifier.context.FragmentContext;
-import com.binding.library.inject.qualifier.manager.ChildFragmentManager;
-import com.binding.library.inject.qualifier.manager.SupportFragmentManager;
-import com.binding.library.inject.scope.FragmentScope;
+import com.binding.model.inject.qualifier.context.FragmentContext;
+import com.binding.model.inject.qualifier.manager.ChildFragmentManager;
+import com.binding.model.inject.qualifier.manager.SupportFragmentManager;
+import com.binding.model.inject.scope.FragmentScope;
 
 import dagger.Module;
 import dagger.Provides;

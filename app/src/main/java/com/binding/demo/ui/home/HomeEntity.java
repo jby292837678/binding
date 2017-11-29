@@ -3,7 +3,7 @@ package com.binding.demo.ui.home;
 import android.view.ViewGroup;
 
 import com.binding.demo.base.cycle.BaseFragment;
-import com.binding.library.model.inter.Item;
+import com.binding.model.model.inter.Item;
 
 /**
  * Created by arvin on 2017/11/27.

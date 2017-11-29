@@ -7,9 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.binding.library.cycle.DataBindingFragment;
-import com.binding.library.model.ViewModel;
-import com.binding.library.util.ReflectUtil;
+import com.binding.model.cycle.DataBindingFragment;
+import com.binding.model.model.ViewModel;
+import com.binding.model.util.ReflectUtil;
 import com.binding.demo.inject.component.DaggerFragmentComponent;
 import com.binding.demo.inject.component.FragmentComponent;
 import com.binding.demo.inject.module.FragmentModule;

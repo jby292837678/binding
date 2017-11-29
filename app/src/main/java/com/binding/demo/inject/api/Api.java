@@ -1,7 +1,7 @@
 package com.binding.demo.inject.api;
 
 import com.binding.demo.ui.user.UserEntity;
-import com.binding.library.data.entity.InfoEntity;
+import com.binding.model.data.entity.InfoEntity;
 
 import io.reactivex.Flowable;
 import retrofit2.http.POST;

@@ -1,7 +1,7 @@
 package com.binding.demo.ui.user.register;
 
-import com.binding.library.model.ModelView;
-import com.binding.library.model.ViewModel;
+import com.binding.model.model.ModelView;
+import com.binding.model.model.ViewModel;
 import com.binding.demo.R;
 import com.binding.demo.databinding.ActivityRegisterBinding;
 

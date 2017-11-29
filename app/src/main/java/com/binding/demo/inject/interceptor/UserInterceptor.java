@@ -2,8 +2,8 @@ package com.binding.demo.inject.interceptor;
 
 import android.content.Context;
 
-import com.binding.library.inject.qualifier.context.AppContext;
-import com.binding.library.util.BaseUtil;
+import com.binding.model.inject.qualifier.context.AppContext;
+import com.binding.model.util.BaseUtil;
 
 import java.io.IOException;
 

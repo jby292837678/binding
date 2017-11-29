@@ -1,2 +1,2 @@
 //include ':app', ':stomach'
-include ':library', ':app'
+include ':model', ':app'

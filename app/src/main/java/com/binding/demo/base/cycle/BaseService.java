@@ -2,7 +2,7 @@ package com.binding.demo.base.cycle;
 
 import android.app.Service;
 
-import com.binding.library.util.ReflectUtil;
+import com.binding.model.util.ReflectUtil;
 import com.binding.demo.inject.component.DaggerServiceComponent;
 import com.binding.demo.inject.component.ServiceComponent;
 import com.binding.demo.ui.IkeApplication;

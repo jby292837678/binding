@@ -1,9 +1,9 @@
 package com.binding.demo.inject.module;
 
 import com.binding.demo.inject.api.Api;
-import com.binding.library.BuildConfig;
-import com.binding.library.data.converter.JsonConverterFactory;
-import com.binding.library.inject.scope.ApplicationScope;
+import com.binding.model.BuildConfig;
+import com.binding.model.data.converter.JsonConverterFactory;
+import com.binding.model.inject.scope.ApplicationScope;
 import com.binding.demo.inject.interceptor.UserInterceptor;
 
 import java.util.concurrent.TimeUnit;

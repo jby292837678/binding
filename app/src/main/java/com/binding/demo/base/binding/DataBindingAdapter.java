@@ -20,9 +20,9 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.binding.library.model.ViewParse;
-import com.binding.library.model.inter.Inflate;
-import com.binding.library.model.inter.Measure;
+import com.binding.model.model.ViewParse;
+import com.binding.model.model.inter.Inflate;
+import com.binding.model.model.inter.Measure;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
