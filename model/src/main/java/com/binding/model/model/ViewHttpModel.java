@@ -39,8 +39,8 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
         this.rcHttp = rcHttp;
     }
 
-    public void setFlowHttp(Http<R> rcHttp){
-
+    public void setFlowHttp(HttpFlow<R> rcHttp){
+        this.httpFlow = rcHttp;
     }
 
     public void setPageCount(int pageCount) {
