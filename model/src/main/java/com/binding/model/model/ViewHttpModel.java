@@ -7,6 +7,7 @@ import android.databinding.ViewDataBinding;
 
 import com.binding.model.cycle.Container;
 import com.binding.model.model.inter.Http;
+import com.binding.model.model.inter.HttpFlow;
 
 import io.reactivex.functions.Consumer;
 
@@ -27,6 +28,7 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
     public final ObservableBoolean loading = new ObservableBoolean(false);
     private R r;
     private Http<R> rcHttp;
+    private HttpFlow<R> httpFlow;
     private boolean enable = true;
     private int pageCount = 15;
 //    protected int offset = 0;
@@ -35,6 +37,10 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
 
     public void setRcHttp(Http<R> rcHttp) {
         this.rcHttp = rcHttp;
+    }
+
+    public void setFlowHttp(Http<R> rcHttp){
+
     }
 
     public void setPageCount(int pageCount) {
@@ -52,9 +58,12 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
     public void onHttp(int page, boolean refresh){
         this.page = page;
         loading.set(true);
-       if(rcHttp!=null) rcHttp.http(page,refresh)
-               .subscribe(this
-               ,this::onThrowable);
+       if(rcHttp!=null)
+           rcHttp.http(page,refresh)
+               .subscribe(this,this::onThrowable);
+       if(httpFlow!=null)
+           httpFlow.http(page,refresh)
+                   .subscribe(this,this::onThrowable);
     }
 
     public void onThrowable(Throwable throwable){

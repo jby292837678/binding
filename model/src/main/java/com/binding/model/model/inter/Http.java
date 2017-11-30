@@ -1,6 +1,7 @@
 package com.binding.model.model.inter;
 
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 
 /**
@@ -19,4 +20,5 @@ import io.reactivex.Observable;
 
 public interface Http<R> {
     Observable<R> http(int offset, boolean refresh);
+//    Flowable<R> http(int offset,boolean refresh);
 }
