@@ -349,7 +349,7 @@ public class ReflectUtil {
     }
 
 
-    public static <T> List<T> transformList(Collection<Object> objects,Class<T> tClass){
+    public static <T> List<T> transformList(Collection<?> objects,Class<T> tClass){
         List<T> ts = new ArrayList<>();
         for(Object entity:objects) ts.add(transform(entity,tClass));
         return ts;
