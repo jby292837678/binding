@@ -69,7 +69,7 @@ public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implem
     }
 
     @Override
-    public boolean setEntity(int position, E f, int type) {
+    public boolean setEntity(int position, E f, int type, View view){
         boolean done = BaseUtil.setEntity(list, position, f, type);
         if (done) notifyDataSetChanged();
         return done;

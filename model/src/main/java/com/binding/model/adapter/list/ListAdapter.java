@@ -85,7 +85,7 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
 
 
     @Override
-    public boolean setEntity(int position, E e, int type) {
+    public boolean setEntity(int position, E e, int type, View view){
         return false;
     }
 

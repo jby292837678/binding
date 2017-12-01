@@ -4,6 +4,7 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.binding.model.adapter.AdapterHandle;
@@ -131,7 +132,7 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
 
 
     @Override
-    public boolean setEntity(int position, E e, int type) {
+    public boolean setEntity(int position, E e, int type, View view){
         switch (type) {
             case AdapterType.add:notifyItemInserted(add(position, e));break;
             case AdapterType.remove:removeNotify(position, e);break;

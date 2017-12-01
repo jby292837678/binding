@@ -59,8 +59,8 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         return adapter;
     }
 
-
-    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
-        adapter.setIEventAdapter(iEventAdapter);
-    }
+//
+//    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
+//        adapter.setIEventAdapter(iEventAdapter);
+//    }
 }

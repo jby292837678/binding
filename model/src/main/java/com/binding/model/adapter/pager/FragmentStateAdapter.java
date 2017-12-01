@@ -3,6 +3,7 @@ package com.binding.model.adapter.pager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.ILayoutAdapter;
@@ -64,7 +65,7 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
 
 
     @Override
-    public boolean setEntity(int position, F f, int type) {
+    public boolean setEntity(int position, F f, int type, View view){
         boolean done = BaseUtil.setEntity(list, position, f, type);
         if (done) notifyDataSetChanged();
         return done;
