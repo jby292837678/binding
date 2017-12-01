@@ -13,6 +13,8 @@ import java.lang.annotation.RetentionPolicy;
         AdapterType.set,
         AdapterType.select,
         AdapterType.no,
+        AdapterType.onClick,
+        AdapterType.onLongClick,
 })
 public @interface AdapterHandle {
 }

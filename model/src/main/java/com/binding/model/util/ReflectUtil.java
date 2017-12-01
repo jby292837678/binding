@@ -100,17 +100,18 @@ public class ReflectUtil {
     private static Method beanMethod(Field f, Class<?> c, String prefix,Class...params) {
         f.setAccessible(true);
         char[] cs = f.getName().toCharArray();
+//        char[] cs = name.toCharArray();
         if (cs[0] >= 97 && cs[0] <= 122) cs[0] -= 32;
         Method method = null;
         try {
-            StringBuilder builder = new StringBuilder();
-            for(Class param:params){
-                builder.append(param.getSimpleName());
-                builder.append(" ");
-                builder.append(param.getSimpleName().toLowerCase());
-                builder.append(",");
-            }
-            if(builder.length()>0)builder.deleteCharAt(builder.length()-1);
+//            StringBuilder builder = new StringBuilder();
+//            for(Class param:params){
+//                builder.append(param.getSimpleName());
+//                builder.append(" ");
+//                builder.append(param.getSimpleName().toLowerCase());
+//                builder.append(",");
+//            }
+//            if(builder.length()>0)builder.deleteCharAt(builder.length()-1);
 //            Timber.i("void %1s%2s(%3s){}",prefix,String.valueOf(cs),builder);
             method = c.getDeclaredMethod(prefix + String.valueOf(cs), params);
         } catch (Exception e) {
@@ -317,5 +318,40 @@ public class ReflectUtil {
         } else {// class本身也是type，强制转型
             return (Class) type;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T transform(Object entity,Class<T> tClass){
+        if(entity instanceof List){
+            List collection = (List) entity;
+            if(collection.isEmpty())return null;
+            else return (T)transformList(collection,collection.get(0).getClass());
+        }else{
+            T t;
+            try {
+                t = tClass.newInstance();
+                for(Field f:entity.getClass().getDeclaredFields()){
+                    try {
+                        Field tf = tClass.getDeclaredField(f.getName());
+                        Object value = ReflectUtil.beanGetValue(tf,entity);
+                        ReflectUtil.beanSetValue(tf,t,value);
+                    } catch (NoSuchFieldException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (InstantiationException e) {
+                throw new RuntimeException("please check the constructor method",e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException("please check the constructor method",e);
+            }
+            return t;
+        }
+    }
+
+
+    public static <T> List<T> transformList(Collection<Object> objects,Class<T> tClass){
+        List<T> ts = new ArrayList<>();
+        for(Object entity:objects) ts.add(transform(entity,tClass));
+        return ts;
     }
 }
