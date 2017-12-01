@@ -4,7 +4,7 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
 
 import com.binding.model.adapter.AdapterType;
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.model.ViewHttpModel;
@@ -60,7 +60,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     }
 
 
-    public void setIEntityAdapter(IEntityAdapter<E> IEntityAdapter) {
-        adapter.setIEntityAdapter(IEntityAdapter);
+    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
+        adapter.setIEventAdapter(iEventAdapter);
     }
 }

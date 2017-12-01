@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.ViewInflate;
 
 /**
@@ -39,10 +39,10 @@ public class RecyclerHolder<E extends ViewInflate> extends RecyclerView.ViewHold
         return new RecyclerHolder<>(container,view);
     }
 
-    public void executePendingBindings(E e, IEntityAdapter iEntityAdapter) {
+    public void executePendingBindings(E e, IEventAdapter iEventAdapter) {
         this.e.removeBinding();
         this.e = e;
-        this.e.setEntityAdapter(iEntityAdapter);
+        this.e.setIEventAdapter(iEventAdapter);
         this.e.attachView(container.getContext(),container,false,e.getDataBinding());
     }
 }

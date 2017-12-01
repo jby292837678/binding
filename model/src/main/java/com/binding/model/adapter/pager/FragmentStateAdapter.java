@@ -4,7 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.ILayoutAdapter;
 import com.binding.model.model.inter.Item;
 import com.binding.model.util.BaseUtil;
@@ -29,7 +29,7 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
         implements ILayoutAdapter<F> {
     private List<F> list = new ArrayList<>();
     private int count = -1;
-    private IEntityAdapter<F> iEntityAdapter;
+    private IEventAdapter<F> iEventAdapter;
 
     public FragmentStateAdapter(FragmentManager fm) {
         super(fm);
@@ -62,18 +62,6 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
         return done;
     }
 
-    @Override
-    public boolean setEntity(int position, F e, int type, boolean done) {
-        position = position == NO_POSITION ? list.indexOf(e) : position;
-        boolean b;
-        if (iEntityAdapter == null) {
-            b = setEntity(position, e, type);
-        } else {
-            b = iEntityAdapter.setEntity(position, e, type, done);
-            if (done) b = setEntity(position, e, type);
-        }
-        return b;
-    }
 
     @Override
     public boolean setEntity(int position, F f, int type) {
@@ -88,8 +76,8 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
     }
 
     @Override
-    public void setIEntityAdapter(IEntityAdapter<F> iEntityAdapter) {
-        this.iEntityAdapter = iEntityAdapter;
+    public void setIEventAdapter(IEventAdapter<F> iEventAdapter) {
+        this.iEventAdapter = iEventAdapter;
     }
 
     @Override

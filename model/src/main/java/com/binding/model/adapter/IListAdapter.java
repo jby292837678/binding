@@ -7,7 +7,7 @@ import java.util.List;
  */
 
 public interface IListAdapter<E> {
-
+    int NO_POSITION = Integer.MIN_VALUE;
     /**
      * @param e the data of change
      * @param type 0x00: add the data to the position,

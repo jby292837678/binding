@@ -16,10 +16,8 @@ import java.util.List;
 
 
 public interface IModelAdapter<E> extends IEventAdapter<E> {
-//    void clear();
     List<E> getList();
     int size();
-    void setIEntityAdapter(IEntityAdapter<E> iEntityAdapter);
-//    void checkPosition(E i,E last);
-    boolean setEntity(int position, E e, @AdapterHandle int type);
+    void setIEventAdapter(IEventAdapter<E> iEntityAdapter);
+
 }

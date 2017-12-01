@@ -5,7 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.ILayoutAdapter;
 import com.binding.model.model.ViewInflate;
 import com.binding.model.util.BaseUtil;
@@ -29,7 +29,7 @@ import java.util.List;
 public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implements ILayoutAdapter<E> {
     private List<E> list = new ArrayList<>();
     private int count = Integer.MAX_VALUE;
-    private IEntityAdapter<E> iEntityAdapter;
+    private IEventAdapter<E> iEntityAdapter;
 
     @Override
     public void setCount(int count) {
@@ -69,19 +69,6 @@ public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implem
     }
 
     @Override
-    public boolean setEntity(int position, E e, int type, boolean done) {
-        position = position == NO_POSITION ? list.indexOf(e) : position;
-        boolean b;
-        if (iEntityAdapter == null) {
-            b = setEntity(position, e, type);
-        } else {
-            b = iEntityAdapter.setEntity(position, e, type, done);
-            if (done) b = setEntity(position, e, type);
-        }
-        return b;
-    }
-
-    @Override
     public boolean setEntity(int position, E f, int type) {
         boolean done = BaseUtil.setEntity(list, position, f, type);
         if (done) notifyDataSetChanged();
@@ -105,7 +92,7 @@ public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implem
     }
 
     @Override
-    public void setIEntityAdapter(IEntityAdapter<E> iEntityAdapter) {
-        this.iEntityAdapter = iEntityAdapter;
+    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
+        this.iEntityAdapter=iEventAdapter;
     }
 }

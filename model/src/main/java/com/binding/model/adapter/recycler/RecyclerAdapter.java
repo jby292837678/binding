@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.ViewInflate;
 import com.binding.model.model.ViewInflateRecycler;
@@ -47,7 +47,7 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
     private AtomicBoolean refresh = new AtomicBoolean(false);
 
     private final int max;
-    private IEntityAdapter<E> iEntityAdapter = this;
+    private IEventAdapter<E> iEntityAdapter = this;
     private final ArrayBlockingQueue<E> queue;
     private int count;
 
@@ -65,7 +65,7 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
     }
 
     @Override
-    public void setIEntityAdapter(IEntityAdapter<E> iEntityAdapter) {
+    public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
         this.iEntityAdapter = iEntityAdapter;
     }
 
@@ -168,18 +168,6 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
     }
 
 
-    @Override
-    public boolean setEntity(int position, E e, int type, boolean done) {
-        position = position == NO_POSITION ? holderList.indexOf(e) : position;
-        boolean b;
-        if (iEntityAdapter == this) {
-            b = setEntity(position, e, type);
-        } else {
-            b = iEntityAdapter.setEntity(position, e, type, done);
-            if (done) b = setEntity(position, e, type);
-        }
-        return b;
-    }
 
 
     public void checkAll(boolean check) {

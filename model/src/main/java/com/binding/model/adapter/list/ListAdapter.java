@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 
 import com.android.databinding.library.baseAdapters.BR;
 import com.binding.model.R;
-import com.binding.model.adapter.IEntityAdapter;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.inter.Parse;
 
@@ -83,10 +83,6 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
         return false;
     }
 
-    @Override
-    public boolean setEntity(int position, E e, int type,boolean objects) {
-        return false;
-    }
 
     @Override
     public boolean setEntity(int position, E e, int type) {
@@ -107,10 +103,11 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
         this.count = count;
     }
 
-    private IEntityAdapter<E> iEntityAdapter;
+    private IEventAdapter<E> iEventAdapter;
+
 
     @Override
-    public void setIEntityAdapter(IEntityAdapter<E> iEntityAdapter) {
-        this.iEntityAdapter = iEntityAdapter;
+    public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
+        this.iEventAdapter = iEventAdapter;
     }
 }
