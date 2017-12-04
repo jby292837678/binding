@@ -2,6 +2,7 @@ package com.binding.model.data.encrypt;
 
 import android.text.TextUtils;
 
+import com.binding.model.util.BaseUtil;
 import com.google.gson.Gson;
 import com.binding.model.util.ReflectUtil;
 
@@ -25,7 +26,7 @@ public abstract class FormUnionParams extends FormSingleParams implements UnionT
         for (Field field : ReflectUtil.getAllFields(getClass(), new ArrayList<Field>())) {
             Object o = ReflectUtil.beanGetValue(field, this);
             if (o == null) continue;
-            hashMap.put(field.getName(), o);
+            hashMap.put(BaseUtil.findQuery(field), o);
         }
         builder.add(getKey(), encrypt(new Gson().toJson(hashMap)));
         return builder.build();

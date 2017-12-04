@@ -1,5 +1,6 @@
 package com.binding.model.data.encrypt;
 
+import com.binding.model.util.BaseUtil;
 import com.binding.model.util.ReflectUtil;
 
 import java.lang.reflect.Field;
@@ -21,7 +22,7 @@ public abstract class FormSingleParams implements SingleTransParams<FormBody> {
         for (Field field : fields) {
             Object o = ReflectUtil.beanGetValue(field, this);
             if (o == null) continue;
-            builder.addEncoded(field.getName(), encrypt(String.valueOf(o)));
+            builder.addEncoded(BaseUtil.findQuery(field), encrypt(String.valueOf(o)));
         }
         return builder.build();
     }

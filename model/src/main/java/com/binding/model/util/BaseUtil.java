@@ -41,6 +41,7 @@ import com.binding.model.App;
 import com.binding.model.R;
 import com.binding.model.Config;
 import com.binding.model.adapter.AdapterType;
+import com.binding.model.data.encrypt.Key;
 import com.binding.model.model.ModelView;
 import com.binding.model.layout.rotate.ObtainCodeEntity;
 import com.binding.model.layout.rotate.TimeUtil;
@@ -52,6 +53,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -99,6 +101,11 @@ public class BaseUtil {
         ModelView contentView = thisCls.getAnnotation(ModelView.class);
         if (contentView == null) return findModelView(thisCls.getSuperclass());
         return contentView;
+    }
+
+    public static String findQuery(Field field) {
+        Key key = field.getAnnotation(Key.class);
+        return key==null?field.getName():key.name();
     }
 
     public static ViewGroup.LayoutParams params(View view, boolean parent) {

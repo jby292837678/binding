@@ -2,6 +2,7 @@ package com.binding.model.data.encrypt;
 
 import android.text.TextUtils;
 
+import com.binding.model.util.BaseUtil;
 import com.google.gson.Gson;
 import com.binding.model.util.ReflectUtil;
 
@@ -31,14 +32,14 @@ public abstract class MultipartUnionParams extends MultipartSingleParams impleme
             if (o instanceof File) {
                 File file = (File) o;
                 RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                builder.addFormDataPart(field.getName(), file.getName(), requestBody);
+                builder.addFormDataPart(BaseUtil.findQuery(field), BaseUtil.findQuery(field), requestBody);
             } else if (o instanceof File[]) {
                 for (File file : (File[]) o) {
                     RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-                    builder.addFormDataPart(field.getName(), file.getName(), requestBody);
+                    builder.addFormDataPart(BaseUtil.findQuery(field), file.getName(), requestBody);
                 }
             } else {
-                hashMap.put(field.getName(), o);
+                hashMap.put(BaseUtil.findQuery(field), o);
             }
         }
         builder.addFormDataPart(getKey(), encrypt(new Gson().toJson(hashMap)));

@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 
-public interface IModelAdapter<E> extends IEventAdapter<E> {
+public interface IModelAdapter<E> extends IEventAdapter<E>, IListAdapter<E> {
     List<E> getList();
     int size();
     void setIEventAdapter(IEventAdapter<E> iEntityAdapter);
