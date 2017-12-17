@@ -27,12 +27,12 @@ public class ViewEvent extends ViewParse implements Event {
     }
 
 
-    public static boolean event(int eventId, Event event,View view,Object... args){
+    public static int event(int eventId, Event event,View view,Object... args){
         Event currentEvent = eventSet.get(eventId);
-        return currentEvent!=null&&currentEvent.onEvent(view,event,args);
+        return currentEvent==null?0:currentEvent.onEvent(view,event,args);
     }
 
-    public final boolean event(int eventId, View view,Object... args) {
+    public final int event(int eventId, View view,Object... args) {
         return event(eventId,this,view,args);
     }
 
@@ -44,7 +44,7 @@ public class ViewEvent extends ViewParse implements Event {
     }
 
     @Override
-    public boolean onEvent(View view, Event event,Object... args) {
-        return false;
+    public int onEvent(View view, Event event,Object... args) {
+        return 0;
     }
 }

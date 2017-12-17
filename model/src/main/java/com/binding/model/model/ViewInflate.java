@@ -16,7 +16,7 @@ import com.binding.model.model.inter.Inflate;
 
 public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent implements Inflate<Binding> {
     private transient Binding dataBinding;
-    private transient IEventAdapter iEventAdapter;
+    protected transient IEventAdapter iEventAdapter;
 
     @Override
     public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
@@ -38,7 +38,7 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
         return dataBinding;
     }
 
-    public final void setIEventAdapter(IEventAdapter iEventAdapter) {
+    public void setIEventAdapter(IEventAdapter iEventAdapter) {
         this.iEventAdapter = iEventAdapter;
     }
 

@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.ViewInflate;
+import com.binding.model.model.inter.Inflate;
+import com.binding.model.model.inter.Recycler;
 
 /**
  * project：cutv_ningbo
@@ -20,7 +22,7 @@ import com.binding.model.model.ViewInflate;
  */
 
 @SuppressWarnings("unchecked")
-public class RecyclerHolder<E extends ViewInflate> extends RecyclerView.ViewHolder {
+public class RecyclerHolder<E extends Inflate> extends RecyclerView.ViewHolder {
 
     private final ViewGroup container;
     private  E e;

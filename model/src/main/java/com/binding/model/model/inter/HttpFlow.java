@@ -1,11 +1,11 @@
 package com.binding.model.model.inter;
 
-import io.reactivex.Observable;
+import io.reactivex.Flowable;
 
 /**
  * Created by arvin on 2017/11/30.
  */
 
 public interface HttpFlow<R> {
-    Observable<R> http(int offset, boolean refresh);
+    Flowable<R> http(int offset, boolean refresh);
 }

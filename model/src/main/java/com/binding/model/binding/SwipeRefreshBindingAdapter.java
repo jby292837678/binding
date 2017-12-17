@@ -61,13 +61,7 @@ public class SwipeRefreshBindingAdapter {
         SwipeRefreshLayout.OnRefreshListener oldValue = ListenerUtil.trackListener(view, newValue, R.id.swipe_refresh_layout);
         if (oldValue != null) view.setOnRefreshListener(null);
         view.setOnRefreshListener(newValue);
-//        view.setColorSchemeResources(
-//                R.color.swipe_color1,
-//                R.color.swipe_color2,
-//                R.color.swipe_color3,
-//                R.color.swipe_color4);
     }
-
 
 
     @BindingAdapter({"adapter"})

@@ -4,7 +4,7 @@ package com.binding.demo.inject.component;
  * Created by pc on 2017/9/4.
  */
 
-import com.binding.model.inject.scope.ServiceScope;
+import com.binding.demo.inject.scope.ServiceScope;
 import com.binding.demo.inject.module.ServiceModule;
 
 import dagger.Component;

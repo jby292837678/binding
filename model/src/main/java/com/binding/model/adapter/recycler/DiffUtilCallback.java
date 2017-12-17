@@ -3,7 +3,7 @@ package com.binding.model.adapter.recycler;
 import android.support.v7.util.DiffUtil;
 
 import com.binding.model.model.inter.Parse;
-import com.binding.model.model.inter.ParseRecycler;
+import com.binding.model.model.inter.Recycler;
 
 import java.util.List;
 
@@ -36,8 +36,8 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
         E oldItem = oldList.get(oldItemPosition);
         E newItem = newList.get(oldItemPosition);
 
-        if(oldItem instanceof ParseRecycler&&newItem instanceof ParseRecycler)
-            return ((ParseRecycler)oldItem).areItemsTheSame(newItem);
+        if(oldItem instanceof Recycler &&newItem instanceof Recycler)
+            return ((Recycler)oldItem).areItemsTheSame(newItem);
         return false;
 //        return oldItem.areItemsTheSame(newList.get(newItemPosition));
     }
@@ -47,8 +47,8 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
         if(oldItemPosition>=oldList.size()||oldItemPosition>=newList.size()) return false;
         Parse oldItem = oldList.get(oldItemPosition);
         E newItem = newList.get(oldItemPosition);
-        if(oldItem instanceof ParseRecycler&&newItem instanceof ParseRecycler){
-            return ((ParseRecycler) oldItem).areContentsTheSame(newItem);
+        if(oldItem instanceof Recycler &&newItem instanceof Recycler){
+            return ((Recycler) oldItem).areContentsTheSame(newItem);
         }else
             return oldItem.equals(newList.get(newItemPosition));
     }

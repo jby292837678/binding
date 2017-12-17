@@ -77,25 +77,40 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
         return 1;
     }
 
-    protected View getContainer(View rootView, int variable) {
-        return Bit.bit(variable, (position, aBoolean,container) -> {
-            switch (position){
-                case 0:
-                    if (aBoolean) {
-                        container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
-                        SwipeBackLayout swipeBackLayout = container.findViewById(R.id.swipeBackLayout);
-                        View ivShadow = container.findViewById(R.id.iv_shadow);
-                        rootView.setBackgroundResource(R.color.windowBackground);
-                        swipeBackLayout.addView(rootView);
-                        swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
-                        return container;
-                    } else {
-                        return rootView;
-                    }
-                default:return container;
-            }
-        }, 2);
+    protected View getContainer(View rootView, int v) {
+        switch (v) {
+            case 1:
+                View container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
+                SwipeBackLayout swipeBackLayout = container.findViewById(R.id.swipeBackLayout);
+                View ivShadow = container.findViewById(R.id.iv_shadow);
+                rootView.setBackgroundResource(R.color.windowBackground);
+                swipeBackLayout.addView(rootView);
+                swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
+                return container;
+            default:
+                return rootView;
+        }
     }
+//
+//    protected View getContainer(View rootView, int variable) {
+//        return Bit.bit(variable, (position, aBoolean,container) -> {
+//            switch (position){
+//                case 0:
+//                    if (aBoolean) {
+//                        container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
+//                        SwipeBackLayout swipeBackLayout = container.findViewById(R.id.swipeBackLayout);
+//                        View ivShadow = container.findViewById(R.id.iv_shadow);
+//                        rootView.setBackgroundResource(R.color.windowBackground);
+//                        swipeBackLayout.addView(rootView);
+//                        swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
+//                        return container;
+//                    } else {
+//                        return rootView;
+//                    }
+//                default:return container;
+//            }
+//        }, 2);
+//    }
 
     public abstract void initToolBar(Toolbar view);
 
@@ -114,7 +129,6 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
     public AppCompatActivity getDataActivity() {
         return this;
     }
-
 
 
     @Override

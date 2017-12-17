@@ -2,6 +2,7 @@ package com.binding.model.util;
 
 import android.text.TextUtils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
@@ -54,13 +55,13 @@ public class ReflectUtil {
         } else if (o instanceof Long) {
             return long.class;
         } else if (o instanceof Boolean) {
-            return  boolean.class;
+            return boolean.class;
         } else if (o instanceof Short) {
-            return  short.class;
+            return short.class;
         } else if (o instanceof Byte) {
-            return  byte.class;
+            return byte.class;
         } else if (o instanceof Float) {
-            return  float.class;
+            return float.class;
         } else if (o instanceof Character) {
             return char.class;
         }
@@ -97,7 +98,7 @@ public class ReflectUtil {
         return false;
     }
 
-    private static Method beanMethod(Field f, Class<?> c, String prefix,Class...params) {
+    private static Method beanMethod(Field f, Class<?> c, String prefix, Class... params) {
         f.setAccessible(true);
         char[] cs = f.getName().toCharArray();
 //        char[] cs = name.toCharArray();
@@ -145,7 +146,7 @@ public class ReflectUtil {
 
 
     public static Method beanSetMethod(Field f, Class c) {
-        return beanMethod(f, c, "set",f.getType());
+        return beanMethod(f, c, "set", f.getType());
     }
 
     public static Method beanGetMethod(Field f, Class c) {
@@ -166,7 +167,7 @@ public class ReflectUtil {
     public static Object beanGetValue(Field f, Object bean) {
         try {
             Method method = beanGetMethod(f, bean.getClass());
-           if(method!=null) return method.invoke(bean);
+            if (method != null) return method.invoke(bean);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -234,7 +235,7 @@ public class ReflectUtil {
         try {
             method.invoke(t, args);
         } catch (Exception e) {
-            Timber.e("method:%1s \tobject:%2s \t params: %2s",method.getName(),t.getClass().getName(), args[0]);
+            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), args[0]);
         }
     }
 
@@ -321,37 +322,48 @@ public class ReflectUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> T transform(Object entity,Class<T> tClass){
-        if(entity instanceof List){
+    public static <T> T transform(Object entity, Class<T> tClass) {
+        if (entity instanceof List) {
             List collection = (List) entity;
-            if(collection.isEmpty())return null;
-            else return (T)transformList(collection,collection.get(0).getClass());
-        }else{
-            T t;
-            try {
-                t = tClass.newInstance();
-                for(Field f:entity.getClass().getDeclaredFields()){
-                    try {
-                        Field tf = tClass.getDeclaredField(f.getName());
-                        Object value = ReflectUtil.beanGetValue(tf,entity);
-                        ReflectUtil.beanSetValue(tf,t,value);
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    }
+            if (collection.isEmpty()) return null;
+            else return (T) transformList(collection, collection.get(0).getClass());
+        } else {
+            T t= newInstance(tClass);
+            for (Field f : entity.getClass().getDeclaredFields()) {
+                try {
+                    Field tf = tClass.getDeclaredField(f.getName());
+                    Object value = ReflectUtil.beanGetValue(tf, entity);
+                    ReflectUtil.beanSetValue(tf, t, value);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
                 }
-            } catch (InstantiationException e) {
-                throw new RuntimeException("please check the constructor method",e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException("please check the constructor method",e);
             }
             return t;
         }
     }
 
 
-    public static <T> List<T> transformList(Collection<?> objects,Class<T> tClass){
+    public static <T> List<T> transformList(Collection<?> objects, Class<T> tClass) {
         List<T> ts = new ArrayList<>();
-        for(Object entity:objects) ts.add(transform(entity,tClass));
+        for (Object entity : objects) ts.add(transform(entity, tClass));
         return ts;
+    }
+
+    public static <T> T newInstance(Class<T> tClass, Object... args) {
+        Class[] cs = new Class[args.length];
+        for (int i = 0; i < args.length; i++) cs[i] = args[i].getClass();
+        try {
+            if (args.length == 0) return tClass.newInstance();
+            else {
+//                for(Constructor constructor:tClass.getDeclaredConstructors()){
+//                    constructor.getGenericParameterTypes()
+//                }
+                return tClass.getConstructor(cs).newInstance(args);
+            }
+        } catch (Exception e) {
+
+            throw new RuntimeException(e);
+        }
+
     }
 }

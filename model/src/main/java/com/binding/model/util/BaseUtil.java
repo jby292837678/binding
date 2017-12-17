@@ -10,7 +10,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -35,13 +34,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-import com.alibaba.android.arouter.facade.Postcard;
-import com.alibaba.android.arouter.launcher.ARouter;
+//import com.alibaba.android.arouter.facade.Postcard;
+//import com.alibaba.android.arouter.launcher.ARouter;
 import com.binding.model.App;
 import com.binding.model.R;
-import com.binding.model.Config;
 import com.binding.model.adapter.AdapterType;
-import com.binding.model.data.encrypt.Key;
+import com.binding.model.data.encrypt.Params;
 import com.binding.model.model.ModelView;
 import com.binding.model.layout.rotate.ObtainCodeEntity;
 import com.binding.model.layout.rotate.TimeUtil;
@@ -104,8 +102,8 @@ public class BaseUtil {
     }
 
     public static String findQuery(Field field) {
-        Key key = field.getAnnotation(Key.class);
-        return key==null?field.getName():key.name();
+        Params key = field.getAnnotation(Params.class);
+        return key==null?field.getName():key.value();
     }
 
     public static ViewGroup.LayoutParams params(View view, boolean parent) {
@@ -229,12 +227,6 @@ public class BaseUtil {
 //        return error == null;
 //    }
 
-
-    public static void navigation(String path, String title) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Config.title,title);
-        navigation(path, bundle);
-    }
 
     public static void setError(TextView view, String errorText) {
         if (!TextUtils.isEmpty(errorText)) {
@@ -403,34 +395,6 @@ public class BaseUtil {
         }
     }
 
-    public static void navigation(String url, Bundle bundle) {
-        build(url, bundle).navigation();
-    }
-
-    public static void navigation(String url) {
-        navigation(url, "");
-    }
-
-    public static void navigation(Uri url) {
-        ARouter.getInstance().build(url).navigation();
-    }
-
-
-    private static Postcard build(String url, Bundle bundle) {
-        return ARouter.getInstance()
-                .build(url)
-                .withTransition(R.anim.push_right_in, R.anim.push_right_out)
-                .with(bundle);
-    }
-
-//    public static void navigationUrl(String url) {
-//        ARouter.getInstance()
-//                .build(ActivityComponent.Router.web_view)
-//                .withTransition(R.anim.push_right_in, R.anim.push_right_out)
-//                .withString(Config.path, url)
-//                .navigation();
-//    }
-
 
     public static boolean checkNull(Object checkable) {
         return checkable != null;
@@ -439,9 +403,7 @@ public class BaseUtil {
     public static void toast(Context context, Throwable e) {
         if (e instanceof ApiException) {
             toast(context, e.getMessage());
-//        }else if(e instanceof Exception && !BuildConfig.DEBUG){
-
-        }
+        }else e.printStackTrace();
     }
 
     public static void toast(Fragment fragment, Throwable e) {

@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
 //import com.binding.library.BR;
-import com.android.databinding.library.baseAdapters.BR;
+import com.binding.model.App;
 import com.binding.model.adapter.IRecyclerAdapter;
-import com.binding.model.adapter.recycler.RecyclerAdapter;
+import com.binding.model.adapter.recycler.RecyclerSelectAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.recycler.RecyclerModel;
 
@@ -45,9 +45,9 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
             window.dismiss();
         }else{
             try{
-                if(getAdapter() instanceof RecyclerAdapter)
-                    ((RecyclerAdapter)getAdapter()).checkAll(false);
-                getDataBinding().setVariable(BR.vm,this);
+                if(getAdapter() instanceof RecyclerSelectAdapter)
+                    ((RecyclerSelectAdapter)getAdapter()).checkAll(false);
+                getDataBinding().setVariable(App.vm,this);
                 consumer.accept(window);
             }catch (Throwable e){
                 e.printStackTrace();

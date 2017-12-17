@@ -1,7 +1,7 @@
 package com.binding.demo.inject.component;
 
 import com.binding.demo.inject.module.FragmentModule;
-import com.binding.model.inject.scope.FragmentScope;
+import com.binding.demo.inject.scope.FragmentScope;
 
 import dagger.Component;
 

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
 
-import com.binding.model.inject.qualifier.manager.ActivityFragmentManager;
+import com.binding.demo.inject.qualifier.manager.ActivityFragmentManager;
 import com.binding.model.model.ModelView;
 import com.binding.model.model.ViewModel;
 import com.binding.demo.R;

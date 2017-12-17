@@ -1,6 +1,7 @@
 package com.binding.model.model;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.binding.model.App;
 import com.binding.model.model.inter.Parse;
 import com.binding.model.util.BaseUtil;
 
@@ -44,6 +45,6 @@ public class ViewParse implements Parse {
     }
 
     public int getVariableName() {
-        return getModelView().name().length==0? BR.vm:getModelView().name()[getModelIndex()];
+        return getModelView().name().length==0? App.vm:getModelView().name()[getModelIndex()];
     }
 }

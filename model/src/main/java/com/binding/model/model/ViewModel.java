@@ -12,6 +12,7 @@ import android.view.View;
 
 //import com.binding.library.BR;
 import com.android.databinding.library.baseAdapters.BR;
+import com.binding.model.App;
 import com.binding.model.cycle.Container;
 import com.binding.model.cycle.CycleContainer;
 import com.binding.model.model.inter.Model;
@@ -60,7 +61,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         int modelIndex = getModelIndex();
         int[] bindName = getModelView().name();
         int length = bindName.length;
-        return modelIndex < length ? bindName[modelIndex] : BR.vm;
+        return modelIndex < length ? bindName[modelIndex] : App.vm;
     }
 
 

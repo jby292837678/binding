@@ -8,9 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 
-import com.binding.model.inject.qualifier.context.ActivityContext;
-import com.binding.model.inject.qualifier.manager.ActivityFragmentManager;
-import com.binding.model.inject.scope.ActivityScope;
+import com.binding.demo.inject.qualifier.context.ActivityContext;
+import com.binding.demo.inject.qualifier.manager.ActivityFragmentManager;
+import com.binding.demo.inject.scope.ActivityScope;
 
 import dagger.Module;
 import dagger.Provides;

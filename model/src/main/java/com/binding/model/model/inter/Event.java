@@ -34,6 +34,6 @@ public interface Event extends Parse {
     SparseArray<Event> eventSet = new SparseArray<>();
     void registerEvent();
     void unRegisterEvent();
-    boolean onEvent(View view, Event event, Object... args);
+    int onEvent(View view, Event event, Object... args);
 
 }

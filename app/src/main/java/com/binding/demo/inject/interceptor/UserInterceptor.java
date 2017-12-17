@@ -2,7 +2,7 @@ package com.binding.demo.inject.interceptor;
 
 import android.content.Context;
 
-import com.binding.model.inject.qualifier.context.AppContext;
+import com.binding.demo.inject.qualifier.context.AppContext;
 import com.binding.model.util.BaseUtil;
 
 import java.io.IOException;

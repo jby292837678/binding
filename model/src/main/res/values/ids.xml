@@ -6,6 +6,7 @@
     <item name="RecyclerModel" type="id"/>
     <item name="ListModel" type="id"/>
     <item name="PagerModel" type="id"/>
+    <item name="swipe_refresh_layout" type="id" />
     <!--<item name="main_home" type="id" />-->
     <!--<item name="main_news" type="id" />-->
     <!--<item name="main_mall" type="id" />-->

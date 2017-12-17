@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.android.databinding.library.baseAdapters.BR;
+import com.binding.model.App;
 import com.binding.model.R;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
@@ -71,7 +72,7 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
                 convertView.setTag(R.id.holder_layoutId, layoutId);
             }
         }
-        binding.setVariable(BR.vm, list.get(position));
+        binding.setVariable(App.vm, list.get(position));
         binding.executePendingBindings();
         return convertView;
     }

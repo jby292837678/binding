@@ -13,6 +13,8 @@ import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.ViewInflate;
 import com.binding.model.model.ViewInflateRecycler;
+import com.binding.model.model.inter.Inflate;
+import com.binding.model.model.inter.Recycler;
 import com.binding.model.model.inter.SpanSize;
 
 import java.util.ArrayList;
@@ -38,41 +40,23 @@ import io.reactivex.schedulers.Schedulers;
  * @version 2.0
  */
 
-public class RecyclerAdapter<E extends ViewInflateRecycler>
-        extends RecyclerView.Adapter<RecyclerHolder<ViewInflate>>
+public class RecyclerAdapter<E extends Inflate>
+        extends RecyclerView.Adapter<RecyclerHolder<E>>
         implements IRecyclerAdapter<E> {
     private final List<E> holderList = new ArrayList<>();
-    private final List<ViewInflate> totalList = new ArrayList<>();
-    private final HashSet<E> checkList = new HashSet<>();
-    private final SparseArray<ViewInflate> sparseArray = new SparseArray<>();
+    private final SparseArray<E> sparseArray = new SparseArray<>();
     private AtomicBoolean refresh = new AtomicBoolean(false);
-
-    private final int max;
-    private IEventAdapter<E> iEntityAdapter = this;
-    private final ArrayBlockingQueue<E> queue;
+    protected IEventAdapter<E> iEventAdapter = this;
     private int count;
-
-    public RecyclerAdapter() {
-        this(0);
-    }
-
-    public RecyclerAdapter(int max) {
-        this.max = max;
-        if (max > 0) {
-            queue = new ArrayBlockingQueue<>(max);
-        } else {
-            queue = new ArrayBlockingQueue<>(1);
-        }
-    }
 
     @Override
     public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
-        this.iEntityAdapter = iEntityAdapter;
+        this.iEventAdapter = iEntityAdapter;
     }
 
     @Override
-    public RecyclerHolder<ViewInflate> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerHolder<ViewInflate>(parent, sparseArray.get(viewType));
+    public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new RecyclerHolder<>(parent, sparseArray.get(viewType));
     }
 
     @Override
@@ -84,7 +68,7 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
                 @Override
                 public int getSpanSize(int position) {
-                    ViewInflate e = totalList.get(position);
+                    E e = holderList.get(position);
                     int spanSize = 1;
                     if (e instanceof SpanSize) spanSize = ((SpanSize) e).getSpanSize();
                     return spanSize;
@@ -95,14 +79,13 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
     }
 
     @Override
-    public void onBindViewHolder(RecyclerHolder<ViewInflate> holder, int position) {
-        ViewInflate e = totalList.get(position);
-        holder.executePendingBindings(e, iEntityAdapter);
+    public void onBindViewHolder(RecyclerHolder<E> holder, int position) {
+        holder.executePendingBindings( holderList.get(position), iEventAdapter);
     }
 
     @Override
     public int getItemViewType(int position) {
-        ViewInflate e = totalList.get(position);
+        E e = holderList.get(position);
         int viewType = e.getModelIndex();
         sparseArray.put(viewType, e);
         return viewType;
@@ -110,7 +93,7 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
 
     @Override
     public int getItemCount() {
-        return count == 0 || count > totalList.size() ? totalList.size() : count;
+        return holderList.size();
     }
 
     @Override
@@ -122,7 +105,6 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
                 if (size() == 0) notifyItemRangeInserted(addAll(position,es),es.size());
                 else refresh(es);break;
             case AdapterType.remove:removeAllNotify(es);break;
-            case AdapterType.select:for (E e : es) select(e);break;
             case AdapterType.set:break;
             case AdapterType.no:
             default:return false;
@@ -137,7 +119,6 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
             case AdapterType.add:notifyItemInserted(add(position, e));break;
             case AdapterType.remove:removeNotify(position, e);break;
             case AdapterType.set:notifyItemChanged(set(position,e));break;
-            case AdapterType.select:select(e);break;
             case AdapterType.refresh:notifyDataSetChanged();break;
             case AdapterType.no:
             default:return false;
@@ -147,54 +128,8 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
 
 
     private void removeNotify(int position, E e) {
-        int p = remove(position, e);
-        if (p >= 0) notifyItemRemoved(p);
-    }
-
-    private int remove(int position, E e) {
-        boolean pValid = position == NO_POSITION || position < -1 || position > totalList.size();
-        int p;
-        if (pValid&&e == null) return -1;
-        if(e == null){
-            E ei = holderList.get(position);
-            p = totalList.indexOf(ei);
-            holderList.remove(ei);
-            totalList.remove(ei);
-        }else{
-            p = totalList.indexOf(e);
-            totalList.remove(e);
-            holderList.remove(e);
-        }
-        return p;
-    }
-
-
-
-
-    public void checkAll(boolean check) {
-        for (E e : holderList) e.check(check);
-    }
-
-    private void select(E e) {
-        if (max > 0) {
-            boolean contains = queue.contains(e);
-            if (!contains) {
-                if (queue.size() == max)
-                    queue.poll().check(false);
-                e.check(true);
-                queue.offer(e);
-            } else {
-                e.check(false);
-            }
-        } else {
-            boolean c = checkList.contains(e);
-            boolean s = c ? checkList.remove(e) : checkList.add(e);
-            e.check(s && !c);
-        }
-    }
-
-    public Collection<E> getChecked() {
-        return max > 0 ? queue : checkList;
+        holderList.remove(position);
+        notifyItemRemoved(position);
     }
 
 
@@ -221,106 +156,44 @@ public class RecyclerAdapter<E extends ViewInflateRecycler>
         return holderList;
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     @Override
     public int size() {
         return holderList.size();
     }
 
-    public void addInflate(int position,ViewInflate inflate){
-        totalList.add(position,inflate);
-    }
-
-    public void removeInflate(ViewInflate inflate){
-        int position = totalList.indexOf(inflate);
-        if(holderList.contains(inflate))holderList.remove(inflate);
-        totalList.remove(inflate);
-        notifyItemRemoved(position);
-    }
-
     public void remove(int position){
-        ViewInflate ti = totalList.get(position);
-        if(holderList.contains(ti))holderList.remove(ti);
-        totalList.remove(position);
+        holderList.remove(position);
         notifyItemRemoved(position);
     }
 
-    public void clean(){
-        totalList.clear();
-        holderList.clear();
-    }
-    
+
     private void clear() {
-        totalList.removeAll(holderList);
         holderList.clear();
     }
 
- 
+
     private int add(int position, E e) {
-        int p;
-        if (holderList.isEmpty()) {
-            holderList.add(e);
-            p = totalList.size();
-            totalList.add(e);
-        } else if (position == NO_POSITION) {
-            holderList.add(e);
-            E last = holderList.get(holderList.size() - 1);
-            p = totalList.indexOf(last) + 1;
-            totalList.add(p, e);
-        } else {
-            holderList.add(position, e);
-            E first = holderList.get(0);
-            p = totalList.indexOf(first)+position;
-            totalList.add(p, e);
-            return p;
-        }
-        return p;
+        holderList.add(position,e);
+        return position;
     }
 
 
-    private int set(int position, E e) {
-        E ie = holderList.get(position);
-        int p = totalList.indexOf(ie);
-        totalList.set(p,e);
+    public int set(int position, E e) {
         holderList.set(position,e);
-        return p;
+        return position;
+    }
+
+    public int addAll(int position,List<E> es) {
+        holderList.addAll(position,es);
+        return position;
     }
 
 
-    private int addAll(int position,List<E> es) {
-        int p;
-        if(holderList.isEmpty()){
-            holderList.addAll(es);
-            totalList.addAll(es);
-            return 0;
-        }
-        if(position>=holderList.size()||position<0){
-            E ie = holderList.get(size()-1);
-            p = totalList.indexOf(ie)+1;
-            totalList.addAll(p,es);
-            holderList.add(position,ie);
-        }else{
-            E ie = holderList.get(position);
-            p = totalList.indexOf(ie)+1;
-            holderList.addAll(position,es);
-            totalList.addAll(p,es);
-        }
-        return p;
-    }
-
-    
-    private void removeAllNotify(List<E> es) {
+    public void removeAllNotify(List<E> es) {
         if(es == null||es.isEmpty())return;
-        int p = totalList.indexOf(es.get(0));
+        int p = holderList.indexOf(es.get(0));
         holderList.removeAll(es);
-        totalList.removeAll(es);
         notifyItemRangeRemoved(p,es.size());
     }
 
-//    private void addAllNotify(int position,List<E> es) {
-//        notifyItemRangeInserted(addAll(position,es), es.size());
-//    }
 }

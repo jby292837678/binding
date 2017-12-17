@@ -11,10 +11,11 @@ import android.view.View;
 
 //import com.binding.library.BR;
 import com.binding.model.BR;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
-import com.binding.model.model.inter.ParseRecycler;
+import com.binding.model.model.inter.Recycler;
 
 /**
  * project：cutv_ningbo
@@ -27,8 +28,7 @@ import com.binding.model.model.inter.ParseRecycler;
  *
  * @version 2.0
  */
-//@ModelView(value = R.layout.layout_recycler_view)
-public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E extends ParseRecycler> extends ViewArrayModel<C,Binding,E> {
+public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E extends Recycler> extends ViewArrayModel<C,Binding,E> {
     public ObservableField<String> empty = new ObservableField<>("");
     private SwipeRefreshLayout.OnRefreshListener onRefreshListener = () -> onHttp(1, true);
     private RecyclerView.LayoutManager layoutManager;
@@ -104,5 +104,9 @@ public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E
         onHttp(true);
     }
 
+    @Override
+    public void setIEventAdapter(IEventAdapter iEventAdapter) {
+        getAdapter().setIEventAdapter(iEventAdapter);
+    }
 }
 

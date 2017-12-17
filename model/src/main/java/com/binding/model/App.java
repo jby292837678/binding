@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
-import com.alibaba.android.arouter.launcher.ARouter;
 import com.binding.model.crash.CrashHandler;
 
 import java.util.Stack;
@@ -18,22 +17,16 @@ import timber.log.Timber;
 public class App implements Application.ActivityLifecycleCallbacks {
     private Stack<Activity> stack = new Stack<>();
     private static final App app = new App();
-
+    public static int vm;
     public static App getInstance() {
         return app;
     }
 
-    public void init(Application application){
+    public void init(Application application,boolean debug,int vm){
+        App.vm = vm;
         application.registerActivityLifecycleCallbacks(this);
-        ARouter.init(application);
-        Timber.plant(new Timber.DebugTree());
-        if (BuildConfig.DEBUG) {
-            ARouter.openDebug();
-            ARouter.openLog();
-        }else{
-            CrashHandler.getInstance().init(application);
-        }
-        ARouter.init(application);
+        if(debug)Timber.plant(new Timber.DebugTree());
+        else CrashHandler.getInstance().init(application);
     }
 
     public static Activity getCurrentActivity(){

@@ -34,7 +34,7 @@
     </style>
 
     <style name="home_navigation">
-
+        <item name="android:layout_weight">1</item>
     </style>
 
     <color name="white_1f">#1FFFFFFF</color>
