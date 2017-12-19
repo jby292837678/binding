@@ -10,33 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
 
-        <!--<activity android:name=".base.arouter.SchemaFilterActivity">-->
-                <!--&lt;!&ndash; Schame &ndash;&gt;-->
-                <!--<intent-filter>-->
-                    <!--<data-->
-                        <!--android:host="m.aliyun.com"-->
-                        <!--android:scheme="arouter"/>-->
-
-                    <!--<action android:name="android.intent.action.VIEW"/>-->
-
-                    <!--<category android:name="android.intent.category.DEFAULT"/>-->
-                    <!--<category android:name="android.intent.category.BROWSABLE"/>-->
-                <!--</intent-filter>-->
-
-                <!--&lt;!&ndash; App Links &ndash;&gt;-->
-                <!--<intent-filter android:autoVerify="true">-->
-                    <!--<action android:name="android.intent.action.VIEW"/>-->
-
-                    <!--<category android:name="android.intent.category.DEFAULT"/>-->
-                    <!--<category android:name="android.intent.category.BROWSABLE"/>-->
-                    <!--<data-->
-                        <!--android:host="m.aliyun.com"-->
-                        <!--android:scheme="http"/>-->
-                    <!--<data-->
-                        <!--android:host="m.aliyun.com"-->
-                        <!--android:scheme="https"/>-->
-                <!--</intent-filter>-->
-        <!--</activity>-->
 
         <activity android:name=".ui.home.HomeActivity" >
 

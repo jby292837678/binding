@@ -52,7 +52,7 @@ public class TimeUtil implements Runnable {
 
     public void remove(TimeEntity timeEntity) {
         if (timeEntity == null) return;
-        hashMap.remove(timeEntity);
+        handler.postDelayed(() -> hashMap.remove(timeEntity),400);
     }
 
     public void destroy() {

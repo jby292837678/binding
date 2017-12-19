@@ -47,7 +47,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
         if (es == null) return false;
         switch (type) {
             case AdapterType.select:for (E e : es) select(e);break;
-            default:return setList(position, es, type);
+            default:return super.setList(position, es, type);
         }
         return true;
     }
@@ -56,7 +56,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
     @Override
     public boolean setEntity(int position, E e, int type, View view){
         switch (type) {
-            case AdapterType.set:notifyItemChanged(set(position,e));break;
+            case AdapterType.select:select(e);break;
             default:return super.setEntity(position,e,type,view);
         }
         return true;
