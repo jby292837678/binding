@@ -62,11 +62,11 @@ public class RecyclerSelectAdapter<E extends Recycler>
         return true;
     }
 
-    public void checkAll(boolean check) {
+    public final void checkAll(boolean check) {
         for (E e : getList()) e.check(check);
     }
 
-    private void select(E e) {
+    public final void select(E e) {
         if (max > 0) {
             boolean contains = queue.contains(e);
             if (!contains) {

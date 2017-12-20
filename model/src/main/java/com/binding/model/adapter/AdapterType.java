@@ -10,9 +10,10 @@ public interface AdapterType {
     int refresh = 2;
     int remove = 3;
     int set = 4;
-    int select = 5;
-    int onClick = 6;
-    int onLongClick = 7;
+    int move = 5;
+    int select = 6;
+    int onClick = 7;
+    int onLongClick = 8;
 
 
 }

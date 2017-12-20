@@ -53,14 +53,9 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         loading.set(false);
     }
 
-    public void setEnable(boolean aBoolean) {}
 
     public IModelAdapter<E> getAdapter() {
         return adapter;
     }
 
-//
-//    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
-//        adapter.setIEventAdapter(iEventAdapter);
-//    }
 }

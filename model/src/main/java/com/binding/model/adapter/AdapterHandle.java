@@ -11,6 +11,7 @@ import java.lang.annotation.RetentionPolicy;
         AdapterType.refresh,
         AdapterType.remove,
         AdapterType.set,
+        AdapterType.move,
         AdapterType.select,
         AdapterType.no,
         AdapterType.onClick,
