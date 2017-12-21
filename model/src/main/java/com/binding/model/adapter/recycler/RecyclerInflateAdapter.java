@@ -18,6 +18,17 @@ public class RecyclerInflateAdapter extends RecyclerAdapter<ViewInflate> {
         return addToAdapter(position,inflate);
     }
 
+    public boolean remove(int position){
+        ViewInflate inflate = array.get(position);
+        return super.removeToAdapter(NO_POSITION,inflate);
+    }
+
+    public void clearArray(){
+        for (int i = 0; i < array.size(); i++) {
+            removeToAdapter(NO_POSITION,array.valueAt(i));
+        }
+    }
+
     /**
      * synchronized the list
      * */
