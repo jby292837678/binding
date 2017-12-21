@@ -1,8 +1,12 @@
 package com.binding.model;
 
+import android.util.SparseArray;
+
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,5 +41,28 @@ public class ExampleUnitTest {
     public void create() {
         A a = newInstance(A.class, 1);
         assertEquals(1, a.getA());
+    }
+
+    @Test
+    public void pos() throws InterruptedException {
+        List<Integer> list = new ArrayList<>();
+//        list.add(0);
+//        list.add(1);
+//        list.add(2);
+//        list.add(3);
+//        for (Integer pos :list) {
+//            System.out.println(pos);
+//        }
+//
+//        Thread.sleep(100);
+//        list.add(0,10);
+//        list.add(1,11);
+//        list.add(2,12);
+//        list.add(3,13);
+//        for (Integer pos :list) {
+//            System.out.println(pos);
+//        }
+
+        System.out.println(list.indexOf(100));
     }
 }

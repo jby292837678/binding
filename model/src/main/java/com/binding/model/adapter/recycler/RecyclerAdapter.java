@@ -35,63 +35,17 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class RecyclerAdapter<E extends Inflate>
-        extends RecyclerView.Adapter<RecyclerHolder<E>>
+        extends RecyclerBaseAdapter<E>
         implements IRecyclerAdapter<E> {
-    private final List<E> holderList = new ArrayList<>();
-    private final SparseArray<E> sparseArray = new SparseArray<>();
 
-    protected IEventAdapter<E> iEventAdapter = this;
-    private int count;
 
-    public void setCount(int count) {
-        this.count = count;
+    public RecyclerAdapter() {
+        this.iEventAdapter = this;
     }
 
     @Override
     public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
         this.iEventAdapter = iEntityAdapter;
-    }
-
-    @Override
-    public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerHolder<>(parent, sparseArray.get(viewType));
-    }
-
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    E e = holderList.get(position);
-                    int spanSize = 1;
-                    if (e instanceof SpanSize) spanSize = ((SpanSize) e).getSpanSize();
-                    return spanSize;
-                }
-            });
-            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
-        }
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerHolder<E> holder, int position) {
-        holder.executePendingBindings(holderList.get(position), iEventAdapter);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        E e = holderList.get(position);
-        int viewType = e.getModelIndex();
-        sparseArray.put(viewType, e);
-        return viewType;
-    }
-
-    @Override
-    public int getItemCount() {
-        return count < 1 ? holderList.size() : count;
     }
 
     @Override
@@ -192,22 +146,22 @@ public class RecyclerAdapter<E extends Inflate>
         notifyItemRemoved(position);
         return true;
     }
-
-    public final boolean moveToAdapter(int position, E e) {
-        return moveToAdapter(position, e, holderList);
-    }
-
-    protected boolean moveToAdapter(int position, E e, List<E> holderList) {
-        if ( position < 0) return false;
-        if(position>=holderList.size())position = holderList.size()-1;
-        int from = holderList.indexOf(e);
-        if (from != position && holderList.remove(e)) {
-            holderList.add(position, e);
-            notifyItemMoved(from, position);
-            return true;
-        }
-        return false;
-    }
+//
+//    public final boolean moveToAdapter(int position, E e) {
+//        return moveToAdapter(position, e, holderList);
+//    }
+//
+//    protected boolean moveToAdapter(int position, E e, List<E> holderList) {
+//        if ( position < 0) return false;
+//        if(position>=holderList.size())position = holderList.size()-1;
+//        int from = holderList.indexOf(e);
+//        if (from != position && holderList.remove(e)) {
+//            holderList.add(position, e);
+//            notifyItemMoved(from, position);
+//            return true;
+//        }
+//        return false;
+//    }
 
     public final boolean setListAdapter(int position, List<E> es) {
         return setListAdapter(position, es, holderList);
@@ -229,8 +183,8 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean removeListAdapter(int position, List<E> es, List<E> holderList) {
-        boolean rang = isRang(position, es, holderList);
-        if (rang) {
+        int rang = isRang(position, es, holderList);
+        if (rang>=0) {
             holderList.removeAll(es);
             notifyItemRangeRemoved(position, es.size());
             return true;
@@ -241,15 +195,15 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
 
-    public final boolean moveListAdapter(int position, List<E> es) {
-        return moveListAdapter(position, es, holderList);
-    }
-
-    protected boolean moveListAdapter(int position, List<E> es, List<E> holderList) {
-        for (int i = 0; i < es.size(); i++)
-            moveToAdapter(position + i, es.get(i), holderList);
-        return isRang(position,es,holderList);
-    }
+//    public final boolean moveListAdapter(int position, List<E> es) {
+//        return moveListAdapter(position, es, holderList);
+//    }
+//
+//    protected boolean moveListAdapter(int position, List<E> es, List<E> holderList) {
+//        for (int i = 0; i < es.size(); i++)
+//            moveToAdapter(position + i, es.get(i), holderList);
+//        return isRang(position,es,holderList);
+//    }
 
     public final boolean addListAdapter(int position, List<E> es) {
         return addListAdapter(position, es, holderList);
@@ -301,13 +255,5 @@ public class RecyclerAdapter<E extends Inflate>
         }
     }
 
-    private boolean isRang(int position, List<E> es, List<E> holderList) {
-        boolean rang = true;
-        for (int i = 0; i < es.size(); i++) {
-            if (holderList.indexOf(es.get(i)) == position + i) continue;
-            rang = false;
-            break;
-        }
-        return rang;
-    }
+
 }
