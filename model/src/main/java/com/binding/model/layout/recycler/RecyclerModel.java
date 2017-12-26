@@ -104,8 +104,7 @@ public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E
         onHttp(true);
     }
 
-    @Override
-    public void setIEventAdapter(IEventAdapter iEventAdapter) {
+    public void setEventAdapter(IEventAdapter iEventAdapter) {
         getAdapter().setIEventAdapter(iEventAdapter);
     }
 }

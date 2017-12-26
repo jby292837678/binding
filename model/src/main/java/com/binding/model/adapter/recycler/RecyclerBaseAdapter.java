@@ -27,7 +27,7 @@ public class RecyclerBaseAdapter<E extends Inflate>
 
     @Override
     public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new RecyclerHolder<E>(parent,sparseArray.get(viewType));
+        return new RecyclerHolder<>(parent,sparseArray.get(viewType));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RecyclerBaseAdapter<E extends Inflate>
     @Override
     public int getItemViewType(int position) {
         E e = holderList.get(position);
-        int viewType = e.getModelIndex();
+        int viewType = e.getLayoutId();
         sparseArray.put(viewType, e);
         return viewType;
     }

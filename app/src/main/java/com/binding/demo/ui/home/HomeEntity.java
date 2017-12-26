@@ -3,6 +3,7 @@ package com.binding.demo.ui.home;
 import android.view.ViewGroup;
 
 import com.binding.demo.base.cycle.BaseFragment;
+import com.binding.demo.ui.home.page.HomePageFragment;
 import com.binding.model.model.inter.Item;
 
 /**
@@ -16,6 +17,7 @@ public class HomeEntity implements Item<BaseFragment> {
     public BaseFragment getItem(int position, ViewGroup container) {
         if(fragment == null){
             switch (position){
+                default:fragment = new HomePageFragment();
             }
         }
         return fragment;
