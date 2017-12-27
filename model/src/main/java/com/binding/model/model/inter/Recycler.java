@@ -9,7 +9,7 @@ import com.binding.model.adapter.AdapterHandle;
  */
 
 public interface Recycler<Binding extends ViewDataBinding> extends Inflate<Binding>,Event{
-    boolean areItemsTheSame(Parse parseRecycler);
+    Object key();
     boolean areContentsTheSame(Parse parseRecycler);
 //    void respond(@AdapterHandle int type,int status,Object...args);
     void check(boolean check);

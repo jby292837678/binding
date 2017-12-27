@@ -22,11 +22,10 @@ public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> exten
     public void check(boolean check) {
 
     }
-    //
-//    @Override
-//    public void respond(@AdapterHandle int type, int status, Object... args) {
-//        switch (type){
-//            case AdapterType.select:check(status == 1);break;
-//        }
-//    }
+
+    @Override
+    public Object key() {
+        return this;
+    }
+
 }

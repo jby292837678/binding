@@ -620,4 +620,13 @@ public class BaseUtil {
         return ni != null && ni.isConnectedOrConnecting();
     }
 
+
+    public static boolean contain(int value, int min, int max) {
+        return value > min && value < max;
+    }
+
+    public static boolean containsList(int value, List list) {
+        return contain(value, -1, list.size());
+    }
+
 }

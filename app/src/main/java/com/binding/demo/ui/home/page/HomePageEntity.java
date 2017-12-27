@@ -11,10 +11,6 @@ import com.binding.model.model.inter.Parse;
 
 @ModelView(R.layout.holder_home_page)
 public class HomePageEntity extends ViewInflateRecycler {
-    @Override
-    public boolean areItemsTheSame(Parse parseRecycler) {
-        return false;
-    }
 
     private int id;
     private String name;

@@ -7,6 +7,8 @@ import com.binding.model.model.inter.Recycler;
 
 import java.util.List;
 
+import static com.binding.model.util.BaseUtil.containsList;
+
 /**
  * Created by apple on 2017/7/28.
  */
@@ -15,6 +17,7 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
 
     private List<E> oldList;
     private List<E> newList;
+
     public DiffUtilCallback(List<E> oldList, List<E> newList) {
         this.oldList = oldList;
         this.newList = newList;
@@ -32,24 +35,31 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        if(oldItemPosition>=oldList.size()||oldItemPosition>=newList.size()) return false;
-        E oldItem = oldList.get(oldItemPosition);
-        E newItem = newList.get(oldItemPosition);
-
-        if(oldItem instanceof Recycler &&newItem instanceof Recycler)
-            return ((Recycler)oldItem).areItemsTheSame(newItem);
+        if (containsList(oldItemPosition, oldList) && containsList(newItemPosition, newList)) {
+            E oldItem = oldList.get(oldItemPosition);
+            E newItem = newList.get(oldItemPosition);
+            if (oldItem instanceof Recycler
+                    && newItem instanceof Recycler
+                    && oldItem.getClass() == newItem.getClass()) {
+                Object old = ((Recycler) oldItem).key();
+                Object n = ((Recycler) newItem).key();
+                return old!=null&&n!=null&&n.equals(old);
+            }
+        }
         return false;
-//        return oldItem.areItemsTheSame(newList.get(newItemPosition));
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        if(oldItemPosition>=oldList.size()||oldItemPosition>=newList.size()) return false;
-        Parse oldItem = oldList.get(oldItemPosition);
+        if (oldItemPosition >= oldList.size() || oldItemPosition >= newList.size()) return false;
+        E oldItem = oldList.get(oldItemPosition);
         E newItem = newList.get(oldItemPosition);
-        if(oldItem instanceof Recycler &&newItem instanceof Recycler){
+        if (oldItem instanceof Recycler
+                && newItem instanceof Recycler
+                && oldItem.getClass() == newItem.getClass()) {
             return ((Recycler) oldItem).areContentsTheSame(newItem);
-        }else
-            return oldItem.equals(newList.get(newItemPosition));
+        }
+        return false;
     }
+
 }
