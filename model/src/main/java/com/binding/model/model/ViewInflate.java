@@ -20,6 +20,7 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
 
     @Override
     public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
+        registerEvent();
         return dataBinding =  bind(getLayoutId(),context, co, attachToParent, binding);
     }
 
@@ -45,5 +46,6 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
     public void removeBinding() {
         this.dataBinding = null;
         iEventAdapter = null;
+        unRegisterEvent();
     }
 }

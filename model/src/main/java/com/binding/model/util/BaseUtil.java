@@ -612,6 +612,10 @@ public class BaseUtil {
         }
     }
 
+    public static void toast(String text){
+        toast(App.getCurrentActivity(),text);
+    }
+
 
     public static boolean isNetworkConnected(Context context) {
         if (context == null) return false;

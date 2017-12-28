@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="holder_list" type="id"/>
-    <item name="holder_layoutId" type="id"/>
+    <!--<item name="holder_layoutId" type="id"/>-->
     <item name="ViewDataBinding" type="id"/>
     <item name="RecyclerModel" type="id"/>
     <item name="ListModel" type="id"/>

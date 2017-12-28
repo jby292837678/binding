@@ -1,19 +1,15 @@
 package com.binding.model.adapter.list;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.android.databinding.library.baseAdapters.BR;
-import com.binding.model.App;
 import com.binding.model.R;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
-import com.binding.model.model.inter.Parse;
+import com.binding.model.model.inter.Inflate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +27,10 @@ import java.util.List;
  */
 
 
-public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecyclerAdapter<E> {
-    private List<E> list = new ArrayList<>();
+public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecyclerAdapter<E>, IEventAdapter<E> {
+    private final List<E> list = new ArrayList<>();
+    private IEventAdapter<E> iEventAdapter = this;
     private int count = 0;
-    private Class<?> c;
 
     @Override
     public int getCount() {
@@ -42,7 +38,7 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
     }
 
     @Override
-    public Object getItem(int position) {
+    public E getItem(int position) {
         return list.get(position);
     }
 
@@ -51,33 +47,26 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
         return position;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Context context = parent.getContext();
+        Inflate inflate = list.get(position);
         ViewDataBinding binding;
-        Parse parse = list.get(position);
-        int layoutId = parse.getModelView().value()[parse.getModelIndex()];
         if (convertView == null) {
-            binding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, parent, false);
-            convertView = binding.getRoot();
-            convertView.setTag(R.id.holder_list, binding);
-            convertView.setTag(R.id.holder_layoutId, layoutId);
+            binding = inflate.attachView(context, parent, false, null);
         } else {
-            if (layoutId == (int) convertView.getTag(R.id.holder_layoutId)) {
-                binding = (ViewDataBinding) convertView.getTag(R.id.holder_list);
-            } else {
-                binding = DataBindingUtil.inflate(LayoutInflater.from(context), layoutId, parent, false);
-                convertView = binding.getRoot();
-                convertView.setTag(R.id.holder_list, binding);
-                convertView.setTag(R.id.holder_layoutId, layoutId);
-            }
+            Inflate out = (Inflate) convertView.getTag(R.id.holder_inflate);
+            binding = inflate.attachView(context, parent, false,
+                    out.getLayoutId() == inflate.getLayoutId() ? out.getDataBinding():null);
+            out.removeBinding();
         }
-        binding.setVariable(App.vm, list.get(position));
-        binding.executePendingBindings();
+        convertView = binding.getRoot();
+        convertView.setTag(R.id.holder_inflate, inflate);
+        inflate.setIEventAdapter(iEventAdapter);
         return convertView;
     }
 
-    //    -----------------------------------  IModelAdapter ------------------------
 
     @Override
     public boolean setList(int position, List<E> e, int type) {
@@ -86,7 +75,7 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
 
 
     @Override
-    public boolean setEntity(int position, E e, int type, View view){
+    public boolean setEntity(int position, E e, int type, View view) {
         return false;
     }
 
@@ -104,11 +93,9 @@ public class ListAdapter<E extends Parse> extends BaseAdapter implements IRecycl
         this.count = count;
     }
 
-    private IEventAdapter<E> iEventAdapter;
-
-
     @Override
-    public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
+    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
         this.iEventAdapter = iEventAdapter;
     }
+
 }

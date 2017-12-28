@@ -1,6 +1,5 @@
 package com.binding.model.model;
 
-import com.android.databinding.library.baseAdapters.BR;
 import com.binding.model.App;
 import com.binding.model.model.inter.Parse;
 import com.binding.model.util.BaseUtil;
