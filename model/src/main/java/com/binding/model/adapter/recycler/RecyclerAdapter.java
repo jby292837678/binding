@@ -136,32 +136,12 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean removeToAdapter(int position, E e, List<E> holderList) {
-        if (e == null) return false;
-        if (holderList.contains(e))
-            position = holderList.indexOf(e);
-        else if (position < 0 || position >= holderList.size()) {
-            return false;
-        }
+        if (holderList.contains(e)) position = holderList.indexOf(e);
+        else if (position < 0 || position >= holderList.size()) return false;
         holderList.remove(position);
         notifyItemRemoved(position);
         return true;
     }
-//
-//    public final boolean moveToAdapter(int position, E e) {
-//        return moveToAdapter(position, e, holderList);
-//    }
-//
-//    protected boolean moveToAdapter(int position, E e, List<E> holderList) {
-//        if ( position < 0) return false;
-//        if(position>=holderList.size())position = holderList.size()-1;
-//        int from = holderList.indexOf(e);
-//        if (from != position && holderList.remove(e)) {
-//            holderList.add(position, e);
-//            notifyItemMoved(from, position);
-//            return true;
-//        }
-//        return false;
-//    }
 
     public final boolean setListAdapter(int position, List<E> es) {
         return setListAdapter(position, es, holderList);
@@ -194,17 +174,6 @@ public class RecyclerAdapter<E extends Inflate>
         }
     }
 
-
-//    public final boolean moveListAdapter(int position, List<E> es) {
-//        return moveListAdapter(position, es, holderList);
-//    }
-//
-//    protected boolean moveListAdapter(int position, List<E> es, List<E> holderList) {
-//        for (int i = 0; i < es.size(); i++)
-//            moveToAdapter(position + i, es.get(i), holderList);
-//        return isRang(position,es,holderList);
-//    }
-
     public final boolean addListAdapter(int position, List<E> es) {
         return addListAdapter(position, es, holderList);
     }
@@ -224,7 +193,7 @@ public class RecyclerAdapter<E extends Inflate>
 
     protected boolean refreshListAdapter(int position, List<E> es, List<E> holderList) {
         List<E> l;
-        if (position > 0 && position < holderList.size()) {
+        if (position >= 0 && position < holderList.size()) {
             l = holderList.subList(0, position);
             l.addAll(es);
         } else if (holderList.size() == 0) {
