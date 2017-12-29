@@ -99,7 +99,7 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
                 return false;
         }
         notifyDataSetChanged();
-        return false;
+        return true;
     }
 
     @Override
@@ -129,7 +129,7 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
             default:return false;
         }
         notifyDataSetChanged();
-        return false;
+        return true;
     }
 
 
