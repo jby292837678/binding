@@ -44,7 +44,6 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     @Override
     public void attachView(Bundle savedInstanceState, T t) {
         if (getModelView().model()) eventModel.add(this);
-        registerEvent();
         weakReference = new WeakReference<>(t);
         if (t instanceof CycleContainer) ((CycleContainer) t).getLifecycle().addObserver(this);
     }

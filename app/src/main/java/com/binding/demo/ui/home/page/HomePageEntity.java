@@ -1,6 +1,10 @@
 package com.binding.demo.ui.home.page;
 
+import android.view.View;
+
 import com.binding.demo.R;
+import com.binding.model.adapter.AdapterType;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.ModelView;
 import com.binding.model.model.ViewInflateRecycler;
 import com.binding.model.model.inter.Parse;
@@ -35,5 +39,16 @@ public class HomePageEntity extends ViewInflateRecycler {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void onClick(View view){
+        iEventAdapter.setEntity(IEventAdapter.NO_POSITION,this, AdapterType.remove,view);
+    }
+
+    @Override
+    public void check(boolean check) {
+        super.check(check);
+
+//        check
     }
 }

@@ -16,6 +16,7 @@
 
             <!--app:vm="@{vm}"-->
         <include
+            android:id="@+id/layout_recycler"
             layout="@layout/layout_recycler_view"/>
     </LinearLayout>
 </layout>

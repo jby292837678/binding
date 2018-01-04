@@ -1,7 +1,10 @@
 package com.binding.model.model.inter;
 
 import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.View;
+
+import java.util.List;
 
 
 /**
@@ -32,6 +35,8 @@ import android.view.View;
 
 public interface Event extends Parse {
     SparseArray<Event> eventSet = new SparseArray<>();
+    SparseArray<List<Integer>> hashId = new SparseArray<>();
+
     void registerEvent();
     void unRegisterEvent();
     int onEvent(View view, Event event, Object... args);

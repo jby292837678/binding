@@ -1,4 +1,4 @@
-package com.binding.model.util;//package com.binding.library.util;
+//package com.binding.model.util;//package com.binding.library.util;
 //
 //import android.content.Context;
 //

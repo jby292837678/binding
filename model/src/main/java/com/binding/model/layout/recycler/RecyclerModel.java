@@ -1,6 +1,5 @@
 package com.binding.model.layout.recycler;
 
-import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
@@ -9,13 +8,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-//import com.binding.library.BR;
-import com.binding.model.BR;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
 import com.binding.model.model.inter.Recycler;
+import com.binding.model.util.BaseUtil;
 
 /**
  * project：cutv_ningbo
@@ -30,27 +28,29 @@ import com.binding.model.model.inter.Recycler;
  */
 public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E extends Recycler> extends ViewArrayModel<C,Binding,E> {
     public ObservableField<String> empty = new ObservableField<>("");
-    private SwipeRefreshLayout.OnRefreshListener onRefreshListener = () -> onHttp(1, true);
-    private RecyclerView.LayoutManager layoutManager;
+    public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private int lastVisibleItem = 0;
     private boolean pageFlag = true;
 
-    public RecyclerModel(IModelAdapter<E> adapter) {
-        super(adapter);
+    public RecyclerModel(IModelAdapter<E> adapter,boolean pageWay) {
+        super(adapter,pageWay);
+    }
+
+    public RecyclerModel(IModelAdapter<E> adapter){
+        this(adapter,false);
     }
 
     @Override
     public void attachView(Bundle savedInstanceState, C c) {
         super.attachView(savedInstanceState, c);
         setLayoutManager(new LinearLayoutManager(getT().getDataActivity()));
-//        getDataBinding().setVariable(BR.adapter,getAdapter());
     }
 
     public void onScrollBottom() {}
 
     @Override
     public void onThrowable(Throwable throwable) {
-
+        BaseUtil.toast(throwable);
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
@@ -63,7 +63,9 @@ public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 >= getAdapter().size()
                     && !loading.get()) {
-                if (pageFlag && dy > 0) onHttp(getAdapter().size()/getPageCount()+1, false);
+                if (pageFlag && dy > 0) {
+                    onHttp(getAdapter().size(), pageWay);
+                }
                 onScrollBottom();
             }
         }
@@ -85,23 +87,16 @@ public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E
     }
 
     public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-        return onRefreshListener;
+        return this::onHttp;
     }
 
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
-        notifyPropertyChanged(BR.layoutManager);
+        this.layoutManager.set(layoutManager);
     }
-
-    @Bindable
-    public RecyclerView.LayoutManager getLayoutManager() {
-        return layoutManager;
-    }
-
 
     public void onHttp(View view) {
-        onHttp(true);
+        onHttp();
     }
 
     public void setEventAdapter(IEventAdapter iEventAdapter) {

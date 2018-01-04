@@ -1,15 +1,13 @@
 package com.binding.model.model;
 
-import android.databinding.Observable;
 import android.databinding.ObservableBoolean;
-import android.databinding.PropertyChangeRegistry;
 import android.databinding.ViewDataBinding;
 
 import com.binding.model.cycle.Container;
-import com.binding.model.model.inter.Http;
-import com.binding.model.model.inter.HttpFlow;
+import com.binding.model.model.inter.HttpObservable;
+import com.binding.model.util.BaseUtil;
 
-import io.reactivex.functions.Consumer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * project：cutv_ningbo
@@ -23,54 +21,54 @@ import io.reactivex.functions.Consumer;
  * @version 2.0
  */
 
-public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R> extends ViewModel<T,Binding> implements Consumer<R>
-    ,Observable {
+public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R> extends ViewModel<T,Binding> {
+
     public final ObservableBoolean loading = new ObservableBoolean(false);
-    private R r;
-    private Http<R> rcHttp;
-    private HttpFlow<R> httpFlow;
+    private HttpObservable<R> rcHttp;
     private boolean enable = true;
-    private int pageCount = 15;
-//    protected int offset = 0;
-    private int page = 1;
-    private transient PropertyChangeRegistry mCallbacks;
+    private int pageCount = 16;
+    protected int offset = 0;
+    private R r;
+    private Disposable disposable;
 
-    public void setRcHttp(Http<R> rcHttp) {
+    /**
+     *  0: refresh = false  offset
+     *  1: refresh = true   offset
+     *  2: refresh = false  page
+     *  3: refresh = true   page
+     * */
+    protected final boolean pageWay;
+
+    public ViewHttpModel() {
+        this(false);
+    }
+
+    public ViewHttpModel(boolean pageWay) {
+        this.pageWay = pageWay;
+    }
+
+
+
+    public void setRcHttp(HttpObservable<R> rcHttp) {
         this.rcHttp = rcHttp;
+        onHttp();
     }
 
-    public void setFlowHttp(HttpFlow<R> rcHttp){
-        this.httpFlow = rcHttp;
-    }
-
-    public void setPageCount(int pageCount) {
-        this.pageCount = pageCount;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public int getPageCount() {
-        return pageCount;
-    }
-
-    public void onHttp(int page, boolean refresh){
-        this.page = page;
+    public void onHttp(int offset, boolean refresh){
+        this.offset = offset;
         loading.set(true);
-       if(rcHttp!=null)
-           rcHttp.http(page,refresh)
-               .subscribe(this,this::onThrowable);
-       if(httpFlow!=null)
-           httpFlow.http(page,refresh)
-                   .subscribe(this,this::onThrowable);
+        int p = pageWay?offset/pageCount+1:offset;
+       if(rcHttp!=null){
+           disposable  = rcHttp.http(p,refresh)
+               .subscribe(this::accept,this::onThrowable);
+       }
     }
 
     public void onThrowable(Throwable throwable){
         loading.set(false);
+        BaseUtil.toast(throwable);
     }
 
-    @Override
     public void accept(R r) throws Exception {
         this.r = r;
         loading.set(false);
@@ -81,7 +79,11 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
     }
 
     public void onHttp(boolean refresh) {
-        onHttp(page,refresh);
+        onHttp(offset, refresh);
+    }
+
+    public void onHttp() {
+        onHttp(true);
     }
 
     public void setEnable(boolean enable) {
@@ -92,26 +94,18 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
         return enable;
     }
 
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
 
-    @Override
-    public void addOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        synchronized (this) {if (mCallbacks == null) mCallbacks = new PropertyChangeRegistry();}
-        mCallbacks.add(callback);
+    public int getPageCount() {
+        return pageCount;
     }
 
     @Override
-    public void removeOnPropertyChangedCallback(OnPropertyChangedCallback callback) {
-        synchronized (this) {if (mCallbacks == null) return;}
-        mCallbacks.remove(callback);
+    public void onDestroy() {
+        super.onDestroy();
+        if(disposable!=null)disposable.dispose();
     }
 
-    public void notifyChange() {
-        synchronized (this) {if (mCallbacks == null) return;}
-        mCallbacks.notifyCallbacks(this, 0, null);
-    }
-
-    public void notifyPropertyChanged(int fieldId) {
-        synchronized (this) {if (mCallbacks == null) return;}
-        mCallbacks.notifyCallbacks(this, fieldId, null);
-    }
 }

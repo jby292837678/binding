@@ -9,11 +9,13 @@ import android.widget.BaseAdapter;
 import com.binding.model.R;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IRecyclerAdapter;
+import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.binding.model.util.BaseUtil.containsList;
 
 /**
  * project：cutv_ningbo
@@ -27,8 +29,7 @@ import java.util.List;
  * @version 2.0
  */
 
-
-public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecyclerAdapter<E>, IEventAdapter<E> {
+public class ListAdapter<E extends Inflate> extends BaseAdapter implements IModelAdapter<E>, IEventAdapter<E> {
     private final List<E> holderList = new ArrayList<>();
     private IEventAdapter<E> iEventAdapter = this;
     private int count = 0;
@@ -70,55 +71,27 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
 
     @Override
     public boolean setEntity(int position, E e, int type, View view) {
-        boolean outOfList = position<0||position>=holderList.size();
         switch (type) {
-            case AdapterType.add:
-                if (outOfList) holderList.add(e);
-                else holderList.add(position, e);
-                break;
-            case AdapterType.remove:
-                if (holderList.contains(e)) position = holderList.indexOf(e);
-                else if (outOfList) return false;
-                holderList.remove(position);
-                break;
-            case AdapterType.set:
-                if (!outOfList) holderList.set(position, e);
-                break;
-            case AdapterType.move:
-                if (position < 0) return false;
-                if(position>=holderList.size())position = holderList.size()-1;
-                int from = holderList.indexOf(e);
-                if (from != position && holderList.remove(e)) holderList.add(position, e);
-                break;
+            case AdapterType.add:return addToAdapter(position,e);
+            case AdapterType.remove:return removeToAdapter(position,e);
+            case AdapterType.set:return setToAdapter(position,e);
+            case AdapterType.move:return moveToAdapter(position,e);
             case AdapterType.select:
             case AdapterType.refresh:
             case AdapterType.no:
             case AdapterType.onClick:
             case AdapterType.onLongClick:
-            default:
-                return false;
+            default:return false;
         }
-        notifyDataSetChanged();
-        return true;
     }
+
+
 
     @Override
     public boolean setList(int position, List<E> es, int type) {
-        boolean outOfList = position<0||position>=holderList.size();
         switch (type) {
-            case AdapterType.add:
-                if(outOfList)holderList.addAll(es);
-                else holderList.addAll(position,es);
-                break;
-            case AdapterType.refresh:
-                List<E> l;
-                if (!outOfList) {
-                    l = holderList.subList(0, position);
-                    l.addAll(es);
-                } else l = es;
-                holderList.clear();
-                holderList.addAll(l);
-                break;
+            case AdapterType.add:return addListAdapter(position,es);
+            case AdapterType.refresh:return refreshListAdapter(position,es);
             case AdapterType.remove:
             case AdapterType.set:
             case AdapterType.move:
@@ -128,10 +101,67 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
             case AdapterType.onLongClick:
             default:return false;
         }
+    }
+
+
+
+    public boolean addToAdapter(int position, E e) {
+        if (containsList(position,holderList))
+            holderList.add(position,e);
+        else holderList.add(e);
         notifyDataSetChanged();
         return true;
     }
 
+    public boolean removeToAdapter(int position, E e) {
+        if (holderList.contains(e)) position = holderList.indexOf(e);
+        if(containsList(position,holderList))holderList.remove(e);
+        notifyDataSetChanged();
+        return containsList(position,holderList);
+    }
+
+
+    public boolean setToAdapter(int position, E e) {
+        if(containsList(position,holderList)){
+            holderList.set(position,e);
+            notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean moveToAdapter(int position,E e){
+        if(position>=holderList.size())position = holderList.size()-1;
+        if(containsList(position,holderList)){
+            int from = holderList.indexOf(e);
+            if (from != position && holderList.remove(e)) holderList.add(position, e);
+            notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean addListAdapter(int position,List<E> es){
+        if(containsList(position,holderList))
+            holderList.addAll(position,es);
+        else holderList.addAll(es);
+        notifyDataSetChanged();
+        return containsList(position,es);
+    }
+
+    public boolean refreshListAdapter(int position,List<E> es){
+        List<E> l;
+        if(containsList(position,holderList)){
+            l = holderList.subList(0,position);
+        }else if(holderList.size() != position||holderList.size() == 0) {
+            return addListAdapter(position,es);
+        }else l = es;
+        holderList.clear();
+        holderList.addAll(l);
+        notifyDataSetChanged();
+        return true;
+    }
 
 
     @Override

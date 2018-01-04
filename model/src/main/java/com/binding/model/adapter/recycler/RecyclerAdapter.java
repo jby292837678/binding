@@ -1,26 +1,22 @@
 package com.binding.model.adapter.recycler;
 
 import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IRecyclerAdapter;
+import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Inflate;
-import com.binding.model.model.inter.SpanSize;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.binding.model.util.BaseUtil.containsList;
 
 /**
  * project：cutv_ningbo
@@ -36,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RecyclerAdapter<E extends Inflate>
         extends RecyclerBaseAdapter<E>
-        implements IRecyclerAdapter<E> {
+        implements IModelAdapter<E> {
 
 
     public RecyclerAdapter() {
@@ -193,10 +189,10 @@ public class RecyclerAdapter<E extends Inflate>
 
     protected boolean refreshListAdapter(int position, List<E> es, List<E> holderList) {
         List<E> l;
-        if (position >= 0 && position < holderList.size()) {
+        if (containsList(position,holderList)){
             l = holderList.subList(0, position);
             l.addAll(es);
-        } else if (holderList.size() == 0) {
+        } else if (holderList.size() == 0||position == holderList.size()) {
             return addListAdapter(position, es, holderList);
         } else l = es;
         refresh(l, holderList);

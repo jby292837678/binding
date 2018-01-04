@@ -6,7 +6,7 @@ import android.view.View;
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IRecyclerAdapter;
+import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import io.reactivex.schedulers.Schedulers;
 //@SuppressWarnings("unchecked")
 public class RecyclerSparseAdapter<E extends Inflate>
         extends RecyclerBaseAdapter<Inflate>
-        implements IRecyclerAdapter<E> {
+        implements IModelAdapter<E> {
     private final List<E> inflates = new ArrayList<>();
     private final TreeMap<Integer, Inflate> other = new TreeMap<>((integer, t1) -> integer - t1);
 

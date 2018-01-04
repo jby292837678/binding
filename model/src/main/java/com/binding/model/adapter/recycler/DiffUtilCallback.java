@@ -37,7 +37,7 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         if (containsList(oldItemPosition, oldList) && containsList(newItemPosition, newList)) {
             E oldItem = oldList.get(oldItemPosition);
-            E newItem = newList.get(oldItemPosition);
+            E newItem = newList.get(newItemPosition);
             if (oldItem instanceof Recycler
                     && newItem instanceof Recycler
                     && oldItem.getClass() == newItem.getClass()) {
@@ -51,15 +51,14 @@ public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        if (oldItemPosition >= oldList.size() || oldItemPosition >= newList.size()) return false;
-        E oldItem = oldList.get(oldItemPosition);
-        E newItem = newList.get(oldItemPosition);
-        if (oldItem instanceof Recycler
-                && newItem instanceof Recycler
-                && oldItem.getClass() == newItem.getClass()) {
-            return ((Recycler) oldItem).areContentsTheSame(newItem);
-        }
-        return false;
+        if (containsList(oldItemPosition,oldList) && containsList(newItemPosition,newList)){
+            E oldItem = oldList.get(oldItemPosition);
+            E newItem = newList.get(newItemPosition);
+            return oldItem instanceof Recycler
+                    && newItem instanceof Recycler
+                    && oldItem.getClass() == newItem.getClass()
+                    &&((Recycler) oldItem).areContentsTheSame(newItem);
+        } else return false;
     }
 
 }

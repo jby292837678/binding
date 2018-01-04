@@ -1,19 +1,21 @@
 package com.binding.model.model.inter;
 
-import java.util.List;
+
+import io.reactivex.Observable;
 
 /**
  * project：cutv_ningbo
  * description：
  * create developer： admin
- * create time：16:05
+ * create time：14:29
  * modify developer：  admin
- * modify time：16:05
+ * modify time：14:29
  * modify remark：
  *
  * @version 2.0
+ * @param <R>
  */
 
 
-public interface HttpArray<E> extends Http<List<E>> {
+public interface HttpObservable<R> extends Http<Observable<R>> {
 }

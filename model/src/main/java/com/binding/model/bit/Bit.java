@@ -19,4 +19,13 @@ public class Bit {
         }
         return view;
     }
+
+    public static int bitInteger(int variable, JudgeBit<Boolean,Integer> judgeBit, int total){
+        int p = 0;
+        for (int i = 0; i < total; i++) {
+            p = judgeBit.judge(i,(variable&1) == 1,total-i);
+            variable = variable>>>1;
+        }
+        return p;
+    }
 }

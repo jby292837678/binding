@@ -6,6 +6,5 @@ import io.reactivex.Flowable;
  * Created by arvin on 2017/11/30.
  */
 
-public interface HttpFlow<R> {
-    Flowable<R> http(int offset, boolean refresh);
+public interface HttpFlowable<R> extends Http<Flowable<R>>{
 }
