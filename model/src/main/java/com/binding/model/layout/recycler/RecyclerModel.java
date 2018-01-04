@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
 import com.binding.model.model.inter.Recycler;
@@ -26,18 +27,23 @@ import com.binding.model.util.BaseUtil;
  *
  * @version 2.0
  */
-public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E extends Recycler> extends ViewArrayModel<C,Binding,E> {
+public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Recycler> extends ViewArrayModel<C, Binding, E> {
     public ObservableField<String> empty = new ObservableField<>("");
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private int lastVisibleItem = 0;
     private boolean pageFlag = true;
 
-    public RecyclerModel(IModelAdapter<E> adapter,boolean pageWay) {
-        super(adapter,pageWay);
+
+    public RecyclerModel(IModelAdapter<E> adapter, boolean pageWay) {
+        super(adapter, pageWay);
     }
 
-    public RecyclerModel(IModelAdapter<E> adapter){
-        this(adapter,false);
+    public RecyclerModel(IModelAdapter<E> adapter) {
+        this(adapter, false);
+    }
+
+    public RecyclerModel() {
+        this(new RecyclerAdapter<>());
     }
 
     @Override
@@ -46,7 +52,8 @@ public class RecyclerModel<C extends Container,Binding extends ViewDataBinding,E
         setLayoutManager(new LinearLayoutManager(getT().getDataActivity()));
     }
 
-    public void onScrollBottom() {}
+    public void onScrollBottom() {
+    }
 
     @Override
     public void onThrowable(Throwable throwable) {

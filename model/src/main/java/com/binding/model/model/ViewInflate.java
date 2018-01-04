@@ -18,8 +18,10 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
     private transient Binding dataBinding;
     protected transient IEventAdapter iEventAdapter;
 
+
+
     @Override
-    public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
+    public final Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
         registerEvent();
         return dataBinding =  bind(getLayoutId(),context, co, attachToParent, binding);
     }

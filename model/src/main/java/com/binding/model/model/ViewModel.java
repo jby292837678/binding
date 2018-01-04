@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 import android.view.View;
+import android.view.ViewGroup;
 
 //import com.binding.library.BR;
 import com.android.databinding.library.baseAdapters.BR;
@@ -39,6 +40,13 @@ import timber.log.Timber;
 public class ViewModel<T extends Container, Binding extends ViewDataBinding> extends ViewInflate<Binding>
         implements Model<T, Binding>, LifecycleObserver {
     private transient WeakReference<T> weakReference;
+
+    public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState){
+        Binding binding = attachView(t.getDataActivity(),co,attachToParent,null);
+        attachView(savedInstanceState,t);
+        return binding;
+    }
+
 
     @CallSuper
     @Override

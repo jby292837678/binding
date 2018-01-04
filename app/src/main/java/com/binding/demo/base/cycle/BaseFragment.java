@@ -41,18 +41,16 @@ public abstract class BaseFragment<VM extends ViewModel> extends DataBindingFrag
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inject(savedInstanceState, container, false);
-        initView(rootView);
-        return rootView;
+        return initView(rootView);
     }
 
     @SuppressWarnings("unchecked")
-    public View inject(Bundle savedInstanceState, ViewGroup parent, boolean attachToParent) {
+    public final View inject(Bundle savedInstanceState, ViewGroup parent, boolean attachToParent) {
         View view;
         try {
             Method method = FragmentComponent.class.getDeclaredMethod("inject", getClass());
             ReflectUtil.invoke(method, getComponent(), this);
-            view = vm.attachView(getContext(), parent, attachToParent,null).getRoot();
-            vm.attachView(savedInstanceState,this);
+            view = vm.attachContainer(this,parent,attachToParent,savedInstanceState).getRoot();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(String.format("name:%1s need to add @Method inject to FragmentComponent", getClass().getSimpleName()));
         }
@@ -60,18 +58,17 @@ public abstract class BaseFragment<VM extends ViewModel> extends DataBindingFrag
     }
 
 
-    public void initView(View rootView) {
-    }
+
 
 
     @Override
-    public Activity getDataActivity() {
+    public final Activity getDataActivity() {
         return getActivity();
     }
 
 
     @Override
-    public FragmentComponent getComponent() {
+    public final FragmentComponent getComponent() {
         if (component == null) {
             component = DaggerFragmentComponent.builder()
                     .appComponent(IkeApplication.getAppComponent())

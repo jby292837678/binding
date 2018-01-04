@@ -21,7 +21,7 @@
         <!--app:inflates="@{vm.data}"-->
         <RadioGroup
             app:checked="@{vm}"
-            app:checkedPosition="@{vm.position}"
+            app:checkedPosition="@{vm.currentItem}"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:layout_marginBottom="6dp"

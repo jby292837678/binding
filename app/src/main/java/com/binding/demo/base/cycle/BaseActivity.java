@@ -47,8 +47,7 @@ public abstract class BaseActivity<VM extends ViewModel> extends DataBindingActi
         try {
             Method method = ActivityComponent.class.getDeclaredMethod("inject", getClass());
             ReflectUtil.invoke(method, getComponent(), this);
-            rootView = vm.attachView(this, parent, attachToParent, null).getRoot();
-            vm.attachView(savedInstanceState, this);
+            rootView = vm.attachContainer(this,parent,attachToParent,savedInstanceState).getRoot();
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(String.format("name:%1s need to add @Method inject to ActivityComponent", getClass().getSimpleName()));
         }

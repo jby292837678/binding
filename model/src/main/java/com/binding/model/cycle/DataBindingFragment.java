@@ -36,7 +36,9 @@ public abstract class DataBindingFragment<C> extends Fragment implements CycleCo
     public abstract View inject(Bundle savedInstanceState, ViewGroup parent, boolean attachToParent);
 
 
-    public void initView(View rootView) {}
+    public View initView(View rootView) {
+        return rootView;
+    }
 
 
     @Override
