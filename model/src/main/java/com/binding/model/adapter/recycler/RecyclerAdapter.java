@@ -204,20 +204,23 @@ public class RecyclerAdapter<E extends Inflate>
 
     @SuppressWarnings("unchecked")
     private void refresh(List<E> es, List<E> holderList) {
-        if (!refresh.get()) {
-            refresh.set(true);
-            Observable.fromArray(es)
-                    .map(s -> DiffUtil.calculateDiff(new DiffUtilCallback<>(holderList, s)))
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(diffResult -> {
-                                diffResult.dispatchUpdatesTo(this);
-                                holderList.clear();
-                                holderList.addAll(es);
-                                refresh.set(false);
-                            }
-                    );
-        }
+        holderList.clear();
+        holderList.addAll(es);
+        notifyDataSetChanged();
+//        if (!refresh.get()) {
+//            refresh.set(true);
+//            Observable.fromArray(es)
+//                    .map(s -> DiffUtil.calculateDiff(new DiffUtilCallback<>(holderList, s)))
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(diffResult -> {
+//                                diffResult.dispatchUpdatesTo(this);
+//                                holderList.clear();
+//                                holderList.addAll(es);
+//                                refresh.set(false);
+//                            }
+//                    );
+//        }
     }
 
 

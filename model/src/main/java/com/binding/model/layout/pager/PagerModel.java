@@ -29,14 +29,12 @@ import java.util.List;
  * @version 2.0
  */
 
-//@ModelView(value = {R.layout.layout_radio_pager})
 public class PagerModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
         extends ViewArrayModel<C,  Binding,E>
         implements PagerRotateListener<E>, ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
     private int loop = -1;
     private PagerEntity<E> pagerEntity;
     public ObservableInt currentItem = new ObservableInt(0);
-    public ObservableInt position = new ObservableInt(0);
     private boolean rotate = false;
     private int count = 0;
 
@@ -89,7 +87,7 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
 
     @Override
     public void onPageSelected(int position) {
-        this.position.set(position);
+        this.currentItem.set(position);
     }
 
     @Override
@@ -100,7 +98,6 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
     public void setRotate(boolean rotate) {
         this.rotate = rotate;
     }
-
 
     @Override
     public void onDestroy() {
