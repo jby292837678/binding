@@ -3,7 +3,6 @@ package com.binding.model.layout.recycler;
 import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,7 +13,6 @@ import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
 import com.binding.model.model.inter.Recycler;
-import com.binding.model.util.BaseUtil;
 
 /**
  * project：cutv_ningbo
@@ -28,11 +26,8 @@ import com.binding.model.util.BaseUtil;
  * @version 2.0
  */
 public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Recycler> extends ViewArrayModel<C, Binding, E> {
-    public ObservableField<String> empty = new ObservableField<>("");
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
-    private int lastVisibleItem = 0;
     private boolean pageFlag = true;
-
 
     public RecyclerModel(IModelAdapter<E> adapter, boolean pageWay) {
         super(adapter, pageWay);
@@ -52,15 +47,29 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         setLayoutManager(new LinearLayoutManager(getT().getDataActivity()));
     }
 
-    public void onScrollBottom() {
+    public RecyclerView.OnScrollListener getScrollListener() {
+        return scrollListener;
     }
 
-    @Override
-    public void onThrowable(Throwable throwable) {
-        BaseUtil.toast(throwable);
+    public void setPageFlag(boolean pageFlag) {
+        this.pageFlag = pageFlag;
     }
+
+    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        this.layoutManager.set(layoutManager);
+    }
+
+    public void onHttp(View view) {
+        onHttp(3);
+    }
+
+    public void setEventAdapter(IEventAdapter iEventAdapter) {
+        getAdapter().setIEventAdapter(iEventAdapter);
+    }
+
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+        private int lastVisibleItem = 0;
         private int dy = 0;
 
         @Override
@@ -71,9 +80,8 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
                     && lastVisibleItem + 1 >= getAdapter().size()
                     && !loading.get()) {
                 if (pageFlag && dy > 0) {
-                    onHttp(getAdapter().size(), pageWay);
+                    onHttp(getAdapter().size(), 2);
                 }
-                onScrollBottom();
             }
         }
 
@@ -84,30 +92,5 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             this.dy = dy;
         }
     };
-
-    public RecyclerView.OnScrollListener getScrollListener() {
-        return scrollListener;
-    }
-
-    public void setPageFlag(boolean pageFlag) {
-        this.pageFlag = pageFlag;
-    }
-
-    public SwipeRefreshLayout.OnRefreshListener getOnRefreshListener() {
-        return this::onHttp;
-    }
-
-
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        this.layoutManager.set(layoutManager);
-    }
-
-    public void onHttp(View view) {
-        onHttp();
-    }
-
-    public void setEventAdapter(IEventAdapter iEventAdapter) {
-        getAdapter().setIEventAdapter(iEventAdapter);
-    }
 }
 

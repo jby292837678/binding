@@ -29,7 +29,7 @@ public class HomePageModel extends RecyclerModel<HomePageFragment,FragmentHomePa
     public void attachView(Bundle savedInstanceState, HomePageFragment homePageFragment) {
         super.attachView(savedInstanceState, homePageFragment);
         getDataBinding().layoutRecycler.setVm(this);
-        setRefreshing(false);
+        setEnable(false);
         setPageFlag(false);
         List<HomePageEntity> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) list.add(new HomePageEntity("name:"+i,i));

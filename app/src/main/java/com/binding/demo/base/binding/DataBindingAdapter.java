@@ -46,30 +46,14 @@ import java.util.List;
 
 public class DataBindingAdapter {
 
-    //    --------------------------View------------------------
-    @BindingAdapter("android:slide_list")
-    public static void setVisibility(View view, int visibility) {
-        if (visibility != view.getVisibility()) {
-            view.setVisibility(visibility);
-        }
-    }
-
-    @BindingAdapter("onLongClick")
-    public static void setOnLongClick(View view, View.OnLongClickListener listener) {
-        view.setOnLongClickListener(listener);
-    }
-
     @SuppressWarnings("unchecked")
     @BindingAdapter("inflates")
     public static void addInflates(ViewGroup group, List<? extends Inflate> inflates) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
         for (Inflate inflate : inflates)
-            inflate.attachView(group.getContext(), group, true, null).getRoot();
+            inflate.attachView(group.getContext(), group, true, null);
     }
-
-
-
 
     @BindingAdapter("params")
     public static void setLayoutParams(View view, ViewGroup.LayoutParams params) {
@@ -78,22 +62,9 @@ public class DataBindingAdapter {
 
     @BindingAdapter({"android:background"})
     public static void setBackground(View view, String imageUrl) {
-//        Context mContext = view.getContext();
-//        Glide.with(mContext).load(imageUrl).into(new SimpleTarget<Bitmap>() {
-//            @Override
-//            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-//                Drawable drawable = new BitmapDrawable(mContext.getResources(), resource);
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                    view.setBackground(drawable);
-//                } else {
-//                    view.setBackgroundDrawable(drawable);
-//                }
-//            }
-//        });
      Context mContext = view.getContext();
         Glide.with(mContext)
                 .load(imageUrl)
-
                 .into(new SimpleTarget<Drawable>() {
             @Override
             public void onResourceReady(Drawable resource, Transition<? super Drawable> transition) {
@@ -104,24 +75,6 @@ public class DataBindingAdapter {
                 }
             }
         });
-    }
-
-    @BindingAdapter("background_blur")
-    public static void backgroundBlur(View view, String url) {
-//        Context mContext = view.getContext();
-//        Glide.with(mContext)
-//                .load(url)
-//                .bitmapTransform(new BlurTransformation(mContext))
-//                .into(new SimpleTarget<GlideDrawable>() {
-//                    @Override
-//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
-//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                            view.setBackground(resource);
-//                        } else {
-//                            view.setBackgroundDrawable(resource);
-//                        }
-//                    }
-//                });
     }
 
     @BindingAdapter("parses")
@@ -151,51 +104,14 @@ public class DataBindingAdapter {
         button.setSoundEffectsEnabled(sound);
     }
 
-
     //    --------------------------ImageView------------------------
     @BindingAdapter({"android:src"})
     public static void setImageDrawable(ImageView imageView, String imageUrl) {
         Context context = imageView.getContext();
         Glide.with(context)
                 .load(imageUrl)
-//                .placeholder(R.mipmap.img_default2_normal)
-//                .error(R.mipmap.img_default2_normal)
                 .into(imageView);
     }
-
-    @BindingAdapter("circle")
-    public static void setImageCircleDrawable(ImageView imageView, String url) {
-        Context context = imageView.getContext();
-//        Glide.with(context).load(url)
-//                .bitmapTransform(new CropCircleTransformation(context))
-//                .error(R.mipmap.home_borrow_checked)
-//                .placeholder(R.mipmap.home_borrow_checked)
-//                .into(imageView);
-    }
-
-    @BindingAdapter("head")
-    public static void head(ImageView imageView, String url) {
-//        Context context = imageView.getContext();
-//        Glide.with(context)
-//                .load(url)
-//                .bitmapTransform(new CropCircleTransformation(context))
-////                .error(R.mipmap.def_icon_head_normal)
-////                .placeholder(R.mipmap.def_icon_head_normal)
-//                .into(imageView);
-    }
-
-    @BindingAdapter({"android:src", "radius"})
-    public static void setImageRadiusDrawable(ImageView imageView, String url, int radius) {
-//        Context context = imageView.getContext();
-//        radius = (int) (radius * BaseUtil.getDisplayMetrics(context).density + 0.5f);
-//        Glide.with(context)
-//                .load(url)
-//                .bitmapTransform(new RoundedCornersTransformation(context, radius, 0, RoundedCornersTransformation.CornerType.ALL))
-////                .error(R.mipmap.home_borrow_checked)
-////                .placeholder(R.mipmap.home_borrow_checked)
-//                .into(imageView);
-    }
-
 
     @BindingAdapter("android:src")
     public static void setImageDrawable(ImageView view, @DrawableRes int mipmapId) {

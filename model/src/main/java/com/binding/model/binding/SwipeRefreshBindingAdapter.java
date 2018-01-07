@@ -9,7 +9,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsSpinner;
 import android.widget.Adapter;
@@ -22,10 +24,10 @@ import android.widget.SpinnerAdapter;
 
 import com.binding.model.R;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.model.inter.Inflate;
 
 
 /**
- * project：cutv_ningbo
  * description：
  * create developer： admin
  * create time：14:25
@@ -45,11 +47,6 @@ public class SwipeRefreshBindingAdapter {
         if (refreshing != view.isRefreshing()) {
             view.setRefreshing(refreshing);
         }
-    }
-
-    @BindingAdapter({"enable"})
-    public static void setEnable(SwipeRefreshLayout view,boolean enable){
-        view.setEnabled(enable);
     }
 
     @BindingAdapter(value = {"onRefreshListener", "refreshingAttrChanged"}, requireAll = false)
@@ -113,5 +110,10 @@ public class SwipeRefreshBindingAdapter {
     @BindingAdapter("currentItem")
     public static void setCurrentItem(ViewPager pager, int currentItem) {
         pager.setCurrentItem(currentItem);
+    }
+    @BindingAdapter("inflate")
+    public static void addInflate(ViewGroup viewGroup, Inflate inflate){
+        viewGroup.removeAllViews();
+        inflate.attachView(viewGroup.getContext(),viewGroup,true,null);
     }
 }

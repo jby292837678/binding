@@ -11,6 +11,5 @@ import com.binding.model.adapter.AdapterHandle;
 public interface Recycler<Binding extends ViewDataBinding> extends Inflate<Binding>,Event{
     Object key();
     boolean areContentsTheSame(Parse parseRecycler);
-//    void respond(@AdapterHandle int type,int status,Object...args);
-    void check(boolean check);
+    void check(int check);
 }

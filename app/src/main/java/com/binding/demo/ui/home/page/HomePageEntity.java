@@ -42,13 +42,11 @@ public class HomePageEntity extends ViewInflateRecycler {
     }
 
     public void onClick(View view){
-        iEventAdapter.setEntity(IEventAdapter.NO_POSITION,this, AdapterType.remove,view);
+        getIEventAdapter().setEntity(IEventAdapter.NO_POSITION,this, AdapterType.remove,view);
     }
 
     @Override
-    public void check(boolean check) {
+    public void check(int check) {
         super.check(check);
-
-//        check
     }
 }

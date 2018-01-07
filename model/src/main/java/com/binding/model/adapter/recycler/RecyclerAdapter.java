@@ -1,6 +1,5 @@
 package com.binding.model.adapter.recycler;
 
-import android.support.v7.util.DiffUtil;
 import android.view.View;
 
 import com.binding.model.adapter.AdapterHandle;
@@ -10,11 +9,6 @@ import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 import static com.binding.model.util.BaseUtil.containsList;
 
@@ -199,14 +193,14 @@ public class RecyclerAdapter<E extends Inflate>
         return true;
     }
 
-
-    private AtomicBoolean refresh = new AtomicBoolean(false);
-
     @SuppressWarnings("unchecked")
     private void refresh(List<E> es, List<E> holderList) {
         holderList.clear();
         holderList.addAll(es);
         notifyDataSetChanged();
+    }
+}
+//    private AtomicBoolean refresh = new AtomicBoolean(false);
 //        if (!refresh.get()) {
 //            refresh.set(true);
 //            Observable.fromArray(es)
@@ -221,7 +215,3 @@ public class RecyclerAdapter<E extends Inflate>
 //                            }
 //                    );
 //        }
-    }
-
-
-}

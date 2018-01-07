@@ -28,8 +28,7 @@ import java.util.List;
 
 public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
         extends ViewHttpModel<C, Binding, List<E>> {
-    public ObservableBoolean refreshing = new ObservableBoolean(true);
-    public ObservableBoolean emptyVisibility = new ObservableBoolean(false);
+    public ObservableBoolean empty = new ObservableBoolean(true);
     private final IModelAdapter<E> adapter;
 
     public ViewArrayModel(IModelAdapter<E> adapter,boolean pageWay) {
@@ -46,9 +45,6 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         return adapter.getList();
     }
 
-    public void setRefreshing(boolean refreshing) {
-        this.refreshing.set(refreshing);
-    }
 
     /**
      * 0: refresh = true  offset
@@ -60,8 +56,8 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     public void accept(List<E> es) throws Exception {
         int position = pageWay ? offset / getPageCount() * getPageCount(): offset;
         adapter.setList(position, es,AdapterType.refresh);
-        emptyVisibility.set(getAdapter().size() != 0);
-        loading.set(false);
+        empty.set(getAdapter().size() == 0);
+        error.set("暂无数据");
     }
 
     public IModelAdapter<E> getAdapter() {

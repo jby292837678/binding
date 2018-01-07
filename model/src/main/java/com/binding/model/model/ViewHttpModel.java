@@ -1,10 +1,12 @@
 package com.binding.model.model;
 
 import android.databinding.ObservableBoolean;
+import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 
 import com.binding.model.cycle.Container;
 import com.binding.model.model.inter.HttpObservable;
+import com.binding.model.model.inter.HttpObservableRefresh;
 import com.binding.model.util.BaseUtil;
 
 import io.reactivex.disposables.Disposable;
@@ -21,22 +23,16 @@ import io.reactivex.disposables.Disposable;
  * @version 2.0
  */
 
-public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R> extends ViewModel<T,Binding> {
-
+public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding, R> extends ViewModel<T, Binding> {
     public final ObservableBoolean loading = new ObservableBoolean(false);
-    private HttpObservable<R> rcHttp;
-    private boolean enable = true;
+    public final ObservableBoolean enable = new ObservableBoolean(true);
+    public final ObservableField<String> error = new ObservableField<>();
     private int pageCount = 16;
     protected int offset = 0;
     private R r;
     private Disposable disposable;
+    private HttpObservable<R> rcHttp;
 
-    /**
-     *  0: refresh = false  offset
-     *  1: refresh = true   offset
-     *  2: refresh = false  page
-     *  3: refresh = true   page
-     * */
     protected final boolean pageWay;
 
     public ViewHttpModel() {
@@ -47,51 +43,55 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
         this.pageWay = pageWay;
     }
 
+    public final void setRcHttp(HttpObservableRefresh<R> rcHttp1){
+        setRoHttp((offset1, refresh) -> rcHttp1.http(offset1,(refresh>>1)==1));
+    }
 
-
-    public void setRcHttp(HttpObservable<R> rcHttp) {
+    public void setRoHttp(HttpObservable<R> rcHttp) {
         this.rcHttp = rcHttp;
-        onHttp();
+        onHttp(0, 0);
     }
 
-    public void onHttp(int offset, boolean refresh){
+    public void onHttp(int offset, int refresh) {
         this.offset = offset;
-        loading.set(true);
-        int p = pageWay?offset/pageCount+1:offset;
-       if(rcHttp!=null){
-           disposable  = rcHttp.http(p,refresh)
-               .subscribe(this::accept,this::onThrowable);
-       }
+        int p = pageWay ? offset / pageCount + 1 : offset;
+        if (rcHttp != null)
+            rcHttp.http(p, refresh).subscribe(this::accept, this::onThrowable, this::onComplete, this::onSubscribe);
     }
 
-    public void onThrowable(Throwable throwable){
+    private void onThrowable(Throwable throwable) {
         loading.set(false);
+        error.set(throwable.getMessage());
         BaseUtil.toast(throwable);
+    }
+
+    private void onSubscribe(Disposable disposable) {
+        loading.set(true);
+        this.disposable = disposable;
     }
 
     public void accept(R r) throws Exception {
         this.r = r;
+    }
+
+    private void onComplete() {
         loading.set(false);
     }
 
-    public R getData(){
+    public R getData() {
         return r;
     }
 
-    public void onHttp(boolean refresh) {
+    public void onHttp(int refresh) {
         onHttp(offset, refresh);
     }
 
-    public void onHttp() {
-        onHttp(true);
+    public void onRefresh() {
+        onHttp(0);
     }
 
     public void setEnable(boolean enable) {
-        this.enable = enable;
-    }
-
-    public boolean getEnable(){
-        return enable;
+        this.enable.set(enable);
     }
 
     public void setPageCount(int pageCount) {
@@ -105,7 +105,6 @@ public class ViewHttpModel<T extends Container,Binding extends ViewDataBinding,R
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(disposable!=null)disposable.dispose();
+        if (disposable != null) disposable.dispose();
     }
-
 }

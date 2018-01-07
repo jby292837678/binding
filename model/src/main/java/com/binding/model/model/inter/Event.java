@@ -35,10 +35,13 @@ import java.util.List;
 
 public interface Event extends Parse {
     SparseArray<Event> eventSet = new SparseArray<>();
-    SparseArray<List<Integer>> hashId = new SparseArray<>();
-
     void registerEvent();
     void unRegisterEvent();
     int onEvent(View view, Event event, Object... args);
+
+    static int event(int eventId, Event event,View view,Object... args){
+        Event currentEvent = eventSet.get(eventId);
+        return currentEvent==null?0:currentEvent.onEvent(view,event,args);
+    }
 
 }

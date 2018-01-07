@@ -37,10 +37,6 @@ public class RecyclerHolder<E extends Inflate> extends RecyclerView.ViewHolder {
         this.e = e;
     }
 
-    public static RecyclerView.ViewHolder createRecyclerHolder(ViewGroup container,View view) {
-        return new RecyclerHolder<>(container,view);
-    }
-
     public void executePendingBindings(E e, IEventAdapter iEventAdapter) {
         this.e.removeBinding();
         this.e = e;

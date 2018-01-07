@@ -5,5 +5,5 @@ package com.binding.model.model.inter;
  */
 
 public interface Http<R> {
-    R http(int offset,boolean refresh);
+    R http(int offset,int refresh);
 }

@@ -250,28 +250,11 @@ public class RecyclerSparseAdapter<E extends Inflate>
         return true;
     }
 
-
-    private AtomicBoolean refresh = new AtomicBoolean(false);
-
     @SuppressWarnings("unchecked")
     private void refresh(List<Inflate> es, List<Inflate> holders) {
         holders.clear();
         holders.addAll(es);
         notifyDataSetChanged();
-//        if (!refresh.get()) {
-//            refresh.set(true);
-//            Observable.fromArray(es)
-//                    .map(s -> DiffUtil.calculateDiff(new DiffUtilCallback<>(holders, s)))
-//                    .subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(diffResult -> {
-//                                diffResult.dispatchUpdatesTo(this);
-//                                holders.clear();
-//                                holders.addAll(es);
-//                                refresh.set(false);
-//                            }
-//                    );
-//        }
     }
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="vm"
+            type="com.binding.model.model.RecyclerInflate" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            onRefreshListener="@{vm::onRefresh}"
+            refreshing="@={vm.loading}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:enabled="@{vm.enabled}">
+            <android.support.v7.widget.RecyclerView
+                adapter="@{vm.adapter}"
+                layout_manager="@{vm.layoutManager}"
+                scroll_listener="@{vm}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:text="@{vm.error}"
+            android:onClick="@{vm::onErrorClick}"
+            android:visibility="@{vm.empty?View.VISIBLE:View.GONE}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+</layout>

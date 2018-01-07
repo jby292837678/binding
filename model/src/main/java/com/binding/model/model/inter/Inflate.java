@@ -14,5 +14,6 @@ public interface Inflate<Binding extends ViewDataBinding> extends Parse{
     Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding set);
     void removeBinding();
     void setIEventAdapter(IEventAdapter iEventAdapter);
+    IEventAdapter getIEventAdapter();
     ViewDataBinding getDataBinding();
 }

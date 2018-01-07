@@ -63,7 +63,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
     }
 
     public final void checkAll(boolean check) {
-        for (E e : getList()) e.check(check);
+        for (E e : getList()) e.check(check?3:2);
     }
 
     public final void select(E e) {
@@ -71,16 +71,16 @@ public class RecyclerSelectAdapter<E extends Recycler>
             boolean contains = queue.contains(e);
             if (!contains) {
                 if (queue.size() == max)
-                    queue.poll().check(false);
-                e.check(true);
+                    queue.poll().check(0);
+                e.check(1);
                 queue.offer(e);
             } else {
-                e.check(false);
+                e.check(0);
             }
         } else {
             boolean c = checkList.contains(e);
             boolean s = c ? checkList.remove(e) : checkList.add(e);
-            e.check(s && !c);
+            e.check(s && !c?1:0);
         }
     }
 

@@ -18,6 +18,7 @@ import com.binding.model.model.ModelView;
 public interface Parse extends Entity {
     ModelView getModelView();
     int getModelIndex();
+    void setModelIndex(int modelIndex);
     int getLayoutId();
 
 }

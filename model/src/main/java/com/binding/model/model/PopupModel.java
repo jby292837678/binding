@@ -3,6 +3,7 @@ package com.binding.model.model;
 import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
 
@@ -17,19 +18,18 @@ import io.reactivex.functions.Consumer;
 
 public class PopupModel<T extends Container, Binding extends ViewDataBinding>  extends ViewModel<T,Binding> {
     private final PopupWindow window = new PopupWindow();
+
     @Override
-    public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
-        Binding viewBinding = super.attachView(context, co, attachToParent, binding);
+    public void attachView(Bundle savedInstanceState, T t) {
+        super.attachView(savedInstanceState, t);
         window.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         window.setFocusable(true);
-        window.setContentView(viewBinding.getRoot());
+        window.setContentView(getDataBinding().getRoot());
         window.setBackgroundDrawable(new BitmapDrawable());
         window.setOutsideTouchable(true);
         window.setTouchable(true);
-        return viewBinding;
     }
-
 
     public PopupWindow getWindow() {
         return window;
