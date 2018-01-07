@@ -1,5 +1,6 @@
 package com.binding.model.model;
 
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 
 import com.binding.model.App;
@@ -36,8 +37,10 @@ public class ViewParse implements Parse {
         return getLayoutId(getModelIndex());
     }
 
-    public final int getLayoutId(int viewType){
-        return modelView.value()[viewType];
+    public final @LayoutRes int getLayoutId(int viewType){
+        int[] layout = getModelView().value();
+        int length = layout.length;
+        return layout[getModelIndex() < length ? getModelIndex() : 0];
     }
 
     @Override
@@ -56,6 +59,8 @@ public class ViewParse implements Parse {
     }
 
     public final int getVariableName() {
-        return modelView.name().length==0? App.vm:modelView.name()[getModelIndex()];
+        int[] bindName = getModelView().name();
+        int length = bindName.length;
+        return getModelIndex() < length ? bindName[getModelIndex()] : App.vm;
     }
 }

@@ -1,13 +1,17 @@
 package com.binding.model.model;
 
+import android.app.Activity;
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.databinding.ViewDataBinding;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,7 +25,6 @@ import com.binding.model.model.inter.Model;
 import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
-
 
 
 /**
@@ -41,9 +44,9 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         implements Model<T, Binding>, LifecycleObserver {
     private transient WeakReference<T> weakReference;
 
-    public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState){
-        Binding binding = attachView(t.getDataActivity(),co,attachToParent,null);
-        attachView(savedInstanceState,t);
+    public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
+        Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
+        attachView(savedInstanceState, t);
         return binding;
     }
 
@@ -64,25 +67,10 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         addLifeCycleObserver(getT(), observer);
     }
 
-    private int getBindName() {
-        int modelIndex = getModelIndex();
-        int[] bindName = getModelView().name();
-        int length = bindName.length;
-        return modelIndex < length ? bindName[modelIndex] : App.vm;
-    }
-
-
-
     public static void dispatchModel(String tag, Object... objects) {
         for (ViewModel model : eventModel) model.onModelEvent(tag, objects);
     }
 
-    private @LayoutRes int getLayoutRes() {
-        int modelIndex = getModelIndex();
-        int[] layout = getModelView().value();
-        int length = layout.length;
-        return layout[modelIndex < length ? modelIndex : 0];
-    }
 
     @Override
     public T getT() {
@@ -107,7 +95,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (getT() != null && getT().getDataActivity() != null) getT().getDataActivity().finish();
     }
 
-    public void onModelEvent( String tag, Object... objects){
+    public void onModelEvent(String tag, Object... objects) {
 
     }
 
@@ -118,4 +106,27 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
+
+
+
+    public void startActivity(Class<? extends Activity> c,Bundle bundle) {
+        if (getT() == null) return;
+        Intent intent = new Intent(getT().getDataActivity(),c);
+        intent.putExtras(bundle);
+        getT().getDataActivity().startActivity(intent);
+    }
+
+
+    public void startActivity(Class<? extends Activity> c) {
+        if (getT() == null) return;
+        Intent intent = new Intent(getT().getDataActivity(),c);
+        getT().getDataActivity().startActivity(intent);
+    }
+
+    public void startActivity(Intent intent) {
+        if (getT() == null) return;
+        getT().getDataActivity().startActivity(intent);
+    }
+
+
 }
