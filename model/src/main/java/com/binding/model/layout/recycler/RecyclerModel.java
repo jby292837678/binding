@@ -48,6 +48,11 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         setLayoutManager(new LinearLayoutManager(getT().getDataActivity()));
     }
 
+//    @Override
+//    public void onRefresh() {
+//        super.onRefresh();
+//    }
+
     public RecyclerView.OnScrollListener getScrollListener() {
         return scrollListener;
     }

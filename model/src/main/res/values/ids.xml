@@ -7,7 +7,10 @@
     <item name="ListModel" type="id"/>
     <item name="PagerModel" type="id"/>
     <item name="swipe_refresh_layout" type="id" />
+    <item name="view_pager_layout" type="id" />
+
     <item name="holder_inflate" type="id" />
+    <item name="radio_group_layout" type="id" />
     <!--<item name="main_home" type="id" />-->
     <!--<item name="main_news" type="id" />-->
     <!--<item name="main_mall" type="id" />-->

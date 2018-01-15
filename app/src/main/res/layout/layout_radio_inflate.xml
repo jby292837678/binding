@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.binding.model.layout.pager.PagerModel"/>
+            type="com.binding.model.model.PagerInflate"/>
     </data>
 
     <FrameLayout
@@ -20,8 +20,8 @@
         <!--app:inflates="@{vm.data}"-->
             <!--app:pager_change="@{vm}"-->
             <!--android:onCheckedChanged="@{vm}"-->
-            <!--app:checkedPosition="@{vm.currentItem}"-->
-        <RadioGroup
+        <com.binding.model.view.radio.CheckRadioGroup
+            app:checkPosition="@={vm.currentItem}"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:layout_marginBottom="6dp"
