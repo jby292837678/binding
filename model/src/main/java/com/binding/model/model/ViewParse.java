@@ -23,9 +23,6 @@ import com.binding.model.util.BaseUtil;
 public class ViewParse implements Parse {
     private final transient ModelView modelView;
     private transient int modelIndex = 0;
-    public ViewParse(@NonNull ModelView modelView) {
-        this.modelView = modelView;
-    }
 
     public ViewParse(){
         this.modelView = BaseUtil.findModelView(getClass());

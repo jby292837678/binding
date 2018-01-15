@@ -17,7 +17,7 @@ import java.util.List;
  */
 
 public class RecyclerBaseAdapter<E extends Inflate>
-        extends RecyclerView.Adapter<RecyclerHolder<E>>{
+        extends RecyclerView.Adapter<RecyclerHolder<E>> {
     protected final List<E> holderList = new ArrayList<>();
     protected IEventAdapter iEventAdapter;
     private final SparseArray<E> sparseArray = new SparseArray<>();

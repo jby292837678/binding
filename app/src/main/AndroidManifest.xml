@@ -15,11 +15,14 @@
 
         </activity>
 
-        <activity android:name=".ui.start.StartupActivity" >
+
+        <activity android:name=".ui.start.StartupActivity" > </activity>
+        <activity android:name=".ui.password.PasswordActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
 
     </application>

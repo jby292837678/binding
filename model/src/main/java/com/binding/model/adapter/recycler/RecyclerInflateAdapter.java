@@ -3,6 +3,7 @@ package com.binding.model.adapter.recycler;
 import android.util.SparseArray;
 
 import com.binding.model.model.ViewInflate;
+import com.binding.model.model.inter.Inflate;
 
 import java.util.List;
 
@@ -10,16 +11,16 @@ import java.util.List;
  * Created by arvin on 2017/12/19.
  */
 
-public class RecyclerInflateAdapter extends RecyclerAdapter<ViewInflate> {
-    private SparseArray<ViewInflate> array = new SparseArray<>();
+public class RecyclerInflateAdapter extends RecyclerAdapter<Inflate> {
+    private SparseArray<Inflate> array = new SparseArray<>();
 
-    public boolean addInflate(int position,ViewInflate inflate){
+    public boolean addInflate(int position,Inflate inflate){
         array.put(position,inflate);
         return addToAdapter(position,inflate);
     }
 
     public boolean remove(int position){
-        ViewInflate inflate = array.get(position);
+        Inflate inflate = array.get(position);
         return super.removeToAdapter(NO_POSITION,inflate);
     }
 
@@ -32,10 +33,10 @@ public class RecyclerInflateAdapter extends RecyclerAdapter<ViewInflate> {
     /**
      * synchronized the list
      * */
-    public final void syncArray(List<ViewInflate> holderList){
+    public final void syncArray(List<Inflate> holderList){
         for (int i = 0; i < array.size(); i++) {
             int key = array.keyAt(i);
-            ViewInflate viewInflate = array.get(key);
+            Inflate viewInflate = array.get(key);
             int actual = holderList.indexOf(viewInflate);
             if(actual == key)continue;
             boolean success = actual == -1? super.addToAdapter(key,viewInflate,holderList): super.moveToAdapter(actual,viewInflate,holderList);

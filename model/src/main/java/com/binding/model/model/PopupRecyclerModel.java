@@ -11,6 +11,7 @@ import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.recycler.RecyclerSelectAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.recycler.RecyclerModel;
+import com.binding.model.model.inter.Inflate;
 
 import io.reactivex.functions.Consumer;
 
@@ -18,7 +19,7 @@ import io.reactivex.functions.Consumer;
  * Created by arvin on 2017/11/19.
  */
 
-public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBinding, E extends ViewInflateRecycler> extends RecyclerModel<T, Binding, E> {
+public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBinding, E extends Inflate> extends RecyclerModel<T, Binding, E> {
     public PopupRecyclerModel(){}
     public PopupRecyclerModel(IModelAdapter<E> adapter) {
         super(adapter);

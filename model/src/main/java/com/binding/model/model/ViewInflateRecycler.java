@@ -20,6 +20,10 @@ public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> exten
 
     @Override
     public void check(int check) {
+        check((check&1) == 1);
+    }
+
+    public void check(boolean checked){
 
     }
 

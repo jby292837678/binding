@@ -36,7 +36,7 @@ public class App implements Application.ActivityLifecycleCallbacks {
     private Stack<Activity> stack = new Stack<>();
     private static final App app = new App();
     public static int vm = BR.vm;
-    public static boolean debug;
+    public static boolean debug = false;
 
     public static App getInstance() {
         return app;

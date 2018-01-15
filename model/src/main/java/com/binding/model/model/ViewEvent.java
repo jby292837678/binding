@@ -1,6 +1,5 @@
 package com.binding.model.model;
 
-import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.binding.model.model.inter.Event;
@@ -19,11 +18,7 @@ import com.binding.model.model.inter.Event;
 
 
 public class ViewEvent extends ViewParse implements Event {
-    public ViewEvent(@NonNull ModelView modelView) {
-        super(modelView);
-    }
 
-    public ViewEvent() {}
 
     @Override
     public final void registerEvent() {

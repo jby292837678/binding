@@ -3,6 +3,7 @@ package com.binding.model.model;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -20,14 +21,8 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
     private transient Binding dataBinding;
     private transient IEventAdapter iEventAdapter;
 
-    public ViewInflate(@NonNull ModelView modelView) {
-        super(modelView);
-    }
-
-    public ViewInflate() {}
-
     @Override
-    public final Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
+    public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
         registerEvent();
         return dataBinding =  bind(getLayoutId(),context, co, attachToParent, binding);
     }

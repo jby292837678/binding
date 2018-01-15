@@ -6,18 +6,11 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Intent;
 import android.databinding.ViewDataBinding;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.annotation.IdRes;
-import android.support.annotation.LayoutRes;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 
-//import com.binding.library.BR;
-import com.android.databinding.library.baseAdapters.BR;
-import com.binding.model.App;
 import com.binding.model.cycle.Container;
 import com.binding.model.cycle.CycleContainer;
 import com.binding.model.model.inter.Model;
@@ -25,6 +18,8 @@ import com.binding.model.model.inter.Model;
 import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
+
+//import com.binding.library.BR;
 
 
 /**

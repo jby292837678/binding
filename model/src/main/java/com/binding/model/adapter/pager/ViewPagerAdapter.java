@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.ILayoutAdapter;
-import com.binding.model.model.ViewInflate;
+import com.binding.model.model.inter.Inflate;
 import com.binding.model.util.BaseUtil;
 
 import java.util.ArrayList;
@@ -26,10 +26,10 @@ import java.util.List;
  */
 
 
-public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implements ILayoutAdapter<E> {
+public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements ILayoutAdapter<E> {
     private List<E> list = new ArrayList<>();
     private int count = Integer.MAX_VALUE;
-    private IEventAdapter<E> iEntityAdapter;
+    private IEventAdapter<E> iEntityAdapter = this;
 
     @Override
     public void setCount(int count) {
@@ -50,6 +50,7 @@ public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implem
     public Object instantiateItem(ViewGroup container, int position) {
         E e = list.get(position % count);
         ViewDataBinding binding = e.attachView(container.getContext(), container, false, e.getDataBinding());
+        e.setIEventAdapter(iEntityAdapter);
         View v = binding.getRoot();
         if (container.equals(v.getParent())) container.removeView(v);
         container.addView(v);
@@ -58,7 +59,9 @@ public class ViewPagerAdapter<E extends ViewInflate> extends PagerAdapter implem
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView(list.get(position % count).getDataBinding().getRoot());
+        E e = list.get(position % count);
+        e.removeBinding();
+        container.removeView(e.getDataBinding().getRoot());
     }
 
     @Override

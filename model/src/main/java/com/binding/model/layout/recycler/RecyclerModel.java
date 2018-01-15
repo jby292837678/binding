@@ -12,6 +12,7 @@ import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
+import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Recycler;
 
 /**
@@ -25,7 +26,7 @@ import com.binding.model.model.inter.Recycler;
  *
  * @version 2.0
  */
-public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Recycler> extends ViewArrayModel<C, Binding, E> {
+public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate> extends ViewArrayModel<C, Binding, E> {
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
 

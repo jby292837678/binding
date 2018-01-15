@@ -6,6 +6,7 @@ import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.List;
@@ -26,7 +27,7 @@ import static com.binding.model.util.BaseUtil.containsList;
 
 public class RecyclerAdapter<E extends Inflate>
         extends RecyclerBaseAdapter<E>
-        implements IModelAdapter<E> {
+        implements IRecyclerAdapter<E> {
 
 
     public RecyclerAdapter() {
