@@ -1,6 +1,8 @@
 package com.binding.model.layout.rotate;
 
 import com.binding.model.layout.ViewArrayModel;
+import com.binding.model.model.ViewInflate;
+import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Parse;
 
 import java.util.ArrayList;
@@ -18,15 +20,15 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
     private int loop = -1;
     private int count = 0;
     private List<E> list = new ArrayList<>();
-    private ViewArrayModel<?,?,E> model;
+    private Inflate inflate;
     private List<PagerRotateListener<E>> pagerRotateListeners = new ArrayList<>();
 
-    public PagerEntity(List<E> list, ViewArrayModel<?,?,E> model) {
-        this(3, list, model);
+    public PagerEntity(List<E> list, Inflate inflate)  {
+        this(3, list,inflate );
     }
 
-    public PagerEntity(int totalTime, List<E> list, ViewArrayModel<?,?,E> model) {
-        this.model = model;
+    public PagerEntity(int totalTime, List<E> list, Inflate inflate) {
+        this.inflate = inflate;
         this.totalTime = totalTime;
         if (list != null) {
             this.list.clear();
@@ -38,8 +40,8 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
 
 
 
-    public ViewArrayModel getModel() {
-        return model;
+    public Inflate getModel() {
+        return inflate;
     }
 
     public void setCount(int count) {
@@ -118,12 +120,12 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PagerEntity<?> that = (PagerEntity<?>) o;
-        return model.equals(that.model);
+        return inflate.equals(that.inflate);
 
     }
 
     @Override
     public int hashCode() {
-        return model.hashCode();
+        return inflate.hashCode();
     }
 }

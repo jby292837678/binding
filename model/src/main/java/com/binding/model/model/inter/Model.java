@@ -1,5 +1,6 @@
 package com.binding.model.model.inter;
 
+import android.arch.lifecycle.LifecycleObserver;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 
@@ -21,7 +22,7 @@ import java.util.HashSet;
  */
 
 
-public interface Model<T extends Container,Binding extends ViewDataBinding> extends Inflate<Binding>{
+public interface Model<T extends Container,Binding extends ViewDataBinding> extends Inflate<Binding>,LifecycleObserver {
     HashSet<ViewModel> eventModel = new HashSet<>();
     void attachView(Bundle savedInstanceState, T t);
     T getT();

@@ -19,9 +19,6 @@ import java.lang.ref.WeakReference;
 
 import timber.log.Timber;
 
-//import com.binding.library.BR;
-
-
 /**
  * project：cutv_ningbo
  * description：
@@ -36,15 +33,13 @@ import timber.log.Timber;
  */
 
 public class ViewModel<T extends Container, Binding extends ViewDataBinding> extends ViewInflate<Binding>
-        implements Model<T, Binding>, LifecycleObserver {
+        implements Model<T, Binding> {
     private transient WeakReference<T> weakReference;
-
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
         attachView(savedInstanceState, t);
         return binding;
     }
-
 
     @CallSuper
     @Override
@@ -66,7 +61,6 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         for (ViewModel model : eventModel) model.onModelEvent(tag, objects);
     }
 
-
     @Override
     public T getT() {
         T t = null;
@@ -83,6 +77,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (getT() != null) {
             unRegisterEvent();
             weakReference.clear();
+            removeBinding();
         }
     }
 
@@ -101,8 +96,6 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
-
-
 
     public void startActivity(Class<? extends Activity> c,Bundle bundle) {
         if (getT() == null) return;
