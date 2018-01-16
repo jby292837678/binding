@@ -2,6 +2,7 @@ package com.binding.model.data.converter;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class JsonResponseBodyConverter<T> implements Converter<ResponseBody, T> 
     }
 
     @Override public T convert(ResponseBody value) throws IOException {
+        gson.fromJson(value.string(),new TypeToken<Object>(){}.getRawType());
         JsonReader jsonReader = gson.newJsonReader(value.charStream());
 //        adapter.fromJson(EncryptUtils.decode(value.string()));
         try {

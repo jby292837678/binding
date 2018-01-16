@@ -35,6 +35,7 @@ import timber.log.Timber;
 public class ViewModel<T extends Container, Binding extends ViewDataBinding> extends ViewInflate<Binding>
         implements Model<T, Binding> {
     private transient WeakReference<T> weakReference;
+
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
         attachView(savedInstanceState, t);
@@ -49,16 +50,8 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (t instanceof CycleContainer) ((CycleContainer) t).getLifecycle().addObserver(this);
     }
 
-    public void addLifeCycleObserver(T t, LifecycleObserver observer) {
-        if (t instanceof CycleContainer) ((CycleContainer) t).getLifecycle().addObserver(observer);
-    }
-
     public void addLifeCycleObserver(LifecycleObserver observer) {
-        addLifeCycleObserver(getT(), observer);
-    }
-
-    public static void dispatchModel(String tag, Object... objects) {
-        for (ViewModel model : eventModel) model.onModelEvent(tag, objects);
+        if (getT()!=null&&getT() instanceof CycleContainer) ((CycleContainer) getT()).getLifecycle().addObserver(observer);
     }
 
     @Override
@@ -85,6 +78,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (getT() != null && getT().getDataActivity() != null) getT().getDataActivity().finish();
     }
 
+    @Override
     public void onModelEvent(String tag, Object... objects) {
 
     }

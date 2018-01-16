@@ -63,7 +63,7 @@ public class SharePreferenceUtil {
     }
 
     @SuppressWarnings("unchecked")
-    private void putValue(String key, Object value) {
+    private void putValue(String key, Object value,boolean remove) {
         if (value == null) return;
         if (value instanceof String) {
             editor.putString(key, value.toString());
@@ -78,6 +78,13 @@ public class SharePreferenceUtil {
         } else if (value instanceof Set) {
             editor.putStringSet(key, (Set<String>) value);
         } else {
+            Class clazz = value.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field f : fields) {
+                Object object = ReflectUtil.beanGetValue(f, value);
+                if (!ReflectUtil.isFieldNull(object)) putValue(f.getName(), object,remove);
+                else if(remove) editor.remove(f.getName());
+            }
             Timber.w("key:%1s,value:%2s", key, value);
         }
     }
@@ -91,7 +98,7 @@ public class SharePreferenceUtil {
      * @param value value
      */
     public void setValue(String key, @NonNull Object value) {
-        putValue(key, value);
+        putValue(key, value,false);
         editor.commit();
     }
 
@@ -100,7 +107,7 @@ public class SharePreferenceUtil {
         Field[] fields = clazz.getDeclaredFields();
         for (Field f : fields) {
             Object object = ReflectUtil.beanGetValue(f, t);
-            if (!ReflectUtil.isFieldNull(object)) putValue(f.getName(), object);
+            if (!ReflectUtil.isFieldNull(object)) putValue(f.getName(), object,true);
             else editor.remove(f.getName());
         }
         editor.commit();
@@ -111,20 +118,11 @@ public class SharePreferenceUtil {
         Field[] fields = clazz.getDeclaredFields();
         for (Field f : fields) {
             Object object = ReflectUtil.beanGetValue(f, t);
-//            if(object!=null)
             if (!ReflectUtil.isFieldNull(object))
-                putValue(f.getName(), object);
+                putValue(f.getName(), object,false);
         }
         editor.commit();
     }
-
-//    public <T> void setAllDto(T t) {
-//        for (Field f : t.getClass().getDeclaredFields()) {
-//           Object o = ReflectUtil.beanGetValue(f,t);
-//            if(o!=null)putValue(f.getName(),o);
-//        }
-//        editor.commit();
-//    }
 
 
     public Map<String, ?> getAll() {

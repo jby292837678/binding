@@ -26,7 +26,6 @@ public class ViewParse implements Parse {
 
     public ViewParse(){
         this.modelView = BaseUtil.findModelView(getClass());
-        if(modelView == null)throw new RuntimeException("should to add @ModelView to the class:" + getClass());
     }
 
     @Override
@@ -42,6 +41,7 @@ public class ViewParse implements Parse {
 
     @Override
     public final ModelView getModelView() {
+        if(modelView == null)throw new RuntimeException("should to add @ModelView to the class:" + getClass());
         return modelView;
     }
 

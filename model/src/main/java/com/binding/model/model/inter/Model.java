@@ -23,7 +23,11 @@ import java.util.HashSet;
 
 
 public interface Model<T extends Container,Binding extends ViewDataBinding> extends Inflate<Binding>,LifecycleObserver {
-    HashSet<ViewModel> eventModel = new HashSet<>();
+    HashSet<Model> eventModel = new HashSet<>();
     void attachView(Bundle savedInstanceState, T t);
     T getT();
+    void onModelEvent(String tag, Object[] objects);
+    static void dispatchModel(String tag, Object... objects) {
+        for (Model model : eventModel) model.onModelEvent(tag, objects);
+    }
 }

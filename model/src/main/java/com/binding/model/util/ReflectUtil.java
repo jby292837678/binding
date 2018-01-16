@@ -1,5 +1,6 @@
 package com.binding.model.util;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import java.lang.reflect.Constructor;
@@ -29,7 +30,7 @@ import timber.log.Timber;
  * @version 2.0
  */
 
-
+@SuppressWarnings("unchecked")
 public class ReflectUtil {
 
     public static List<Field> getAllFields(Class<?> aClass) {
@@ -355,15 +356,37 @@ public class ReflectUtil {
         try {
             if (args.length == 0) return tClass.newInstance();
             else {
-//                for(Constructor constructor:tClass.getDeclaredConstructors()){
-//                    constructor.getGenericParameterTypes()
-//                }
                 return tClass.getConstructor(cs).newInstance(args);
             }
         } catch (Exception e) {
-
             throw new RuntimeException(e);
         }
 
+    }
+
+    public static <T> T copy(@NonNull T t){
+        Class<T> c = (Class<T>) t.getClass();
+        T t1 = newInstance(c);
+        for (Field field : getAllFields(t.getClass())){
+            Object object = beanGetValue(field,t);
+            if(!isFieldNull(object))beanSetValue(field,t1,object);
+        }
+        return t1;
+    }
+
+
+    public static <F,T> T trans(@NonNull F f,Class<T> tc){
+        Class<F> fc = (Class<F>) f.getClass();
+        T t = newInstance(tc);
+        for (Field field:getAllFields(tc)){
+            try {
+                Field fField = fc.getDeclaredField(field.getName());
+                Object o = beanGetValue(fField,f);
+                if(!isFieldNull(o))beanSetValue(field,t,o);
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
+        }
+        return t;
     }
 }
