@@ -23,7 +23,7 @@ public class CheckRadioGroup extends RadioGroup {
     }
 
     public void checkPosition(int checkPosition) {
-        check(findViewById(checkPosition).getId());
+        check(getChildAt(checkPosition).getId());
     }
 
     @Override

@@ -12,20 +12,20 @@ import com.binding.model.R;
 /**
  * Created by arvin on 2018/1/15.
  */
-@InverseBindingMethods({@InverseBindingMethod(type = ViewPager.class, attribute = "current", event = "currentAttrChanged", method = "getCurrentItem")})
+@InverseBindingMethods({@InverseBindingMethod(type = ViewPager.class, attribute = "position", event = "positionAttrChanged", method = "getCurrentItem")})
 public class ViewPagerBindingAdapter {
-    @BindingAdapter({"current"})
+    @BindingAdapter("position")
     public static void setCurrentItem(ViewPager view, int position) {
         if (view.getCurrentItem() != position) view.setCurrentItem(position);
     }
 
-    @BindingAdapter(value = {"change","currentAttrChanged"},requireAll =  false)
-    public static void addOnPageChangeListener(ViewPager pager,ViewPager.OnPageChangeListener listener,InverseBindingListener currentAttrChanged){
+    @BindingAdapter(value = {"pageChange","positionAttrChanged"},requireAll =  false)
+    public static void addOnPageChangeListener(ViewPager pager,ViewPager.OnPageChangeListener listener,InverseBindingListener positionAttrChanged){
         ViewPager.OnPageChangeListener newValue = new ViewPager.OnPageChangeListener() {
             @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {if(listener!=null)listener.onPageScrolled(position, positionOffset, positionOffsetPixels);}
             @Override public void onPageScrollStateChanged(int state) {if(listener!=null)listener.onPageScrollStateChanged(state);}
             @Override public void onPageSelected(int position) {
-                if (currentAttrChanged != null) currentAttrChanged.onChange();
+                if (positionAttrChanged != null) positionAttrChanged.onChange();
                 if (listener != null) listener.onPageSelected(position);
             }
         };

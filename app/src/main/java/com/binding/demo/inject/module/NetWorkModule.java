@@ -2,7 +2,7 @@ package com.binding.demo.inject.module;
 
 import com.binding.demo.inject.api.Api;
 import com.binding.model.BuildConfig;
-import com.binding.model.data.converter.JsonConverterFactory;
+
 import com.binding.demo.inject.scope.ApplicationScope;
 import com.binding.demo.inject.interceptor.UserInterceptor;
 
@@ -15,6 +15,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * project：cutv_ningbo
@@ -40,7 +41,7 @@ public class NetWorkModule {
 
         return new Retrofit.Builder()
                 .baseUrl(Api.host)
-                .addConverterFactory(JsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .callFactory(client)
                 .build().create(Api.class);

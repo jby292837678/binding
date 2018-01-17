@@ -92,10 +92,6 @@ public class SwipeRefreshBindingAdapter {
         if (listener != null) view.addOnScrollListener(listener);
     }
 
-    @BindingAdapter("checkedPosition")
-    public static void checkPosition(RadioGroup group, int position) {
-        if (position < group.getChildCount()) group.check(group.getChildAt(position).getId());
-    }
 
     @BindingAdapter("checked")
     public static void addCheckedListener(RadioGroup group, RadioGroup.OnCheckedChangeListener listener) {

@@ -13,9 +13,8 @@ package com.binding.model.data.exception;
  */
 
 
-public class ApiException extends Exception {
-    public ApiException() {
-    }
+public class ApiException extends RuntimeException{
+    public ApiException() {}
 
     public ApiException(String message) {
         super(message);

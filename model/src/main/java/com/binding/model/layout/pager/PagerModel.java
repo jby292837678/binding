@@ -31,12 +31,11 @@ import java.util.List;
 
 public class PagerModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
         extends ViewArrayModel<C,  Binding,E>
-        implements PagerRotateListener<E>, ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
+        implements PagerRotateListener<E>, ViewPager.OnPageChangeListener{
     private int loop = -1;
     private PagerEntity<E> pagerEntity;
     public ObservableInt currentItem = new ObservableInt(0);
     private boolean rotate = false;
-    private int count = 0;
 
     public PagerModel(IModelAdapter<E> adapter) {
         super(adapter);
@@ -69,30 +68,10 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
         pagerEntity.addRotateListener(this);
     }
 
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    @Override
-    public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-        int indexOfChild = group.indexOfChild(group.findViewById(checkedId));
-        setCurrentItem(indexOfChild);
-    }
-
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        this.currentItem.set(position);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        if (rotate) TimeUtil.getInstance().switching(pagerEntity, state);
+    @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+    @Override public void onPageSelected(int position) {}
+    @Override public void onPageScrollStateChanged(int state) {
+        if (rotate&&pagerEntity!=null) TimeUtil.getInstance().switching(pagerEntity, state);
     }
 
     public void setRotate(boolean rotate) {
