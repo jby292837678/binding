@@ -23,8 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="63dp">
 
-            <RadioGroup
-                app:checked="@{vm}"
+            <com.binding.model.view.radio.CheckRadioGroup
+                app:checkedChange="@{vm::onCheckedChanged}"
                 android:background="@color/white"
                 android:id="@+id/radio_group"
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                     android:drawableTop="@drawable/home_device"
                     android:text="@string/device"
                     />
-            </RadioGroup>
+            </com.binding.model.view.radio.CheckRadioGroup>
         </FrameLayout>
     </FrameLayout>
 </layout>

@@ -64,6 +64,8 @@ public class RecyclerSelectAdapter<E extends Recycler>
 
     public final void checkAll(boolean check) {
         for (E e : getList()) e.check(check?3:2);
+        if(!check)checkList.clear();
+        else checkList.addAll(getList());
     }
 
     public final void select(E e) {

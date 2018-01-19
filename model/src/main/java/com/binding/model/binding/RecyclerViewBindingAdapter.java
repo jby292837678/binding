@@ -19,6 +19,17 @@ public class RecyclerViewBindingAdapter {
 
 //        view.getposi
     }
+
+
+    @BindingAdapter({"layout_manager"})
+    public static void setLayoutManager(RecyclerView view, RecyclerView.LayoutManager layoutManager) {
+        if (layoutManager != null) view.setLayoutManager(layoutManager);
+    }
+
+    @BindingAdapter({"scroll_listener"})
+    public static void setOnScroll(RecyclerView view, RecyclerView.OnScrollListener listener) {
+        if (listener != null) view.addOnScrollListener(listener);
+    }
 }
 
 //@InverseBindingMethods({

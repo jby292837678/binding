@@ -50,6 +50,10 @@ public class App implements Application.ActivityLifecycleCallbacks {
         else CrashHandler.getInstance().init(application);
     }
 
+    public Stack<Activity> getStack() {
+        return stack;
+    }
+
     public void init(Application application) {
         init(application, debug, vm);
     }

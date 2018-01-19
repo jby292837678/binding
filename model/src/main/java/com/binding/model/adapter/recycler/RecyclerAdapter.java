@@ -9,6 +9,7 @@ import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.inter.Inflate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.binding.model.util.BaseUtil.containsList;
@@ -155,7 +156,7 @@ public class RecyclerAdapter<E extends Inflate>
 
     protected boolean removeListAdapter(int position, List<E> es, List<E> holderList) {
         int rang = isRang(position, es, holderList);
-        if (rang>=0) {
+        if (rang >= 0) {
             holderList.removeAll(es);
             notifyItemRangeRemoved(position, es.size());
             return true;
@@ -183,12 +184,12 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean refreshListAdapter(int position, List<E> es, List<E> holderList) {
-        List<E> l;
-        if (containsList(position,holderList)){
-            l = holderList.subList(0, position);
-            l.addAll(es);
-        } else if (holderList.size() == 0||position == holderList.size()) {
+        if (holderList.size() == 0 || position == holderList.size())
             return addListAdapter(position, es, holderList);
+        List<E> l = new ArrayList<>();
+        if (containsList(position, holderList)) {
+            l.addAll(holderList.subList(0, position));
+            l.addAll(es);
         } else l = es;
         refresh(l, holderList);
         return true;

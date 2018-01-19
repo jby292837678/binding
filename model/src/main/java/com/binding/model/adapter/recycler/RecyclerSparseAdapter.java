@@ -234,7 +234,9 @@ public class RecyclerSparseAdapter<E extends Inflate>
     protected boolean refreshListAdapter(int position, List<E> es, List<E> inflates) {
         List<Inflate> l = new ArrayList<>();
         if (position > 0 && position < inflates.size()) {
-            inflates = inflates.subList(0, position);
+            List<E> ls = new ArrayList<>();
+            ls.addAll(inflates.subList(0,position));
+            inflates = ls;
             inflates.addAll(es);
         } else if (inflates.size() == 0) {
             return addListAdapter(position, es, inflates);

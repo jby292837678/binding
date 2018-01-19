@@ -60,6 +60,10 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
         this.currentItem.set(currentItem);
     }
 
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+    }
+
     @Override
     public void accept(List<E> es) throws Exception {
         super.accept(es);

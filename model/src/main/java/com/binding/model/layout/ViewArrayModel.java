@@ -31,14 +31,11 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     public ObservableBoolean empty = new ObservableBoolean(true);
     private final IModelAdapter<E> adapter;
 
-    public ViewArrayModel(IModelAdapter<E> adapter,boolean pageWay) {
-        super(pageWay);
+    public ViewArrayModel(IModelAdapter<E> adapter) {
         this.adapter = adapter;
     }
 
-    public ViewArrayModel(IModelAdapter<E> adapter){
-        this(adapter,false);
-    }
+
 
     @Override
     public List<E> getData() {

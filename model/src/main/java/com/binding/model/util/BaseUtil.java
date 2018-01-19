@@ -401,9 +401,8 @@ public class BaseUtil {
     }
 
     public static void toast(Context context, Throwable e) {
-        if (e instanceof ApiException) {
-            toast(context, e.getMessage());
-        }else e.printStackTrace();
+        if (e instanceof ApiException) toast(context, e.getMessage());
+        if(App.debug)e.printStackTrace();
     }
 
     public static void toast(Fragment fragment, Throwable e) {

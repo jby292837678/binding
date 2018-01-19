@@ -25,16 +25,17 @@ public class CheckRadioGroupBindingAdapter {
     }
 
     @BindingAdapter(value = {"checkedChange","positionAttrChanged"},requireAll = false)
-    public static void addOnCheckedChangeListener(CheckRadioGroup checkRadioGroup, CheckRadioGroup.OnCheckedChangeListener listener,
+    public static void addOnCheckedChangeListener(RadioGroup radioGroup, RadioGroup.OnCheckedChangeListener listener,
                                                   InverseBindingListener positionAttrChanged){
         RadioGroup.OnCheckedChangeListener newValue = (group, checkedId) -> {
             if(listener!=null)listener.onCheckedChanged(group,checkedId);
             if(positionAttrChanged!=null)positionAttrChanged.onChange();
         };
-        RadioGroup.OnCheckedChangeListener oldValue = ListenerUtil.trackListener(checkRadioGroup, newValue, R.id.radio_group_layout);
-        if(oldValue!=null)checkRadioGroup.setOnCheckedChangeListener(null);
-        checkRadioGroup.setOnCheckedChangeListener(newValue);
+        RadioGroup.OnCheckedChangeListener oldValue = ListenerUtil.trackListener(radioGroup, newValue, R.id.radio_group_layout);
+        if(oldValue!=null)radioGroup.setOnCheckedChangeListener(null);
+        radioGroup.setOnCheckedChangeListener(newValue);
     }
+
 }
 
 

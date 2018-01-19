@@ -22,7 +22,7 @@ import javax.inject.Inject;
  * Created by arvin on 2017/11/27.
  */
 @ModelView(R.layout.activity_home)
-public class HomeModel extends ViewModel<HomeActivity,ActivityHomeBinding> implements RadioGroup.OnCheckedChangeListener{
+public class HomeModel extends ViewModel<HomeActivity,ActivityHomeBinding> {
     @Inject HomeModel() {}
     private static final List<HomeEntity> list = new ArrayList<>();
     @ActivityFragmentManager
@@ -42,7 +42,6 @@ public class HomeModel extends ViewModel<HomeActivity,ActivityHomeBinding> imple
         radioGroup.check(radioGroup.getChildAt(0).getId());
     }
 
-    @Override
     public void onCheckedChanged(RadioGroup radioGroup, int id) {
         int position = radioGroup.indexOfChild(radioGroup.findViewById(id));
         checkFragment(position);

@@ -232,12 +232,35 @@ public class ReflectUtil {
         return list;
     }
 
+    public static void invoke(String methodName,Object o,Object...args){
+        try {
+            Class<?>[] cs = new Class<?>[args.length];
+            for (int i = 0; i <args.length; i++) cs[i] = args[i].getClass();
+            Method method = o.getClass().getDeclaredMethod(methodName,cs);
+            if(method!=null)invoke(method,o,args);
+        } catch (NoSuchMethodException e) {
+            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s",methodName,o.getClass().getName(),arrayToString(args));
+        }
+    }
+
     public static void invoke(Method method, Object t, Object... args) {
         try {
             method.invoke(t, args);
         } catch (Exception e) {
-            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), args[0]);
+            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(),arrayToString(args));
         }
+    }
+
+    public static String arrayToString(Object[] args){
+        if(args==null)return "";
+        StringBuilder builder = new StringBuilder();
+        for (Object arg : args) {
+            builder.append(arg.getClass().getName());
+            builder.append(":");
+            builder.append(arg.toString());
+            builder.append("\t\t");
+        }
+        return builder.toString();
     }
 
     /**

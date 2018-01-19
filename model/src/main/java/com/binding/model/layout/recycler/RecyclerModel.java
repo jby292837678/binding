@@ -30,12 +30,8 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
 
-    public RecyclerModel(IModelAdapter<E> adapter, boolean pageWay) {
-        super(adapter, pageWay);
-    }
-
     public RecyclerModel(IModelAdapter<E> adapter) {
-        this(adapter, false);
+        super(adapter);
     }
 
     public RecyclerModel() {
@@ -47,11 +43,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         super.attachView(savedInstanceState, c);
         setLayoutManager(new LinearLayoutManager(getT().getDataActivity()));
     }
-
-//    @Override
-//    public void onRefresh() {
-//        super.onRefresh();
-//    }
 
     public RecyclerView.OnScrollListener getScrollListener() {
         return scrollListener;
@@ -72,7 +63,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     public void setEventAdapter(IEventAdapter iEventAdapter) {
         getAdapter().setIEventAdapter(iEventAdapter);
     }
-
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
         private int lastVisibleItem = 0;
