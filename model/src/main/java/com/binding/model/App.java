@@ -50,8 +50,16 @@ public class App implements Application.ActivityLifecycleCallbacks {
         else CrashHandler.getInstance().init(application);
     }
 
-    public Stack<Activity> getStack() {
-        return stack;
+    public static Stack<Activity> getStack() {
+        return app.stack;
+    }
+
+    public static boolean isActivityLive(Class c) {
+        for (Activity activity : app.stack) {
+            if (activity.getClass().isAssignableFrom(c))
+                return true;
+        }
+        return false;
     }
 
     public void init(Application application) {

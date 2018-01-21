@@ -25,9 +25,9 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class RecyclerSelectAdapter<E extends Recycler>
         extends RecyclerAdapter<E> {
+    private final ArrayBlockingQueue<E> queue;
     private final HashSet<E> checkList = new HashSet<>();
     private final int max;
-    private final ArrayBlockingQueue<E> queue;
 
     public RecyclerSelectAdapter() {
         this(0);

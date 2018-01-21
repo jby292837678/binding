@@ -2,6 +2,7 @@ package com.binding.model.view.radio;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RadioGroup;
 
 /**
@@ -19,16 +20,13 @@ public class CheckRadioGroup extends RadioGroup {
 
     public int getCheckedPosition(){
         int checkId = getCheckedRadioButtonId();
+        if(checkId == -1)return 0;
         return indexOfChild(findViewById(checkId));
     }
 
     public void checkPosition(int checkPosition) {
-        check(getChildAt(checkPosition).getId());
-    }
-
-    @Override
-    public void setOnCheckedChangeListener(OnCheckedChangeListener listener) {
-        super.setOnCheckedChangeListener(listener);
-
+        View view = getChildAt(checkPosition);
+        if(view == null)return;
+        check(view.getId());
     }
 }

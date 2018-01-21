@@ -15,12 +15,23 @@ package com.binding.model.data.exception;
 
 public class ApiException extends RuntimeException{
     private int code;
+    private String json;
 
     public ApiException() {}
 
     public ApiException(String message, int code) {
         super(message);
         this.code = code;
+    }
+
+    public ApiException(String message,int code, String json) {
+        super(message);
+        this.code = code;
+        this.json = json;
+    }
+
+    public String getJson() {
+        return json;
     }
 
     public ApiException(String message) {
