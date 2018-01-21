@@ -34,7 +34,7 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
         implements PagerRotateListener<E>, ViewPager.OnPageChangeListener{
     private int loop = -1;
     private PagerEntity<E> pagerEntity;
-    public ObservableInt currentItem = new ObservableInt(0);
+    public ObservableInt currentItem = new ObservableInt(-1);
     private boolean rotate = false;
 
     public PagerModel(IModelAdapter<E> adapter) {

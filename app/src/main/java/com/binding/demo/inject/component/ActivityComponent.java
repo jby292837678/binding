@@ -4,6 +4,7 @@ package com.binding.demo.inject.component;
 import com.binding.demo.inject.scope.ActivityScope;
 import com.binding.demo.inject.module.ActivityModule;
 import com.binding.demo.ui.home.HomeActivity;
+import com.binding.demo.ui.message.MessageActivity;
 import com.binding.demo.ui.password.PasswordActivity;
 import com.binding.demo.ui.start.StartupActivity;
 import com.binding.demo.ui.user.login.LoginActivity;
@@ -29,6 +30,7 @@ public interface ActivityComponent {
     void inject(LoginActivity activity);
     void inject(RegisterActivity activity);
     void inject(StartupActivity activity);
+    void inject(MessageActivity activity);
     void inject(PasswordActivity activity);
 
 
@@ -40,5 +42,6 @@ public interface ActivityComponent {
         String startup = ike +"startup";
 
         String password = ike+"password";
+        String message = ike+"message";
     }
 }

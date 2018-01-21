@@ -8,6 +8,7 @@ import android.databinding.adapters.ListenerUtil;
 import android.support.design.widget.TabLayout;
 
 import com.binding.model.R;
+import com.binding.model.util.ReflectUtil;
 
 /**
  * Created by arvin on 2018/1/17.
@@ -20,7 +21,11 @@ public class TabLayoutBindingAdapter {
 
     @BindingAdapter("position")
     public static void setScrollPosition(TabLayout layout,int position){
-        if(layout.getSelectedTabPosition() == position)return;
+        int current = layout.getSelectedTabPosition();
+        if(current == position||position<0)return;
+//        layout.selectTab(tab);
+        TabLayout.Tab tab =layout.getTabAt(position);
+        ReflectUtil.invoke("selectTab",layout,tab);
         layout.setScrollPosition(position, 0f, true);
     }
 

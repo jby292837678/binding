@@ -232,14 +232,17 @@ public class ReflectUtil {
         return list;
     }
 
-    public static void invoke(String methodName,Object o,Object...args){
+    public static void invoke(String methodName, Object o, Object... args) {
         try {
             Class<?>[] cs = new Class<?>[args.length];
-            for (int i = 0; i <args.length; i++) cs[i] = args[i].getClass();
-            Method method = o.getClass().getDeclaredMethod(methodName,cs);
-            if(method!=null)invoke(method,o,args);
+            for (int i = 0; i < args.length; i++) cs[i] = args[i].getClass();
+            Method method = o.getClass().getDeclaredMethod(methodName, cs);
+            if (method != null) {
+                method.setAccessible(true);
+                invoke(method, o, args);
+            }
         } catch (NoSuchMethodException e) {
-            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s",methodName,o.getClass().getName(),arrayToString(args));
+            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
         }
     }
 
@@ -247,12 +250,12 @@ public class ReflectUtil {
         try {
             method.invoke(t, args);
         } catch (Exception e) {
-            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(),arrayToString(args));
+            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), arrayToString(args));
         }
     }
 
-    public static String arrayToString(Object[] args){
-        if(args==null)return "";
+    public static String arrayToString(Object[] args) {
+        if (args == null) return "";
         StringBuilder builder = new StringBuilder();
         for (Object arg : args) {
             builder.append(arg.getClass().getName());
@@ -352,7 +355,7 @@ public class ReflectUtil {
             if (collection.isEmpty()) return null;
             else return (T) transformList(collection, collection.get(0).getClass());
         } else {
-            T t= newInstance(tClass);
+            T t = newInstance(tClass);
             for (Field f : entity.getClass().getDeclaredFields()) {
                 try {
                     Field tf = tClass.getDeclaredField(f.getName());
@@ -387,25 +390,25 @@ public class ReflectUtil {
 
     }
 
-    public static <T> T copy(@NonNull T t){
+    public static <T> T copy(@NonNull T t) {
         Class<T> c = (Class<T>) t.getClass();
         T t1 = newInstance(c);
-        for (Field field : getAllFields(t.getClass())){
-            Object object = beanGetValue(field,t);
-            if(!isFieldNull(object))beanSetValue(field,t1,object);
+        for (Field field : getAllFields(t.getClass())) {
+            Object object = beanGetValue(field, t);
+            if (!isFieldNull(object)) beanSetValue(field, t1, object);
         }
         return t1;
     }
 
 
-    public static <F,T> T trans(@NonNull F f,Class<T> tc){
+    public static <F, T> T trans(@NonNull F f, Class<T> tc) {
         Class<F> fc = (Class<F>) f.getClass();
         T t = newInstance(tc);
-        for (Field field:getAllFields(tc)){
+        for (Field field : getAllFields(tc)) {
             try {
                 Field fField = fc.getDeclaredField(field.getName());
-                Object o = beanGetValue(fField,f);
-                if(!isFieldNull(o))beanSetValue(field,t,o);
+                Object o = beanGetValue(fField, f);
+                if (!isFieldNull(o)) beanSetValue(field, t, o);
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }

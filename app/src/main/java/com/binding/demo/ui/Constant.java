@@ -6,4 +6,5 @@ package com.binding.demo.ui;
 
 public interface Constant {
 
+    String position = "position";
 }
