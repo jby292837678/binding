@@ -123,6 +123,37 @@ public class ReflectUtil {
     }
 
 
+    public static Field getField(String fieldName,Class<?> c){
+        if(c == null)return null;
+        try {
+            return c.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            Timber.i(e);
+        }
+        return null;
+    }
+
+    public static <T> T getFieldValue(String fieldName,Object bean){
+        try {
+            return getFieldValue(bean.getClass().getDeclaredField(fieldName),bean);
+        } catch (NoSuchFieldException e) {
+            Timber.i(e);
+            return null;
+        }
+    }
+
+    public static <T> T getFieldValue(Field field, Object bean){
+        if(field == null)return null;
+        try {
+            field.setAccessible(true);
+            return (T)field.get(bean);
+        } catch (IllegalAccessException e) {
+            Timber.i(e);
+            return null;
+
+        }
+    }
+
     public static Type[] getFieldGenericType(Field field) {
         field.setAccessible(true);
         Type fieldType = field.getGenericType();

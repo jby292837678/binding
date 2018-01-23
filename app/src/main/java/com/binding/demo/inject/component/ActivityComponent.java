@@ -3,6 +3,7 @@ package com.binding.demo.inject.component;
 
 import com.binding.demo.inject.scope.ActivityScope;
 import com.binding.demo.inject.module.ActivityModule;
+import com.binding.demo.ui.bottom.BottomSheetActivity;
 import com.binding.demo.ui.home.HomeActivity;
 import com.binding.demo.ui.message.MessageActivity;
 import com.binding.demo.ui.password.PasswordActivity;
@@ -32,6 +33,7 @@ public interface ActivityComponent {
     void inject(StartupActivity activity);
     void inject(MessageActivity activity);
     void inject(PasswordActivity activity);
+    void inject(BottomSheetActivity activity);
 
 
     interface Router {
@@ -43,5 +45,6 @@ public interface ActivityComponent {
 
         String password = ike+"password";
         String message = ike+"message";
+        String bottom_sheet = ike+"bottom/sheet";
     }
 }

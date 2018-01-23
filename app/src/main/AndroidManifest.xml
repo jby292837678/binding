@@ -20,6 +20,9 @@
         <activity android:name=".ui.password.PasswordActivity" >
         </activity>
         <activity android:name=".ui.message.MessageActivity" >
+
+        </activity>
+        <activity android:name=".ui.bottom.BottomSheetActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

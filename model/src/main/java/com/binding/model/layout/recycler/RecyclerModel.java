@@ -10,6 +10,7 @@ import android.view.View;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
+import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
 import com.binding.model.model.inter.Inflate;
@@ -54,6 +55,10 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         this.layoutManager.set(layoutManager);
+        if(getAdapter() instanceof RecyclerBaseAdapter){
+            RecyclerBaseAdapter adapter = (RecyclerBaseAdapter)getAdapter();
+            adapter.setLayoutManager(layoutManager);
+        }
     }
 
     public void onHttp(View view) {

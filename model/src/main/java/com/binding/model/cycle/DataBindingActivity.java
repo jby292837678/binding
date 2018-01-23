@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.binding.model.Config;
 import com.binding.model.R;
 import com.binding.model.util.BaseUtil;
-import com.binding.model.view.back.SwipeBackLayout;
+import com.binding.model.view.swipeback.SwipeBackLayout;
 
 /**
  * project：cutv_ningbo

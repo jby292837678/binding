@@ -22,6 +22,7 @@ public class RecyclerBaseAdapter<E extends Inflate>
     protected IEventAdapter iEventAdapter;
     private final SparseArray<E> sparseArray = new SparseArray<>();
     private int count;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,6 +33,7 @@ public class RecyclerBaseAdapter<E extends Inflate>
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
         RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        if(layoutManager == null)layoutManager = this.layoutManager;
         if (layoutManager instanceof GridLayoutManager) {
             final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
             gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -105,5 +107,9 @@ public class RecyclerBaseAdapter<E extends Inflate>
             return true;
         }
         return false;
+    }
+
+    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
     }
 }
