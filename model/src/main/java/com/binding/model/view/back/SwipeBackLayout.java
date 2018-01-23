@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.binding.model.view.swipeback;
+package com.binding.model.view.back;
 
 
 import android.annotation.TargetApi;

@@ -12,4 +12,5 @@ public interface Recycler<Binding extends ViewDataBinding> extends Inflate<Bindi
     Object key();
     boolean areContentsTheSame(Parse parseRecycler);
     void check(int check);
+
 }

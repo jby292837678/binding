@@ -23,8 +23,6 @@ public class RecyclerBaseAdapter<E extends Inflate>
     private final SparseArray<E> sparseArray = new SparseArray<>();
     private int count;
 
-
-
     @Override
     public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecyclerHolder<>(parent,sparseArray.get(viewType));
@@ -52,7 +50,7 @@ public class RecyclerBaseAdapter<E extends Inflate>
     @Override
     public void onBindViewHolder(RecyclerHolder<E> holder, int position) {
         E e = holderList.get(position);
-        holder.executePendingBindings(e, iEventAdapter);
+        holder.executePendingBindings(position,e, iEventAdapter);
     }
 
     @Override
@@ -71,8 +69,6 @@ public class RecyclerBaseAdapter<E extends Inflate>
     public void setCount(int count) {
         this.count = count;
     }
-
-
 
     public final boolean moveListAdapter(int position, List<E> es) {
         return moveListAdapter(position, es, holderList);

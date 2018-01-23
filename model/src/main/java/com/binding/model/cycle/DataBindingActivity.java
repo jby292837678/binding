@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.arch.lifecycle.LifecycleRegistry;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -19,9 +20,8 @@ import android.widget.TextView;
 
 import com.binding.model.Config;
 import com.binding.model.R;
-import com.binding.model.bit.Bit;
 import com.binding.model.util.BaseUtil;
-import com.binding.model.view.swipeback.SwipeBackLayout;
+import com.binding.model.view.back.SwipeBackLayout;
 
 /**
  * project：cutv_ningbo
@@ -40,6 +40,7 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
     private Toolbar toolbar;
     private final LifecycleRegistry mRegistry = new LifecycleRegistry(this);
     private TextView network_error;
+    private View background;
 
     @Override
     public LifecycleRegistry getLifecycle() {
@@ -82,16 +83,25 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
             case 1:
                 View container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
                 SwipeBackLayout swipeBackLayout = container.findViewById(R.id.swipeBackLayout);
-                View ivShadow = container.findViewById(R.id.iv_shadow);
+                background = container.findViewById(R.id.iv_shadow);
                 rootView.setBackgroundResource(R.color.windowBackground);
                 swipeBackLayout.addView(rootView);
-                swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
+                swipeBackLayout.setOnScroll((fs) -> background.setAlpha(1f - fs));
                 return container;
             default:
                 return rootView;
         }
     }
-//
+
+    public void setBackgroud(@DrawableRes int drawable){
+        if(background!=null)background.setBackgroundResource(drawable);
+    }
+
+    public View getBackground() {
+        return background;
+    }
+
+    //
 //    protected View getContainer(View rootView, int variable) {
 //        return Bit.bit(variable, (position, aBoolean,container) -> {
 //            switch (position){
@@ -99,10 +109,10 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
 //                    if (aBoolean) {
 //                        container = getLayoutInflater().inflate(R.layout.activity_base, null, false);
 //                        SwipeBackLayout swipeBackLayout = container.findViewById(R.id.swipeBackLayout);
-//                        View ivShadow = container.findViewById(R.id.iv_shadow);
+//                        View background = container.findViewById(R.id.iv_shadow);
 //                        rootView.setBackgroundResource(R.color.windowBackground);
 //                        swipeBackLayout.addView(rootView);
-//                        swipeBackLayout.setOnSwipeBackListener((fa, fs) -> ivShadow.setAlpha(1 - fs));
+//                        swipeBackLayout.setOnSwipeBackListener((fa, fs) -> background.setAlpha(1 - fs));
 //                        return container;
 //                    } else {
 //                        return rootView;

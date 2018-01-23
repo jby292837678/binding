@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
         <variable
             name="vm"
-            type="com.binding.demo.ui.message.fragment.MessageFragmentModel"/>
+            type="com.binding.demo.ui.message.fragment.MessageFragmentModel" />
     </data>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/lin"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

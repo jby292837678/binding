@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.binding.model.R;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.ViewInflate;
 import com.binding.model.model.inter.Inflate;
@@ -37,10 +38,11 @@ public class RecyclerHolder<E extends Inflate> extends RecyclerView.ViewHolder {
         this.e = e;
     }
 
-    public void executePendingBindings(E e, IEventAdapter iEventAdapter) {
+    public void executePendingBindings(int position,E e, IEventAdapter iEventAdapter) {
         this.e.removeBinding();
         this.e = e;
         this.e.setIEventAdapter(iEventAdapter);
+        container.setTag(R.id.position,position);
         this.e.attachView(container.getContext(),container,false,e.getDataBinding());
     }
 }
