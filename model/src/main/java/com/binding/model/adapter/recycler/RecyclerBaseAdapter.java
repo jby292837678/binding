@@ -1,13 +1,11 @@
 package com.binding.model.adapter.recycler;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.inter.Inflate;
-import com.binding.model.model.inter.SpanSize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,32 +20,30 @@ public class RecyclerBaseAdapter<E extends Inflate>
     protected IEventAdapter iEventAdapter;
     private final SparseArray<E> sparseArray = new SparseArray<>();
     private int count;
-    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecyclerHolder<>(parent,sparseArray.get(viewType));
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-        if(layoutManager == null)layoutManager = this.layoutManager;
-        if (layoutManager instanceof GridLayoutManager) {
-            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-                @Override
-                public int getSpanSize(int position) {
-                    E e = holderList.get(position);
-                    int spanSize = 1;
-                    if (e instanceof SpanSize) spanSize = ((SpanSize) e).getSpanSize();
-                    return spanSize;
-                }
-            });
-            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
-        }
-    }
+//    @Override
+//    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+//        super.onAttachedToRecyclerView(recyclerView);
+//        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//        if (layoutManager instanceof GridLayoutManager) {
+//            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
+//            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+//                @Override
+//                public int getSpanSize(int position) {
+//                    E e = holderList.get(position);
+//                    int spanSize = 1;
+//                    if (e instanceof SpanSize) spanSize = ((SpanSize) e).getSpanSize();
+//                    return spanSize;
+//                }
+//            });
+//            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
+//        }
+//    }
 
     @Override
     public void onBindViewHolder(RecyclerHolder<E> holder, int position) {
@@ -107,9 +103,5 @@ public class RecyclerBaseAdapter<E extends Inflate>
             return true;
         }
         return false;
-    }
-
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
     }
 }

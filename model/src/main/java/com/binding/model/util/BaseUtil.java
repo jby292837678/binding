@@ -228,7 +228,7 @@ public class BaseUtil {
 //    }
 
 
-    public static void setError(TextView view, String errorText) {
+    public static void setError(View view, String errorText) {
         if (!TextUtils.isEmpty(errorText)) {
             ForegroundColorSpan fgcspan = new ForegroundColorSpan(Color.RED);
             SpannableStringBuilder ssbuilder = new SpannableStringBuilder(errorText);
@@ -237,7 +237,7 @@ public class BaseUtil {
         }
     }
 
-    public static boolean isValidToast(TextView view, String error) {
+    public static boolean isValidToast(View view, String error) {
         setError(view, error);
         if (!TextUtils.isEmpty(error))
             Toast.makeText(view.getContext(), error, Toast.LENGTH_SHORT).show();

@@ -3,12 +3,14 @@ package com.binding.model.layout.recycler;
 import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.recycler.GridSpanSizeLookup;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
 import com.binding.model.cycle.Container;
@@ -55,10 +57,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         this.layoutManager.set(layoutManager);
-        if(getAdapter() instanceof RecyclerBaseAdapter){
-            RecyclerBaseAdapter adapter = (RecyclerBaseAdapter)getAdapter();
-            adapter.setLayoutManager(layoutManager);
-        }
     }
 
     public void onHttp(View view) {

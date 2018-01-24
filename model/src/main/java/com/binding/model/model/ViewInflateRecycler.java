@@ -23,13 +23,15 @@ public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> exten
         check((check&1) == 1);
     }
 
-    public void check(boolean checked){
-
-    }
+    public void check(boolean checked){}
 
     @Override
     public Object key() {
         return this;
     }
 
+    @Override
+    public int getSpanSize() {
+        return 1;
+    }
 }
