@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.ViewDataBinding;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
@@ -67,6 +68,9 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
                 e.printStackTrace();
             }
         }
+    }
 
+    public void onCancelClick(View view){
+        getWindow().dismiss();
     }
 }

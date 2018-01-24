@@ -33,6 +33,11 @@ import java.util.Collection;
 
 public class ViewBindingAdapter {
 
+    @BindingAdapter("alpha")
+    public static void setAlpha(View view,float alpha){
+        if(alpha>=0&&alpha<=1)view.setAlpha(alpha);
+    }
+
     @BindingAdapter({"adapter"})
     public static void setAdapter(View view, IModelAdapter adapter) {
         if (adapter == null) return;

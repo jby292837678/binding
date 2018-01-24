@@ -3,6 +3,7 @@ package com.binding.model.model;
 import android.databinding.ViewDataBinding;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
@@ -27,7 +28,6 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
     }
     private float alpha = App.popupAlhpa;
     private PopupWindow.OnDismissListener onDismissListener;
-
     private final PopupWindow window = new PopupWindow();
 
     @Override
@@ -90,4 +90,7 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
             }
     }
 
+    public void onCancelClick(View view){
+        getWindow().dismiss();
+    }
 }
