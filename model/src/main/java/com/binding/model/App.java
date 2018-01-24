@@ -33,6 +33,7 @@ import timber.log.Timber;
  */
 
 public class App implements Application.ActivityLifecycleCallbacks {
+    public static float popupAlhpa = 1f;
     private Stack<Activity> stack = new Stack<>();
     private static final App app = new App();
     public static int vm = BR.vm;

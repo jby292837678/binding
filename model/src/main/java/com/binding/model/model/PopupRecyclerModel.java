@@ -25,7 +25,7 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
     public PopupRecyclerModel(IModelAdapter<E> adapter) {
         super(adapter);
     }
-    private float alhpa = 1f;
+    private float alpha = App.popupAlhpa;
     private PopupWindow.OnDismissListener onDismissListener;
 
     private final PopupWindow window = new PopupWindow();
@@ -53,8 +53,8 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
         this.onDismissListener = onDismissListener;
     }
 
-    public void setAlhpa(float alhpa){
-        this.alhpa =alhpa;
+    public void setAlpha(float alpha){
+        this.alpha =alpha;
     }
 
     public PopupWindow getWindow() {
@@ -69,9 +69,8 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
                 if (getAdapter() instanceof RecyclerSelectAdapter)
                     ((RecyclerSelectAdapter) getAdapter()).checkAll(false);
                 getDataBinding().setVariable(App.vm, this);
-
                 WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
-                params.alpha=alhpa;
+                params.alpha=alpha;
                 getT().getDataActivity().getWindow().setAttributes(params);
                 consumer.accept(window);
             } catch (Throwable e) {
