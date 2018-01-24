@@ -4,6 +4,7 @@ import android.databinding.ViewDataBinding;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import com.binding.model.App;
@@ -24,6 +25,8 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
     public PopupRecyclerModel(IModelAdapter<E> adapter) {
         super(adapter);
     }
+    private float alhpa = 1f;
+    private PopupWindow.OnDismissListener onDismissListener;
 
     private final PopupWindow window = new PopupWindow();
 
@@ -37,8 +40,22 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
         window.setBackgroundDrawable(new BitmapDrawable());
         window.setOutsideTouchable(true);
         window.setTouchable(true);
+        window.setOnDismissListener(() -> {
+            WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
+            params.alpha=1f;
+            getT().getDataActivity().getWindow().setAttributes(params);
+            if(onDismissListener!=null)onDismissListener.onDismiss();
+        });
     }
 
+
+    public void setOnDismissListener(PopupWindow.OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
+
+    public void setAlhpa(float alhpa){
+        this.alhpa =alhpa;
+    }
 
     public PopupWindow getWindow() {
         return window;
@@ -52,6 +69,10 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
                 if (getAdapter() instanceof RecyclerSelectAdapter)
                     ((RecyclerSelectAdapter) getAdapter()).checkAll(false);
                 getDataBinding().setVariable(App.vm, this);
+
+                WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
+                params.alpha=alhpa;
+                getT().getDataActivity().getWindow().setAttributes(params);
                 consumer.accept(window);
             } catch (Throwable e) {
                 e.printStackTrace();

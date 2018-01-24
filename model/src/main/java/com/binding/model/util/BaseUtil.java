@@ -401,8 +401,17 @@ public class BaseUtil {
     }
 
     public static void toast(Context context, Throwable e) {
-        if (e instanceof ApiException) toast(context, e.getMessage());
+        ApiException exception= cause(e);
+        if (exception != null) toast(context, exception.getMessage());
         if(App.debug)e.printStackTrace();
+    }
+
+    private static ApiException cause(Throwable throwable){
+        if(throwable instanceof ApiException)return (ApiException) throwable;
+        else {
+            if(throwable.getCause() == null)return null;
+            return cause(throwable.getCause());
+        }
     }
 
     public static void toast(Fragment fragment, Throwable e) {
