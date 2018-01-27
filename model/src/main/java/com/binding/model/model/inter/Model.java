@@ -36,7 +36,6 @@ public interface Model<T extends Container,Binding extends ViewDataBinding> exte
     static void dispatchModel(String tag, Object... args) {
         for (Model model : eventModel){
             ReflectUtil.invoke(tag,model,args);
-
             Timber.e("method:%1s \tobject:%2s \t params: %2s", tag, model.getClass().getName(),arrayToString(args));
             model.onModelEvent(tag, args);
         }

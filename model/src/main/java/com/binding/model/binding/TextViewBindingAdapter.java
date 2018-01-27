@@ -27,7 +27,6 @@ public class TextViewBindingAdapter {
     @BindingAdapter({"android:drawableRight"})
     public static void setDrawableRight(TextView view, int drawable) {
         android.databinding.adapters.TextViewBindingAdapter.setDrawableRight(view, ContextCompat.getDrawable(view.getContext(), drawable));
-
     }
 
     @BindingAdapter({"android:drawableTop"})

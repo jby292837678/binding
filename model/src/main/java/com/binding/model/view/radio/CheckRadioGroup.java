@@ -20,7 +20,7 @@ public class CheckRadioGroup extends RadioGroup {
 
     public int getCheckedPosition(){
         int checkId = getCheckedRadioButtonId();
-        if(checkId == -1)return 0;
+        if(checkId == -1)return -1;
         return indexOfChild(findViewById(checkId));
     }
 

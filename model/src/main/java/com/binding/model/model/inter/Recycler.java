@@ -11,6 +11,8 @@ import com.binding.model.adapter.AdapterHandle;
 public interface Recycler<Binding extends ViewDataBinding> extends GridInflate<Binding>,Event{
     Object key();
     boolean areContentsTheSame(Parse parseRecycler);
-    void check(int check);
+    void check(boolean check);
+    int getCheckType();
 
+    boolean isPush();
 }

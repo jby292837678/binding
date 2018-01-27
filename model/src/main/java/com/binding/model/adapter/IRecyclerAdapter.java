@@ -7,5 +7,5 @@ import com.binding.model.model.inter.Inflate;
  */
 
 public interface IRecyclerAdapter<E extends Inflate> extends IModelAdapter<E> {
-
+    void setEventAdapter(IEventAdapter<E> eventAdapter);
 }

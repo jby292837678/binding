@@ -11,9 +11,7 @@ public interface AdapterType {
     int remove = 3;
     int set = 4;
     int move = 5;
-    int select = 6;
     int onClick = 7;
     int onLongClick = 8;
-
-
+    int select = 6;
 }

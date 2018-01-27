@@ -45,8 +45,8 @@ public class HomePageEntity extends ViewInflateRecycler {
         getIEventAdapter().setEntity(IEventAdapter.NO_POSITION,this, AdapterType.remove,view);
     }
 
-    @Override
-    public void check(int check) {
-        super.check(check);
-    }
+//    @Override
+//    public void check(int check) {
+//        super.check(check);
+//    }
 }

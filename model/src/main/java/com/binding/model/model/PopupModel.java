@@ -20,7 +20,7 @@ import io.reactivex.functions.Consumer;
 
 public class PopupModel<T extends Container, Binding extends ViewDataBinding>  extends ViewModel<T,Binding> {
     private final PopupWindow window = new PopupWindow();
-    private float alhpa = 1f;
+    private float alpha = App.popupAlhpa;
     private PopupWindow.OnDismissListener onDismissListener;
 
     @Override
@@ -45,8 +45,8 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         this.onDismissListener = onDismissListener;
     }
 
-    public void setAlhpa(float alhpa){
-        this.alhpa =alhpa;
+    public  void setAlpha(float alpha){
+        this.alpha = alpha;
     }
 
     public PopupWindow getWindow() {
@@ -59,7 +59,7 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         }else{
             try{
                 WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
-                params.alpha=alhpa;
+                params.alpha=alpha;
                 getT().getDataActivity().getWindow().setAttributes(params);
 
                 getDataBinding().setVariable(App.vm,this);

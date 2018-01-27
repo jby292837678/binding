@@ -36,7 +36,7 @@ public class RecyclerSparseAdapter<E extends Inflate>
         implements IRecyclerAdapter<E> {
     private final List<E> inflates = new ArrayList<>();
     private final TreeMap<Integer, Inflate> other = new TreeMap<>((integer, t1) -> integer - t1);
-
+    private IEventAdapter<E> eventAdapter;
 
     public RecyclerSparseAdapter() {
         iEventAdapter = this;
@@ -58,7 +58,13 @@ public class RecyclerSparseAdapter<E extends Inflate>
     }
 
     @Override
+    public void setEventAdapter(IEventAdapter<E> eventAdapter) {
+        this.eventAdapter = eventAdapter;
+    }
+
+    @Override
     public boolean setEntity(int position, E e, int type, View view) {
+        if(eventAdapter!=null&&eventAdapter.setEntity(position,e,type,view))return true;
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e, inflates);

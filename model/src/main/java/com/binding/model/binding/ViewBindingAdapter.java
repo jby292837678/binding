@@ -1,15 +1,9 @@
 package com.binding.model.binding;
 
-import android.content.Context;
 import android.databinding.BindingAdapter;
-import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,10 +16,6 @@ import android.widget.ListView;
 import android.widget.SpinnerAdapter;
 
 import com.binding.model.adapter.IModelAdapter;
-import com.binding.model.model.ViewParse;
-import com.binding.model.model.inter.Measure;
-
-import java.util.Collection;
 
 /**
  * Created by arvin on 2018/1/17.
@@ -33,7 +23,7 @@ import java.util.Collection;
 
 public class ViewBindingAdapter {
 
-    @BindingAdapter("alpha")
+    @BindingAdapter("android:alpha")
     public static void setAlpha(View view,float alpha){
         if(alpha>=0&&alpha<=1)view.setAlpha(alpha);
     }
@@ -60,22 +50,8 @@ public class ViewBindingAdapter {
 
     @BindingAdapter("params")
     public static void setLayoutParams(View view, ViewGroup.LayoutParams params) {
-        view.setLayoutParams(params);
+        if(params !=null)view.setLayoutParams(params);
     }
 
 
-    @BindingAdapter("parses")
-    public static void parses(ViewGroup viewGroup, Collection<? extends ViewParse> parses) {
-        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        for (ViewParse parse : parses) {
-            if (parse instanceof Measure) {
-                ViewDataBinding binding = DataBindingUtil.inflate(inflater, parse.getLayoutId(), viewGroup, true);
-                binding.getRoot().setLayoutParams(((Measure) parse).measure(binding.getRoot(), viewGroup));
-                binding.setVariable(parse.getVariableName(), parse);
-            } else {
-                ViewDataBinding binding = DataBindingUtil.inflate(inflater, parse.getLayoutId(), viewGroup, true);
-                binding.setVariable(parse.getVariableName(), parse);
-            }
-        }
-    }
 }

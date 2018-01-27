@@ -23,10 +23,14 @@
 
         </activity>
         <activity android:name=".ui.bottom.BottomSheetActivity" >
+
+        </activity>
+        <activity android:name=".ui.select.SelectActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
         </activity>
 
     </application>

@@ -26,24 +26,6 @@ public class RecyclerBaseAdapter<E extends Inflate>
         return new RecyclerHolder<>(parent,sparseArray.get(viewType));
     }
 
-//    @Override
-//    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-//        super.onAttachedToRecyclerView(recyclerView);
-//        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-//        if (layoutManager instanceof GridLayoutManager) {
-//            final GridLayoutManager gridLayoutManager = (GridLayoutManager) layoutManager;
-//            gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-//                @Override
-//                public int getSpanSize(int position) {
-//                    E e = holderList.get(position);
-//                    int spanSize = 1;
-//                    if (e instanceof SpanSize) spanSize = ((SpanSize) e).getSpanSize();
-//                    return spanSize;
-//                }
-//            });
-//            gridLayoutManager.setSpanCount(gridLayoutManager.getSpanCount());
-//        }
-//    }
 
     @Override
     public void onBindViewHolder(RecyclerHolder<E> holder, int position) {

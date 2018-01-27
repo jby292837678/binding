@@ -1,11 +1,14 @@
 package com.binding.model.adapter.recycler;
 
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.Checkable;
 
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.model.inter.Recycler;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -25,69 +28,99 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class RecyclerSelectAdapter<E extends Recycler>
         extends RecyclerAdapter<E> {
-    private final ArrayBlockingQueue<E> queue;
-    private final HashSet<E> checkList = new HashSet<>();
-    private final int max;
+    private final ArrayList<E> checkList = new ArrayList<>();
+    private int max;
 
     public RecyclerSelectAdapter() {
-        this(0);
+        this(Integer.MAX_VALUE);
     }
 
     public RecyclerSelectAdapter(int max) {
         this.max = max;
-        if (max > 0) {
-            queue = new ArrayBlockingQueue<>(max);
-        } else {
-            queue = new ArrayBlockingQueue<>(1);
-        }
     }
 
     @Override
     public boolean setList(int position, List<E> es, @AdapterHandle int type) {
         if (es == null) return false;
         switch (type) {
-            case AdapterType.select:for (E e : es) select(e);break;
-            default:return super.setList(position, es, type);
+            case AdapterType.select:
+                for (E e : es) select(e, !checkList.contains(e), e.isPush());
+                break;
+            default:
+                return super.setList(position, es, type);
         }
         return true;
     }
 
 
     @Override
-    public boolean setEntity(int position, E e, int type, View view){
+    public boolean setEntity(int position, E e, int type, View view) {
         switch (type) {
-            case AdapterType.select:select(e);break;
-            default:return super.setEntity(position,e,type,view);
+            case AdapterType.select:
+                return select(e, view);
+            default:
+                return super.setEntity(position, e, type, view);
         }
-        return true;
     }
 
     public final void checkAll(boolean check) {
-        for (E e : getList()) e.check(check?3:2);
-        if(!check)checkList.clear();
-        else checkList.addAll(getList());
-    }
-
-    public final void select(E e) {
-        if (max > 0) {
-            boolean contains = queue.contains(e);
-            if (!contains) {
-                if (queue.size() == max)
-                    queue.poll().check(0);
-                e.check(1);
-                queue.offer(e);
-            } else {
-                e.check(0);
+        checkList.clear();
+        for (E e : getList()) {
+            if (e == null) continue;
+            if (checkList.size() < max) {
+                select(e, check && checkList.add(e), e.isPush());
             }
-        } else {
-            boolean c = checkList.contains(e);
-            boolean s = c ? checkList.remove(e) : checkList.add(e);
-            e.check(s && !c?1:0);
         }
     }
 
-    public Collection<E> getChecked() {
-        return max > 0 ? queue : checkList;
+    public final boolean select(E e, View v) {
+        if (v != null)
+            switch (e.getCheckType()) {
+                case ENABLE:
+                    return select(e, v.isEnabled(), e.isPush());
+                case CHECK:
+                    if (v instanceof Checkable) {
+                        return select(e, ((Checkable) v).isChecked(), e.isPush());
+                    } else return false;
+                case SELECT:
+                    return select(e, v.isSelected(), e.isPush());
+                default:
+                    return select(e, !checkList.contains(e), e.isPush());
+            }
+        else return select(e, checkList.contains(e), e.isPush());
     }
 
+    public final boolean select(E in, boolean check, boolean push) {
+        boolean success = true;
+        E out = null;
+        if (!check) {
+            in.check(false);
+            checkList.remove(in);
+        } else {
+            if (push) {
+                out = push(in);
+                in.check(true);
+            } else {
+                success = add(in);
+                if (success) in.check(true);
+                else out = in;
+            }
+            if (out != null) out.check(false);
+        }
+        return success;
+    }
+
+    private boolean add(E in) {
+        boolean success = checkList.size() < max;
+        return success && checkList.add(in);
+    }
+
+
+    private E push(E in) {
+        checkList.add(in);
+        E out = null;
+        while (checkList.size() > max)
+            out = checkList.remove(0);
+        return out;
+    }
 }

@@ -30,14 +30,19 @@ public class RecyclerAdapter<E extends Inflate>
         extends RecyclerBaseAdapter<E>
         implements IRecyclerAdapter<E> {
 
-
     public RecyclerAdapter() {
         this.iEventAdapter = this;
     }
+    private IEventAdapter<E> eventAdapter;
 
     @Override
     public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
         this.iEventAdapter = iEntityAdapter;
+    }
+
+    @Override
+    public void setEventAdapter(IEventAdapter<E> eventAdapter){
+        this.eventAdapter = eventAdapter;
     }
 
     @Override
@@ -53,6 +58,7 @@ public class RecyclerAdapter<E extends Inflate>
 
     @Override
     public boolean setEntity(int position, E e, int type, View view) {
+        if(eventAdapter != null&&eventAdapter.setEntity(position,e,type,view))return true;
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e, holderList);

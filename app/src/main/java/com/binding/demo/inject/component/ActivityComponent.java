@@ -7,6 +7,7 @@ import com.binding.demo.ui.bottom.BottomSheetActivity;
 import com.binding.demo.ui.home.HomeActivity;
 import com.binding.demo.ui.message.MessageActivity;
 import com.binding.demo.ui.password.PasswordActivity;
+import com.binding.demo.ui.select.SelectActivity;
 import com.binding.demo.ui.start.StartupActivity;
 import com.binding.demo.ui.user.login.LoginActivity;
 import com.binding.demo.ui.user.register.RegisterActivity;
@@ -33,6 +34,7 @@ public interface ActivityComponent {
     void inject(StartupActivity activity);
     void inject(MessageActivity activity);
     void inject(PasswordActivity activity);
+    void inject(SelectActivity activity);
     void inject(BottomSheetActivity activity);
 
 
@@ -46,5 +48,6 @@ public interface ActivityComponent {
         String password = ike+"password";
         String message = ike+"message";
         String bottom_sheet = ike+"bottom/sheet";
+        String select = ike+"select";
     }
 }

@@ -1,17 +1,50 @@
 package com.binding.model.model;
 
+import android.content.Context;
 import android.databinding.ViewDataBinding;
+import android.view.ViewGroup;
 
+import com.binding.model.App;
+import com.binding.model.R;
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.model.inter.Parse;
 import com.binding.model.model.inter.Recycler;
 
+import timber.log.Timber;
+
 /**
  * Created by pc on 2017/9/26.
  */
 
-public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> extends ViewInflate<Binding> implements Recycler<Binding> {
+public class ViewInflateRecycler<Binding extends ViewDataBinding> extends ViewInflate<Binding> implements Recycler<Binding> {
+    private transient int holder_position=-1;
+
+    @Override
+    public Binding attachView(Context context, ViewGroup co, boolean attachToParent, Binding binding) {
+        if (co != null) {
+            Object o = co.getTag(R.id.holder_position);
+            if (o instanceof Integer) this.holder_position = (int) o;
+            if(App.debug) {
+                String name = "null";
+                if(getIEventAdapter() !=null)
+                    name = getIEventAdapter().getClass().getName();
+                Timber.i("attach holder_position:"+holder_position+"adapter:"+name);
+            }
+        }
+        return super.attachView(context, co, attachToParent, binding);
+    }
+
+    @Override
+    public void removeBinding() {
+        super.removeBinding();
+        if(App.debug) {
+            String name = "null";
+            if(getIEventAdapter() !=null)
+                name = getIEventAdapter().getClass().getName();
+            Timber.i("removeBinding holder_position:"+holder_position+"adapter:"+name);
+        }
+    }
 
     @Override
     public boolean areContentsTheSame(Parse parseRecycler) {
@@ -19,11 +52,13 @@ public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> exten
     }
 
     @Override
-    public void check(int check) {
-        check((check&1) == 1);
+    public boolean isPush() {
+        return true;
     }
 
-    public void check(boolean checked){}
+    @Override
+    public void check(boolean checked) {
+    }
 
     @Override
     public Object key() {
@@ -33,5 +68,14 @@ public abstract class ViewInflateRecycler<Binding extends ViewDataBinding> exten
     @Override
     public int getSpanSize() {
         return 1;
+    }
+
+    @Override
+    public int getCheckType() {
+        return 0;
+    }
+
+    public int getHolder_position() {
+        return holder_position;
     }
 }

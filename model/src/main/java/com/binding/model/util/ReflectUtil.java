@@ -448,4 +448,14 @@ public class ReflectUtil {
     }
 
 
+    public <T> T copy(T t,Object...args){
+        T coyp = newInstance((Class<T>) t.getClass(),args);
+        for (Field field : ReflectUtil.getAllFields(getClass())) {
+            Object object = ReflectUtil.beanGetValue(field,this);
+            if(object!=null)
+                ReflectUtil.beanSetValue(field,coyp,object);
+        }
+        return coyp;
+    }
+
 }
