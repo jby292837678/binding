@@ -21,9 +21,10 @@
             <!--app:pager_change="@{vm}"-->
             <!--android:onCheckedChanged="@{vm}"-->
             <!--app:checkedPosition="@{vm.currentItem}"-->
+        <!--app:checkedChange="@{vm::onCheckedChanged}"-->
+
         <com.binding.model.view.radio.CheckRadioGroup
             app:position="@={vm.currentItem}"
-            app:checkedChange="@{vm::onCheckedChanged}"
             android:orientation="horizontal"
             android:layout_gravity="bottom"
             android:layout_marginBottom="6dp"

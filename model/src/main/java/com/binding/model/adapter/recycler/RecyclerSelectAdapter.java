@@ -54,12 +54,12 @@ public class RecyclerSelectAdapter<E extends Recycler>
 
 
     @Override
-    public boolean setEntity(int position, E e, int type, View view) {
+    public boolean setEntityView(int position, E e, int type, View view) {
         switch (type) {
             case AdapterType.select:
                 return select(e, view);
             default:
-                return super.setEntity(position, e, type, view);
+                return super.setEntityView(position, e, type, view);
         }
     }
 

@@ -57,8 +57,12 @@ public class RecyclerAdapter<E extends Inflate>
 
 
     @Override
-    public boolean setEntity(int position, E e, int type, View view) {
+    public final boolean setEntity(int position, E e, int type, View view) {
         if(eventAdapter != null&&eventAdapter.setEntity(position,e,type,view))return true;
+        return setEntityView(position,e,type,view);
+    }
+
+    public boolean setEntityView(int position, E e, int type,View v){
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e, holderList);
