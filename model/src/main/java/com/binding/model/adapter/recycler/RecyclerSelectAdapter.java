@@ -123,4 +123,8 @@ public class RecyclerSelectAdapter<E extends Recycler>
             out = checkList.remove(0);
         return out;
     }
+
+    public ArrayList<E> getCheckList() {
+        return checkList;
+    }
 }

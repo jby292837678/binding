@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.adapter.recycler.GridSpanSizeLookup;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
@@ -33,7 +34,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
 
-    public RecyclerModel(IModelAdapter<E> adapter) {
+    public RecyclerModel(IRecyclerAdapter<E> adapter) {
         super(adapter);
     }
 
@@ -63,8 +64,8 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         onHttp(3);
     }
 
-    public void setEventAdapter(IEventAdapter iEventAdapter) {
-        getAdapter().setIEventAdapter(iEventAdapter);
+    public void setEventAdapter(IEventAdapter<E> iEventAdapter) {
+        ((IRecyclerAdapter<E>)getAdapter()).setEventAdapter(iEventAdapter);
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
