@@ -26,12 +26,12 @@ import java.util.List;
  */
 
 
-public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
+public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding, E extends Parse,Adapter extends IModelAdapter<E>>
         extends ViewHttpModel<C, Binding, List<E>> {
     public ObservableBoolean empty = new ObservableBoolean(true);
-    private final IModelAdapter<E> adapter;
+    private final Adapter adapter;
 
-    public ViewArrayModel(IModelAdapter<E> adapter) {
+    public ViewArrayModel(Adapter adapter) {
         this.adapter = adapter;
     }
 
@@ -57,7 +57,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         error.set("暂无数据");
     }
 
-    public IModelAdapter<E> getAdapter() {
+    public Adapter getAdapter() {
         return adapter;
     }
 

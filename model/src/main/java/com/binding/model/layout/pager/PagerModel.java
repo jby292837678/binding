@@ -3,11 +3,10 @@ package com.binding.model.layout.pager;
 import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v4.view.ViewPager;
 import android.widget.RadioGroup;
 
-import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.ILayoutAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.ViewArrayModel;
 import com.binding.model.layout.rotate.PagerEntity;
@@ -30,14 +29,14 @@ import java.util.List;
  */
 
 public class PagerModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
-        extends ViewArrayModel<C,  Binding,E>
+        extends ViewArrayModel<C,  Binding,E,ILayoutAdapter<E>>
         implements PagerRotateListener<E>, ViewPager.OnPageChangeListener{
     private int loop = -1;
     private PagerEntity<E> pagerEntity;
     public ObservableInt currentItem = new ObservableInt(-1);
     private boolean rotate = false;
 
-    public PagerModel(IModelAdapter<E> adapter) {
+    public PagerModel(ILayoutAdapter<E> adapter) {
         super(adapter);
     }
 
@@ -60,10 +59,6 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
         this.currentItem.set(currentItem);
     }
 
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-
-    }
-
     @Override
     public void accept(List<E> es) throws Exception {
         super.accept(es);
@@ -80,6 +75,12 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
 
     public void setRotate(boolean rotate) {
         this.rotate = rotate;
+    }
+
+
+    @Override
+    public ILayoutAdapter<E> getAdapter() {
+        return super.getAdapter();
     }
 
     @Override

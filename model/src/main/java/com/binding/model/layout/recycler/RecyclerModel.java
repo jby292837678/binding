@@ -30,7 +30,7 @@ import com.binding.model.model.inter.Recycler;
  *
  * @version 2.0
  */
-public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate> extends ViewArrayModel<C, Binding, E> {
+public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate> extends ViewArrayModel<C, Binding, E,IRecyclerAdapter<E>> {
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
 
@@ -65,7 +65,12 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     }
 
     public void setEventAdapter(IEventAdapter<E> iEventAdapter) {
-        ((IRecyclerAdapter<E>)getAdapter()).setEventAdapter(iEventAdapter);
+        getAdapter().setEventAdapter(iEventAdapter);
+    }
+
+    @Override
+    public IRecyclerAdapter<E> getAdapter() {
+        return super.getAdapter();
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
