@@ -68,8 +68,8 @@ public class RecyclerSelectAdapter<E extends Recycler>
         for (E e : getList()) {
             if (e == null) continue;
             if (checkList.size() < max) {
-                select(e, check && checkList.add(e), e.isPush());
-            }
+                select(e, check , e.isPush());
+            }else break;
         }
     }
 

@@ -25,26 +25,10 @@ public class ViewInflateRecycler<Binding extends ViewDataBinding> extends ViewIn
         if (co != null) {
             Object o = co.getTag(R.id.holder_position);
             if (o instanceof Integer) this.holder_position = (int) o;
-            if(App.debug) {
-                String name = "null";
-                if(getIEventAdapter() !=null)
-                    name = getIEventAdapter().getClass().getName();
-                Timber.i("attach holder_position:"+holder_position+"adapter:"+name);
-            }
         }
         return super.attachView(context, co, attachToParent, binding);
     }
 
-    @Override
-    public void removeBinding() {
-        super.removeBinding();
-        if(App.debug) {
-            String name = "null";
-            if(getIEventAdapter() !=null)
-                name = getIEventAdapter().getClass().getName();
-            Timber.i("removeBinding holder_position:"+holder_position+"adapter:"+name);
-        }
-    }
 
     @Override
     public boolean areContentsTheSame(Parse parseRecycler) {
