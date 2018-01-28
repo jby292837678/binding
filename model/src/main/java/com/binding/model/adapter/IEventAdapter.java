@@ -11,5 +11,8 @@ public interface IEventAdapter<E> {
     int ENABLE = 1;
     int CHECK = 2;
     int SELECT = 3;
+    /**
+     * please don't use method getAdapter at body
+     * */
     boolean setEntity(int position, E e, @AdapterHandle int type, View view);
 }

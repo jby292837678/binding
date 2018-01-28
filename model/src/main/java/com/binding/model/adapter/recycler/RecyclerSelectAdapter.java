@@ -56,26 +56,34 @@ public class RecyclerSelectAdapter<E extends Recycler>
     @Override
     public boolean setIEntity(int position, E e, int type, View view) {
         switch (type) {
-            case AdapterType.select:return select(e, view);
-            default:return super.setIEntity(position, e, type, view);
+            case AdapterType.select:
+                return select(e, view);
+            default:
+                return super.setIEntity(position, e, type, view);
         }
     }
 
-    public final void check(int position,boolean check){
-        if(BaseUtil.containsList(position,getList())){
+    public final void check(int position, boolean check) {
+        if (BaseUtil.containsList(position, getList())) {
             E e = getList().get(position);
-            select(e, check , e.isPush());
+            select(e, check, e.isPush());
         }
     }
 
     public final void checkAll(boolean check) {
-        checkList.clear();
-        for (E e : getList()) {
-            if (e == null) continue;
-            if (checkList.size() < max) {
-                select(e, check , e.isPush());
-            }else break;
-        }
+        if (check) {
+            for (E e : getList()) {
+                if (e == null) continue;
+                if (checkList.size() < max) {
+                    select(e, true, e.isPush());
+                } else break;
+            }
+        } else
+            for (int i = checkList.size() - 1; i >= 0; i--) {
+                E e = checkList.get(i);
+                if (e == null) continue;
+                select(e, false, e.isPush());
+            }
     }
 
     public final boolean select(E e, View v) {

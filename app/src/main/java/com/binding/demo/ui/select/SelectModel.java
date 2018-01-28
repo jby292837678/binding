@@ -33,6 +33,10 @@ public class SelectModel extends RecyclerModel<SelectActivity,ActivitySelectBind
         for (int i = 0; i < 100; i++) {
             list.add(new SelectEntity(String.valueOf(i)));
         }
+        addEventAdapter((position, selectEntity, type, view) -> {
+            getAdapter().setIEntity(position, selectEntity, type, view);
+            return true;
+        });
         getAdapter().setList(NO_POSITION,list, AdapterType.add);
     }
 
