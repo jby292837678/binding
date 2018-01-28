@@ -1,5 +1,6 @@
 package com.binding.model.adapter.recycler;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.AdapterHandle;
@@ -27,23 +28,9 @@ import static com.binding.model.util.BaseUtil.containsList;
  */
 
 public class RecyclerAdapter<E extends Inflate>
-        extends RecyclerBaseAdapter<E>
+        extends RecyclerBaseAdapter<E,E>
         implements IRecyclerAdapter<E> {
 
-    public RecyclerAdapter() {
-        this.iEventAdapter = this;
-    }
-    private IEventAdapter<E> eventAdapter;
-
-    @Override
-    public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
-        this.iEventAdapter = iEntityAdapter;
-    }
-
-    @Override
-    public void setEventAdapter(IEventAdapter<E> eventAdapter){
-        this.eventAdapter = eventAdapter;
-    }
 
     @Override
     public List<E> getList() {
@@ -56,13 +43,7 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
 
-    @Override
-    public final boolean setEntity(int position, E e, int type, View view) {
-        if(eventAdapter != null&&eventAdapter.setEntity(position,e,type,view))return true;
-        return setEntityView(position,e,type,view);
-    }
-
-    public boolean setEntityView(int position, E e, int type,View v){
+    public boolean setIEntity(int position, E e, int type, View v) {
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e, holderList);
@@ -211,6 +192,7 @@ public class RecyclerAdapter<E extends Inflate>
         holderList.addAll(es);
         notifyDataSetChanged();
     }
+
 }
 //    private AtomicBoolean refresh = new AtomicBoolean(false);
 //        if (!refresh.get()) {

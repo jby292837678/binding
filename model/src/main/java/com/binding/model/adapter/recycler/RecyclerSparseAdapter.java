@@ -1,6 +1,7 @@
 package com.binding.model.adapter.recycler;
 
 import android.support.v7.util.DiffUtil;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.AdapterHandle;
@@ -32,20 +33,10 @@ import io.reactivex.schedulers.Schedulers;
  */
 //@SuppressWarnings("unchecked")
 public class RecyclerSparseAdapter<E extends Inflate>
-        extends RecyclerBaseAdapter<Inflate>
+        extends RecyclerBaseAdapter<Inflate,E>
         implements IRecyclerAdapter<E> {
     private final List<E> inflates = new ArrayList<>();
     private final TreeMap<Integer, Inflate> other = new TreeMap<>((integer, t1) -> integer - t1);
-    private IEventAdapter<E> eventAdapter;
-
-    public RecyclerSparseAdapter() {
-        iEventAdapter = this;
-    }
-
-    @Override
-    public void setIEventAdapter(IEventAdapter<E> iEntityAdapter) {
-        this.iEventAdapter = iEntityAdapter;
-    }
 
     @Override
     public List<E> getList() {
@@ -57,14 +48,8 @@ public class RecyclerSparseAdapter<E extends Inflate>
         return inflates.size();
     }
 
-    @Override
-    public void setEventAdapter(IEventAdapter<E> eventAdapter) {
-        this.eventAdapter = eventAdapter;
-    }
 
-    @Override
-    public boolean setEntity(int position, E e, int type, View view) {
-        if(eventAdapter!=null&&eventAdapter.setEntity(position,e,type,view))return true;
+    public boolean setIEntity(int position, E e, int type, View view) {
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e, inflates);
@@ -80,7 +65,7 @@ public class RecyclerSparseAdapter<E extends Inflate>
             case AdapterType.onClick:
             case AdapterType.onLongClick:
             default:
-                return false;
+                return true;
         }
     }
 

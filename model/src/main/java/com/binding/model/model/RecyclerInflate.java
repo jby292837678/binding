@@ -236,8 +236,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
         onHttp(offset,3);
     }
 
-
-    public void setEventAdapter(IEventAdapter<E> iEventAdapter) {
-        getAdapter().setIEventAdapter(iEventAdapter);
+    public void addEventAdapter(IEventAdapter<E> iEventAdapter) {
+        getAdapter().addEventAdapter(iEventAdapter);
     }
 }

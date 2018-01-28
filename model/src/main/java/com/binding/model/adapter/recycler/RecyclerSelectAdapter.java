@@ -7,6 +7,7 @@ import android.widget.Checkable;
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.model.inter.Recycler;
+import com.binding.model.util.BaseUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -52,14 +53,18 @@ public class RecyclerSelectAdapter<E extends Recycler>
         return true;
     }
 
-
     @Override
-    public boolean setEntityView(int position, E e, int type, View view) {
+    public boolean setIEntity(int position, E e, int type, View view) {
         switch (type) {
-            case AdapterType.select:
-                return select(e, view);
-            default:
-                return super.setEntityView(position, e, type, view);
+            case AdapterType.select:return select(e, view);
+            default:return super.setIEntity(position, e, type, view);
+        }
+    }
+
+    public final void check(int position,boolean check){
+        if(BaseUtil.containsList(position,getList())){
+            E e = getList().get(position);
+            select(e, check , e.isPush());
         }
     }
 
@@ -77,7 +82,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
         if (v != null)
             switch (e.getCheckType()) {
                 case ENABLE:
-                    return select(e, v.isEnabled(), e.isPush());
+                    return select(e, !v.isEnabled(), e.isPush());
                 case CHECK:
                     if (v instanceof Checkable) {
                         return select(e, ((Checkable) v).isChecked(), e.isPush());
@@ -87,7 +92,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
                 default:
                     return select(e, !checkList.contains(e), e.isPush());
             }
-        else return select(e, checkList.contains(e), e.isPush());
+        else return select(e, !checkList.contains(e), e.isPush());
     }
 
     public final boolean select(E in, boolean check, boolean push) {

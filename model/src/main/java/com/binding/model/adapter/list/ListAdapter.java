@@ -31,7 +31,8 @@ import static com.binding.model.util.BaseUtil.containsList;
 
 public class ListAdapter<E extends Inflate> extends BaseAdapter implements IModelAdapter<E>, IEventAdapter<E> {
     private final List<E> holderList = new ArrayList<>();
-    private IEventAdapter<E> iEventAdapter = this;
+    private final IEventAdapter<E> iEventAdapter = this;
+    private final List<IEventAdapter<E>> eventAdapters = new ArrayList<>();
     private int count = 0;
 
     @Override
@@ -71,27 +72,48 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
 
     @Override
     public boolean setEntity(int position, E e, int type, View view) {
+        for (IEventAdapter<E> eventAdapter : eventAdapters) {
+            if (eventAdapter instanceof IModelAdapter)
+                return ((IModelAdapter) eventAdapter).setIEntity(position, e, type, view);
+            else if (eventAdapter.setEntity(position, e, type, view)) return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addEventAdapter(IEventAdapter<E> eventAdapter) {
+        eventAdapters.add(0, eventAdapter);
+    }
+
+    @Override
+    public boolean setIEntity(int position, E e, int type, View view) {
         switch (type) {
-            case AdapterType.add:return addToAdapter(position,e);
-            case AdapterType.remove:return removeToAdapter(position,e);
-            case AdapterType.set:return setToAdapter(position,e);
-            case AdapterType.move:return moveToAdapter(position,e);
+            case AdapterType.add:
+                return addToAdapter(position, e);
+            case AdapterType.remove:
+                return removeToAdapter(position, e);
+            case AdapterType.set:
+                return setToAdapter(position, e);
+            case AdapterType.move:
+                return moveToAdapter(position, e);
             case AdapterType.select:
             case AdapterType.refresh:
             case AdapterType.no:
             case AdapterType.onClick:
             case AdapterType.onLongClick:
-            default:return false;
+            default:
+                return false;
         }
     }
-
 
 
     @Override
     public boolean setList(int position, List<E> es, int type) {
         switch (type) {
-            case AdapterType.add:return addListAdapter(position,es);
-            case AdapterType.refresh:return refreshListAdapter(position,es);
+            case AdapterType.add:
+                return addListAdapter(position, es);
+            case AdapterType.refresh:
+                return refreshListAdapter(position, es);
             case AdapterType.remove:
             case AdapterType.set:
             case AdapterType.move:
@@ -99,15 +121,15 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
             case AdapterType.no:
             case AdapterType.onClick:
             case AdapterType.onLongClick:
-            default:return false;
+            default:
+                return false;
         }
     }
 
 
-
     public boolean addToAdapter(int position, E e) {
-        if (containsList(position,holderList))
-            holderList.add(position,e);
+        if (containsList(position, holderList))
+            holderList.add(position, e);
         else holderList.add(e);
         notifyDataSetChanged();
         return true;
@@ -115,24 +137,24 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
 
     public boolean removeToAdapter(int position, E e) {
         if (holderList.contains(e)) position = holderList.indexOf(e);
-        if(containsList(position,holderList))holderList.remove(e);
+        if (containsList(position, holderList)) holderList.remove(e);
         notifyDataSetChanged();
-        return containsList(position,holderList);
+        return containsList(position, holderList);
     }
 
 
     public boolean setToAdapter(int position, E e) {
-        if(containsList(position,holderList)){
-            holderList.set(position,e);
+        if (containsList(position, holderList)) {
+            holderList.set(position, e);
             notifyDataSetChanged();
             return true;
         }
         return false;
     }
 
-    public boolean moveToAdapter(int position,E e){
-        if(position>=holderList.size())position = holderList.size()-1;
-        if(containsList(position,holderList)){
+    public boolean moveToAdapter(int position, E e) {
+        if (position >= holderList.size()) position = holderList.size() - 1;
+        if (containsList(position, holderList)) {
             int from = holderList.indexOf(e);
             if (from != position && holderList.remove(e)) holderList.add(position, e);
             notifyDataSetChanged();
@@ -142,21 +164,21 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
     }
 
 
-    public boolean addListAdapter(int position,List<E> es){
-        if(containsList(position,holderList))
-            holderList.addAll(position,es);
+    public boolean addListAdapter(int position, List<E> es) {
+        if (containsList(position, holderList))
+            holderList.addAll(position, es);
         else holderList.addAll(es);
         notifyDataSetChanged();
-        return containsList(position,es);
+        return containsList(position, es);
     }
 
-    public boolean refreshListAdapter(int position,List<E> es){
+    public boolean refreshListAdapter(int position, List<E> es) {
         List<E> l;
-        if(containsList(position,holderList)){
-            l = holderList.subList(0,position);
-        }else if(holderList.size() != position||holderList.size() == 0) {
-            return addListAdapter(position,es);
-        }else l = es;
+        if (containsList(position, holderList)) {
+            l = holderList.subList(0, position);
+        } else if (holderList.size() != position || holderList.size() == 0) {
+            return addListAdapter(position, es);
+        } else l = es;
         holderList.clear();
         holderList.addAll(l);
         notifyDataSetChanged();
@@ -178,9 +200,5 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
         this.count = count;
     }
 
-    @Override
-    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
-        this.iEventAdapter = iEventAdapter;
-    }
 
 }

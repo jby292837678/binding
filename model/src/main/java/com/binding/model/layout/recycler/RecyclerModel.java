@@ -64,8 +64,8 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         onHttp(3);
     }
 
-    public void setEventAdapter(IEventAdapter<E> iEventAdapter) {
-        getAdapter().setEventAdapter(iEventAdapter);
+    public void addEventAdapter(IEventAdapter<E> iEventAdapter) {
+        getAdapter().addEventAdapter(iEventAdapter);
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.ILayoutAdapter;
+import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Inflate;
 import com.binding.model.util.BaseUtil;
 
@@ -29,7 +30,8 @@ import java.util.List;
 public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements ILayoutAdapter<E> {
     private List<E> list = new ArrayList<>();
     private int count = Integer.MAX_VALUE;
-    private IEventAdapter<E> iEntityAdapter = this;
+    private final IEventAdapter<E> iEntityAdapter = this;
+    private final List<IEventAdapter<E>>  eventAdapters = new ArrayList<>();
 
     @Override
     public void setCount(int count) {
@@ -71,8 +73,24 @@ public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements
         return done;
     }
 
+
     @Override
     public boolean setEntity(int position, E f, int type, View view){
+        for (IEventAdapter<E> eventAdapter : eventAdapters) {
+            if(eventAdapter instanceof IModelAdapter)
+                return ((IModelAdapter) eventAdapter).setIEntity(position,f,type,view);
+            if(eventAdapter.setEntity(position, f, type, view))return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void addEventAdapter(IEventAdapter<E> eventAdapter) {
+        eventAdapters.add(0,eventAdapter);
+    }
+
+    @Override
+    public boolean setIEntity(int position, E f, int type, View view){
         boolean done = BaseUtil.setEntity(list, position, f, type);
         if (done) notifyDataSetChanged();
         return done;
@@ -94,8 +112,4 @@ public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements
         return list.size();
     }
 
-    @Override
-    public void setIEventAdapter(IEventAdapter<E> iEventAdapter) {
-        this.iEntityAdapter=iEventAdapter;
-    }
 }
