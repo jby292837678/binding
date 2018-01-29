@@ -36,7 +36,7 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
     public static boolean pageWay = false;
 
     public final void setRcHttp(HttpObservableRefresh<R> rcHttp1){
-        setRoHttp((offset1, refresh) -> rcHttp1.http(offset1,(refresh>>1)==1));
+        setRoHttp((offset1, refresh) -> rcHttp1.http(offset1,refresh>0));
     }
 
     public void setRoHttp(HttpObservable<R> rcHttp) {
