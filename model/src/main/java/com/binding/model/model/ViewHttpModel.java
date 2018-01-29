@@ -41,11 +41,12 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
 
     public void setRoHttp(HttpObservable<R> rcHttp) {
         this.rcHttp = rcHttp;
-        onHttp(0, 0);
+        onHttp(0, 1);
     }
 
     public void onHttp(int offset, int refresh) {
-        this.offset = offset;
+        if(refresh>0)offset = 0;
+        else this.offset = offset;
         int p = pageWay ? offset / pageCount + 1 : offset;
         if (rcHttp != null)
             rcHttp.http(p, refresh).subscribe(this::accept, this::onThrowable, this::onComplete, this::onSubscribe);
@@ -79,7 +80,7 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
     }
 
     public void onRefresh() {
-        onHttp(0);
+        onHttp(2);
     }
 
     public void setEnable(boolean enable) {

@@ -61,7 +61,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     }
 
     public void onHttp(View view) {
-        onHttp(3);
+        onHttp(0,3);
     }
 
     public void addEventAdapter(IEventAdapter<E> iEventAdapter) {
@@ -85,7 +85,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
                     && lastVisibleItem + 1 >= getAdapter().size()
                     && !loading.get()) {
                 if (pageFlag && dy > 0) {
-                    onHttp(getAdapter().size(), 2);
+                    onHttp(getAdapter().size(),0);
                 }
             }
         }
