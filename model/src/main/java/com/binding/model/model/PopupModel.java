@@ -70,6 +70,10 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         }
     }
 
+    public void dismiss(){
+        window.dismiss();
+    }
+
     public void onCancelClick(View view){
         getWindow().dismiss();
     }

@@ -55,6 +55,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,6 +66,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.reactivex.functions.Consumer;
+import timber.log.Timber;
 
 /**
  * project：cutv_ningbo
@@ -80,6 +82,11 @@ import io.reactivex.functions.Consumer;
 
 
 public class BaseUtil {
+    public static final String FORMAT_HOUR_MIN = "HH:mm";
+    public static final String FORMAT_DATE_MONTH_MIN = "MM-dd HH:mm";
+    public static final String FORMAT_DATE_DAY = "yyyy-MM-dd";
+    public static final String FORMAT_TIME = "HH:mm:ss";
+    public static final String FORMAT_DATE_MIN = "yyyy-MM-dd HH:mm";
 
     public static Class getSuperGenericType(Class clazz) {
         return getSuperGenericType(clazz, 0);
@@ -639,6 +646,16 @@ public class BaseUtil {
 
     public static boolean containsList(int value, List list) {
         return contain(value, -1, list.size());
+    }
+
+    public static long time(String time,String pattern){
+        DateFormat format  = new SimpleDateFormat(pattern, Locale.CHINA);
+        try {
+            return format.parse(time).getTime();
+        } catch (ParseException e) {
+            Timber.i(e,"time:%1s  pattern:2%",time,pattern);
+            return 0;
+        }
     }
 
 }

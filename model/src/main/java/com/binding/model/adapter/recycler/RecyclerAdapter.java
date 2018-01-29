@@ -66,7 +66,7 @@ public class RecyclerAdapter<E extends Inflate>
 
     @Override
     public boolean setList(int position, List<E> es, @AdapterHandle int type) {
-        if (es == null || es.isEmpty()) return false;
+        if (es == null) return false;
         switch (type) {
             case AdapterType.refresh:
                 return refreshListAdapter(position, es, holderList);
