@@ -23,8 +23,7 @@ public abstract class FormSingleParams implements SingleTransParams<FormBody> {
         for (Field field : fields) {
             Object o = ReflectUtil.beanGetValue(field, this);
             if (o == null) continue;
-            String str = o.toString();
-            builder.addEncoded(BaseUtil.findQuery(field), encrypt(str));
+            builder.addEncoded(BaseUtil.findQuery(field), encrypt(o));
         }
         return builder.build();
     }

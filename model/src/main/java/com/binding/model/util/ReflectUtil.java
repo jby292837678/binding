@@ -274,13 +274,16 @@ public class ReflectUtil {
     }
 
     public static Method getAllClassMethod(Class<?> c,String methodName, Class<?>[] cs){
+        Method method = null;
         try {
-            Method method = c.getDeclaredMethod(methodName, cs);
-            if(method == null&&c != Object.class) return getAllClassMethod(c.getSuperclass(),methodName,cs);
+            method = c.getDeclaredMethod(methodName, cs);
+            if(method == null&&c!=Object.class){
+                return getAllClassMethod(c.getSuperclass(),methodName,cs);
+            }
         } catch (NoSuchMethodException e) {
             Timber.e("no such method method:%1s", methodName);
         }
-        return null;
+        return method;
     }
 
     public static void invoke(Method method, Object t, Object... args) {
