@@ -91,7 +91,11 @@ public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBin
             }
     }
 
-    public void onCancelClick(View view){
+    public void dismiss(){
         getWindow().dismiss();
+    }
+
+    public void onCancelClick(View view){
+        dismiss();
     }
 }

@@ -9,7 +9,8 @@ import com.binding.model.data.encrypt.FormUnionParams;
 public class DesParams extends FormUnionParams {
 
     @Override
-    public String encrypt(String json) {
+    public String encrypt(Object obj) {
+        String json = obj.toString();
         DES crypt = new DES(DES.DKDBKEY);
         return crypt.encrypt(json);
     }

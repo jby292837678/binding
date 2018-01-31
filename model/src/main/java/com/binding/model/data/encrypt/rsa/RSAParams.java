@@ -14,7 +14,8 @@ import timber.log.Timber;
 public class RSAParams extends FormUnionParams {
 
     @Override
-    public String encrypt(String json) {
+    public String encrypt(Object obj) {
+        String json = obj.toString();
         if(BuildConfig.DEBUG)return json;
         String encrypt = RSA.encryptByPublic(json);
         Timber.i("first : json:%1s encrypt:%2s",json,encrypt);

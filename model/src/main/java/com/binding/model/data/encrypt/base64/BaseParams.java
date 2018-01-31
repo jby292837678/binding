@@ -11,7 +11,8 @@ import com.binding.model.data.encrypt.FormUnionParams;
 public class BaseParams extends FormUnionParams {
 
     @Override
-    public String encrypt(String json) {
+    public String encrypt(Object obj) {
+        String json = obj.toString();
         byte[] data = Base64.encode(json.getBytes(), Base64.NO_WRAP);
         return new String(data, Base64.NO_WRAP);
     }

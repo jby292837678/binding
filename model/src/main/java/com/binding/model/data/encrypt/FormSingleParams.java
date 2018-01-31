@@ -24,7 +24,6 @@ public abstract class FormSingleParams implements SingleTransParams<FormBody> {
             Object o = ReflectUtil.beanGetValue(field, this);
             if (o == null) continue;
             String str = o.toString();
-            if(field.getType().isArray()) str = new Gson().toJson(o);
             builder.addEncoded(BaseUtil.findQuery(field), encrypt(str));
         }
         return builder.build();

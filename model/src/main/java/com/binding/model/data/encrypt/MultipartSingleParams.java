@@ -33,7 +33,7 @@ public abstract class MultipartSingleParams implements SingleTransParams<Multipa
                     builder.addFormDataPart(BaseUtil.findQuery(field), file.getName(), requestBody);
                 }
             } else {
-                builder.addFormDataPart(BaseUtil.findQuery(field),encrypt(String.valueOf(o)));
+                builder.addFormDataPart(BaseUtil.findQuery(field),encrypt(o));
             }
         }
         return builder.build();

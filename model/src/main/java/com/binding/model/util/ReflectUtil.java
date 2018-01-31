@@ -264,17 +264,23 @@ public class ReflectUtil {
     }
 
     public static void invoke(String methodName, Object o, Object... args) {
-        try {
             Class<?>[] cs = new Class<?>[args.length];
             for (int i = 0; i < args.length; i++) cs[i] = args[i].getClass();
-            Method method = o.getClass().getDeclaredMethod(methodName, cs);
+            Method method = getAllClassMethod(o.getClass(),methodName,cs);
             if (method != null) {
                 method.setAccessible(true);
                 invoke(method, o, args);
-            }
+            }else Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
+    }
+
+    public static Method getAllClassMethod(Class<?> c,String methodName, Class<?>[] cs){
+        try {
+            Method method = c.getDeclaredMethod(methodName, cs);
+            if(method == null&&c != Object.class) return getAllClassMethod(c.getSuperclass(),methodName,cs);
         } catch (NoSuchMethodException e) {
-            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
+            Timber.e("no such method method:%1s", methodName);
         }
+        return null;
     }
 
     public static void invoke(Method method, Object t, Object... args) {

@@ -8,5 +8,5 @@ import okhttp3.RequestBody;
 
 public interface SingleTransParams<T extends RequestBody> {
     T transParams();
-    String encrypt(String json);
+    String encrypt(Object json);
 }

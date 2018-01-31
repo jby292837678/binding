@@ -3,6 +3,7 @@ package com.binding.model.view.radio;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.Checkable;
 import android.widget.RadioGroup;
 
 /**
@@ -25,8 +26,11 @@ public class CheckRadioGroup extends RadioGroup {
     }
 
     public void checkPosition(int checkPosition) {
-        View view = getChildAt(checkPosition);
-        if(view == null)return;
-        check(view.getId());
+        if(checkPosition<0||checkPosition>=getChildCount()){
+            this.clearCheck();
+        }else{
+            View view = getChildAt(checkPosition);
+            if(view != null) check(view.getId());
+        }
     }
 }

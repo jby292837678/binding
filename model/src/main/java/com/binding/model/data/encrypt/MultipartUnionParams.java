@@ -42,7 +42,7 @@ public abstract class MultipartUnionParams extends MultipartSingleParams impleme
                 hashMap.put(BaseUtil.findQuery(field), o);
             }
         }
-        builder.addFormDataPart(getKey(), encrypt(new Gson().toJson(hashMap)));
+        builder.addFormDataPart(getKey(), encrypt(hashMap));
         return builder.build();
     }
 

@@ -9,8 +9,8 @@ import com.binding.model.data.encrypt.FormUnionParams;
 public class AESParams extends FormUnionParams {
 
     @Override
-    public String encrypt(String json) {
-        return json;
+    public String encrypt(Object json) {
+        return json.toString();
     }
 
     @Override

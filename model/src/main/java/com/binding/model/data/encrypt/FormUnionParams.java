@@ -23,12 +23,12 @@ public abstract class FormUnionParams extends FormSingleParams implements UnionT
         if(TextUtils.isEmpty(getKey()))return super.transParams();
         FormBody.Builder builder = new FormBody.Builder();
         HashMap<String, Object> hashMap = new HashMap<>();
-        for (Field field : ReflectUtil.getAllFields(getClass(), new ArrayList<Field>())) {
+        for (Field field : ReflectUtil.getAllFields(getClass(), new ArrayList<>())) {
             Object o = ReflectUtil.beanGetValue(field, this);
             if (o == null) continue;
             hashMap.put(BaseUtil.findQuery(field), o);
         }
-        builder.add(getKey(), encrypt(new Gson().toJson(hashMap)));
+        builder.add(getKey(), encrypt(hashMap));
         return builder.build();
     }
 }
