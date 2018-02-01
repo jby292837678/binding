@@ -251,7 +251,7 @@ public class BaseUtil {
     public static boolean isValidToast(View view, String error) {
         setError(view, error);
         if (!TextUtils.isEmpty(error))
-            Toast.makeText(view.getContext(), error, Toast.LENGTH_SHORT).show();
+            toast(error);
         return TextUtils.isEmpty(error);
     }
 
@@ -471,6 +471,8 @@ public class BaseUtil {
     }
 
     public static boolean toast(Context context, String message) {
+        if(TextUtils.isEmpty(message))return false;
+        if(TextUtils.isEmpty(message.trim()))return false;
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
         return true;
     }

@@ -46,7 +46,7 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
 
     public void onHttp(int offset, int refresh) {
         if(refresh>0)offset = 0;
-        else this.offset = offset;
+        this.offset = offset;
         int p = pageWay ? offset / pageCount + 1 : offset;
         if (rcHttp != null)
             rcHttp.http(p, refresh).subscribe(this::accept, this::onThrowable, this::onComplete, this::onSubscribe);
