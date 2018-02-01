@@ -3,6 +3,8 @@ package com.binding.model.util;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.binding.model.model.inter.Inflate;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
@@ -284,6 +286,24 @@ public class ReflectUtil {
             Timber.e("no such method method:%1s", methodName);
         }
         return method;
+    }
+
+    public static <E extends Inflate> List<E> copyList(List<? extends E> list){
+        List<E> copy = new ArrayList<>();
+        for (E e : list) {
+            copy.add(copy(e));
+        }
+        return copy;
+    }
+
+    public static <E extends Inflate> List<E> copyList(List<? extends E> list, int modelIndex){
+        List<E> copy = new ArrayList<>();
+        for (E e : list) {
+            E c = copy(e);
+            c.setModelIndex(modelIndex);
+            copy.add(c);
+        }
+        return copy;
     }
 
     public static void invoke(Method method, Object t, Object... args) {

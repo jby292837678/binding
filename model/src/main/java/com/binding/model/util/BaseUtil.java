@@ -45,6 +45,7 @@ import com.binding.model.layout.rotate.ObtainCodeEntity;
 import com.binding.model.layout.rotate.TimeUtil;
 import com.binding.model.model.ViewModel;
 import com.binding.model.data.exception.ApiException;
+import com.binding.model.model.inter.Inflate;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.Closeable;
@@ -58,6 +59,7 @@ import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -193,6 +195,8 @@ public class BaseUtil {
         return (Class) getInterfacesGenericTypes(clazz, c)[0];
     }
 
+
+
     public static int getLayoutId(int layoutIndex, Class clazz) {
         ModelView modelView = BaseUtil.findModelView(clazz);
         if (modelView == null)
@@ -259,7 +263,7 @@ public class BaseUtil {
 
     public static String getPhoneError(String mobiles) {
         if (TextUtils.isEmpty(mobiles)) return "手机号不能为空";
-        Pattern p = Pattern.compile("^((13[0-9])|(17[0-9])|(15[^4,\\D])|(18[0,5-9]))\\d{8}$");
+        Pattern p = Pattern.compile("^((19[0-9])|(13[0-9])|(17[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$");
         Matcher m = p.matcher(mobiles);
         boolean valid = m.matches();
         return valid ? null : "不合法的手机号";
