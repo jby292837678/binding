@@ -47,7 +47,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
         if (es == null) return false;
         switch (type) {
             case AdapterType.select:
-                for (E e : es) select(e, !checkList.contains(e), isPush(e) );
+                for (E e : es) select(e, !checkList.contains(e), isPush(e));
                 break;
             default:
                 return super.setList(position, es, type);
@@ -55,21 +55,21 @@ public class RecyclerSelectAdapter<E extends Recycler>
         return true;
     }
 
-    private boolean isPush(E e){
-        int status = e.checkWay()&1;
+    private boolean isPush(E e) {
+        int status = e.checkWay() & 1;
         return status == 1;
     }
 
-    private boolean isTakeBack(E e){
-        int status = e.checkWay()>>1&1;
+    private boolean isTakeBack(E e) {
+        int status = e.checkWay() >> 1 & 1;
         return status == 1;
     }
-    
+
     @Override
     public boolean setIEntity(int position, E e, int type, View view) {
         switch (type) {
             case AdapterType.select:
-                return select(e, view);
+                return select(position, e, view);
             default:
                 return super.setIEntity(position, e, type, view);
         }
@@ -98,8 +98,13 @@ public class RecyclerSelectAdapter<E extends Recycler>
             }
     }
 
-    public final boolean select(E e, View v) {
-        if (v != null)
+    public final boolean select(int position, E e, View v) {
+        if (v != null) {
+            if (e == null) {
+                if (getList().isEmpty()) return false;
+                if (!containsList(position, getList())) position = 0;
+                e = getList().get(position);
+            }
             switch (e.getCheckType()) {
                 case ENABLE:
                     return select(e, !v.isEnabled(), isPush(e));
@@ -112,15 +117,18 @@ public class RecyclerSelectAdapter<E extends Recycler>
                 default:
                     return select(e, !checkList.contains(e), isPush(e));
             }
-        else return select(e, !checkList.contains(e), isPush(e));
+        } else return select(e, !checkList.contains(e), isPush(e));
     }
 
     public final boolean select(E in, boolean check, boolean push) {
         boolean success = true;
         E out = null;
-        if (!check&&isTakeBack(in)) {
-            in.check(false);
-            checkList.remove(in);
+        if (!check) {
+            if (isTakeBack(in)) in.check(true);
+            else {
+                in.check(false);
+                checkList.remove(in);
+            }
         } else {
             if (push) {
                 out = push(in);
