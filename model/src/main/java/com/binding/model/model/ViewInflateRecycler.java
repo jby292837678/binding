@@ -36,8 +36,8 @@ public class ViewInflateRecycler<Binding extends ViewDataBinding> extends ViewIn
     }
 
     @Override
-    public boolean isPush() {
-        return true;
+    public int checkWay() {
+        return 3;
     }
 
     @Override

@@ -14,5 +14,10 @@ public interface Recycler<Binding extends ViewDataBinding> extends GridInflate<B
     void check(boolean check);
     int getCheckType();
 
-    boolean isPush();
+    /**
+     *          0       1       2       3
+     * push     false   true   false    true
+     * takeBack false   false  true     true
+     * */
+    int checkWay();
 }
