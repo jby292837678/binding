@@ -288,16 +288,15 @@ public class ReflectUtil {
         return method;
     }
 
-    public static <E extends Inflate> List<E> copyList(List<? extends E> list){
-        List<E> copy = new ArrayList<>();
-        for (E e : list) {
+    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list){
+        ArrayList<E> copy = new ArrayList<>();
+        for (E e : list)
             copy.add(copy(e));
-        }
         return copy;
     }
 
-    public static <E extends Inflate> List<E> copyList(List<? extends E> list, int modelIndex){
-        List<E> copy = new ArrayList<>();
+    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list, int modelIndex){
+        ArrayList<E> copy = new ArrayList<>();
         for (E e : list) {
             E c = copy(e);
             c.setModelIndex(modelIndex);
