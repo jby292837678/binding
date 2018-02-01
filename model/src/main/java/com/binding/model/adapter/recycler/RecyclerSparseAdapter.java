@@ -1,24 +1,17 @@
 package com.binding.model.adapter.recycler;
 
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.AdapterHandle;
 import com.binding.model.adapter.AdapterType;
-import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import static com.binding.model.util.BaseUtil.containsList;
 
 /**
  * project：cutv_ningbo
@@ -103,7 +96,7 @@ public class RecyclerSparseAdapter<E extends Inflate>
     }
 
     private int addTo(int position, E e, List<E> inflates) {
-        if (position >= inflates.size() || position < 0) {
+        if (!containsList(position,inflates)) {
             position = inflates.size();
             inflates.add(e);
         } else inflates.add(position, e);
@@ -117,7 +110,8 @@ public class RecyclerSparseAdapter<E extends Inflate>
     }
 
     protected boolean setToAdapter(int position, E e, List<E> inflates) {
-        if (position >= 0 && position < inflates.size()) {
+        if (containsList(position,inflates)) {
+//        if (position >= 0 && position < inflates.size()) {
             int p = holderList.indexOf(inflates.get(position));
             inflates.set(position, e);
             holderList.set(p, e);
@@ -224,7 +218,8 @@ public class RecyclerSparseAdapter<E extends Inflate>
 
     protected boolean refreshListAdapter(int position, List<E> es, List<E> inflates) {
         List<Inflate> l = new ArrayList<>();
-        if (position > 0 && position < inflates.size()) {
+//        if (position > 0 && position < inflates.size()) {
+        if (containsList(position,inflates)) {
             List<E> ls = new ArrayList<>();
             ls.addAll(inflates.subList(0,position));
             inflates = ls;

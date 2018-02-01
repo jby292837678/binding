@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
+import static com.binding.model.util.BaseUtil.containsList;
+
 /**
  * project：cutv_ningbo
  * description：
@@ -64,7 +66,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
     }
 
     public final void check(int position, boolean check) {
-        if (BaseUtil.containsList(position, getList())) {
+        if (containsList(position, getList())) {
             E e = getList().get(position);
             select(e, check, e.isPush());
         }

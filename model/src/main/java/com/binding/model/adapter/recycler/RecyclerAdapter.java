@@ -92,7 +92,7 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean setToAdapter(int position, E e, List<E> holderList) {
-        if (position >= 0 && position < holderList.size()) {
+        if (containsList(position,holderList)) {
             holderList.set(position, e);
             notifyItemChanged(position);
             return true;
@@ -105,7 +105,7 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean addToAdapter(int position, E e, List<E> holderList) {
-        if (position >= holderList.size() || position < 0) {
+        if (!containsList(position,holderList)) {
             position = holderList.size();
             holderList.add(e);
         } else holderList.add(position, e);
@@ -120,7 +120,7 @@ public class RecyclerAdapter<E extends Inflate>
 
     protected boolean removeToAdapter(int position, E e, List<E> holderList) {
         if (holderList.contains(e)) position = holderList.indexOf(e);
-        else if (position < 0 || position >= holderList.size()) return false;
+        else if (!containsList(position,holderList)) return false;
         holderList.remove(position);
         notifyItemRemoved(position);
         return true;
@@ -162,7 +162,7 @@ public class RecyclerAdapter<E extends Inflate>
     }
 
     protected boolean addListAdapter(int position, List<E> es, List<E> holderList) {
-        if (position < 0 || position >= holderList.size()) {
+        if (!containsList(position,holderList)) {
             position = holderList.size();
             holderList.addAll(es);
         } else holderList.addAll(position, es);
