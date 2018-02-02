@@ -1,8 +1,12 @@
 package com.binding.model.model;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
+import android.support.annotation.CallSuper;
+import android.text.TextUtils;
 
 import com.binding.model.cycle.Container;
 import com.binding.model.model.inter.HttpObservable;
@@ -10,6 +14,7 @@ import com.binding.model.model.inter.HttpObservableRefresh;
 import com.binding.model.util.BaseUtil;
 
 import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.disposables.ListCompositeDisposable;
 
 /**
  * project：cutv_ningbo
@@ -30,7 +35,7 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
     private int pageCount = 16;
     protected int offset = 0;
     private R r;
-    private Disposable disposable;
+    private final ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
     private HttpObservable<R> rcHttp;
 
     public static boolean pageWay = false;
@@ -54,17 +59,29 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
 
     private void onThrowable(Throwable throwable) {
         loading.set(false);
-        error.set(throwable.getMessage());
+        String msg = throwable.getMessage();
+        if(TextUtils.isEmpty(msg))msg = "请求失败";
+        error.set(msg);
         BaseUtil.toast(throwable);
     }
 
     private void onSubscribe(Disposable disposable) {
         loading.set(true);
-        this.disposable = disposable;
+        listCompositeDisposable.add(disposable);
     }
 
     public void accept(R r) throws Exception {
+        error.set("");
         this.r = r;
+    }
+
+
+    @CallSuper
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
+    public void onResume(){
+        if(!loading.get()&& !TextUtils.isEmpty(error.get())){
+            onHttp(0, 1);
+        }
     }
 
     private void onComplete() {
@@ -98,6 +115,6 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (disposable != null) disposable.dispose();
+        listCompositeDisposable.dispose();
     }
 }

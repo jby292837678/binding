@@ -27,6 +27,10 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
     protected final IEventAdapter<I> iEventAdapter = this;
     private final List<IEventAdapter<I>> eventAdapters = new ArrayList<>();
 
+    public RecyclerBaseAdapter() {
+        eventAdapters.add(iEventAdapter);
+    }
+
     @Override
     public RecyclerHolder<E> onCreateViewHolder(ViewGroup parent, int viewType) {
         return new RecyclerHolder<>(parent,sparseArray.get(viewType));
@@ -113,7 +117,8 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-        eventAdapters.add(iEventAdapter);
+        if(!eventAdapters.contains(iEventAdapter))
+            eventAdapters.add(iEventAdapter);
     }
 
     @Override

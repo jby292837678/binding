@@ -39,6 +39,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
         attachView(savedInstanceState, t);
+
         return binding;
     }
 
@@ -48,6 +49,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (getModelView().model()) eventModel.add(this);
         weakReference = new WeakReference<>(t);
         if (t instanceof CycleContainer) ((CycleContainer) t).getLifecycle().addObserver(this);
+
     }
 
     public void addLifeCycleObserver(LifecycleObserver observer) {
