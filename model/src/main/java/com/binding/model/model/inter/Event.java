@@ -38,6 +38,7 @@ public interface Event extends Parse {
     void registerEvent();
     void unRegisterEvent();
     int onEvent(View view, Event event, Object... args);
+    boolean isLive();
 
     static int event(int eventId, Event event,View view,Object... args){
         Event currentEvent = eventSet.get(eventId);

@@ -1,7 +1,5 @@
 package com.binding.demo.ui.home;
 
-import android.view.View;
-
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.binding.demo.base.cycle.BaseActivity;
 

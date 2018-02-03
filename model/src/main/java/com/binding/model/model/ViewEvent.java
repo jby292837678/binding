@@ -18,10 +18,11 @@ import com.binding.model.model.inter.Event;
 
 
 public class ViewEvent extends ViewParse implements Event {
-
+    private transient boolean live = false;
 
     @Override
     public final void registerEvent() {
+        live = true;
         for(int eventId :getModelView().event()){
             eventSet.put(eventId, this);
         }
@@ -29,9 +30,15 @@ public class ViewEvent extends ViewParse implements Event {
 
     @Override
     public final void unRegisterEvent() {
+        live = false;
         for(int eventId :getModelView().event()) {
             eventSet.remove(eventId);
         }
+    }
+
+    @Override
+    public boolean isLive() {
+        return live;
     }
 
     @Override
