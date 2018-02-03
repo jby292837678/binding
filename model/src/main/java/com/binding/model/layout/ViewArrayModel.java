@@ -35,9 +35,6 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         this.adapter = adapter;
     }
 
-
-
-    @Override
     public List<E> getData() {
         return adapter.getList();
     }

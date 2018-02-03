@@ -28,13 +28,13 @@ import io.reactivex.internal.disposables.ListCompositeDisposable;
  * @version 2.0
  */
 
-public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding, R> extends ViewModel<T, Binding> {
+public abstract class ViewHttpModel<T extends Container, Binding extends ViewDataBinding, R> extends ViewModel<T, Binding> {
     public final ObservableBoolean loading = new ObservableBoolean(false);
     public final ObservableBoolean enable = new ObservableBoolean(true);
     public final ObservableField<String> error = new ObservableField<>();
     private int pageCount = 16;
     protected int offset = 0;
-    private R r;
+//    private R r;
     private final ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
     private HttpObservable<R> rcHttp;
 
@@ -70,10 +70,7 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
         listCompositeDisposable.add(disposable);
     }
 
-    public void accept(R r) throws Exception {
-        error.set("");
-        this.r = r;
-    }
+    public abstract void accept(R r) throws Exception;
 
 
     @CallSuper
@@ -86,11 +83,10 @@ public class ViewHttpModel<T extends Container, Binding extends ViewDataBinding,
 
     private void onComplete() {
         loading.set(false);
+        error.set("");
     }
 
-    public R getData() {
-        return r;
-    }
+
 
     public void onHttp(int refresh) {
         onHttp(offset, refresh);
