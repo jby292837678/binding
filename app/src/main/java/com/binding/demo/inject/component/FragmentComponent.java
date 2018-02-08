@@ -6,6 +6,7 @@ import com.binding.demo.base.cycle.BaseSheetDialogFragment;
 import com.binding.demo.inject.module.FragmentModule;
 import com.binding.demo.inject.scope.FragmentScope;
 import com.binding.demo.ui.bottom.fragment.FullSheetDialogFragment;
+import com.binding.demo.ui.home.page.HomePageFragment;
 import com.binding.demo.ui.message.fragment.MessageFragment;
 
 import dagger.Component;
@@ -28,5 +29,6 @@ import dagger.Component;
 public interface FragmentComponent {
     void inject(MessageFragment fragment);
     void inject(BottomSheetDialogFragment fragment);
+    void inject(HomePageFragment fragment);
     void inject(FullSheetDialogFragment fragment);
 }

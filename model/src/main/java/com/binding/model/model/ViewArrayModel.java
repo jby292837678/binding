@@ -37,7 +37,6 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         extends ViewHttpModel<C, Binding, List<E>> {
     public ObservableBoolean empty = new ObservableBoolean(true);
     private final Adapter adapter;
-    private HttpObservable<E> ecHttp;
 
     public ViewArrayModel(Adapter adapter) {
         this.adapter = adapter;
@@ -47,38 +46,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         return adapter.getList();
     }
 
-    private void setEcHttp(HttpObservable<E> ecHttp){
-       this.ecHttp = ecHttp;
-    }
 
-    @Override
-    void onSubscribe(Disposable disposable) {
-        super.onSubscribe(disposable);
-        if(offset == 0)getAdapter().clear();
-        else if(isPageWay()) {
-            int index = offset;
-            offset =  offset / getPageCount() * getPageCount();
-            if(index !=offset)
-                getAdapter().setList(offset,getAdapter().getList().subList(offset,index),AdapterType.remove);
-        }
-
-    }
-
-    @Override
-    public void onHttp(int offset, int refresh) {
-        super.onHttp(refresh);
-        int p = isPageWay() ? offset / getPageCount() + 1 : offset;
-        if(ecHttp !=null)
-            ecHttp.http(p,refresh)
-                    .subscribe(this::onNext,this::onThrowable,this::onComplete,this::onSubscribe);
-    }
-
-    private void onNext(E e) {
-        getAdapter().setEntity(IEventAdapter.NO_POSITION,e,add,null);
-    }
-
-    /**
-     */
     @Override
     public void accept(List<E> es) throws Exception {
         int position = isPageWay() ? offset / getPageCount() * getPageCount(): offset;

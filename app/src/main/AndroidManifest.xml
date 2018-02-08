@@ -12,26 +12,15 @@
 
 
         <activity android:name=".ui.home.HomeActivity" >
-
-        </activity>
-
-
-        <activity android:name=".ui.start.StartupActivity" > </activity>
-        <activity android:name=".ui.password.PasswordActivity" >
-        </activity>
-        <activity android:name=".ui.message.MessageActivity" >
-
-        </activity>
-        <activity android:name=".ui.bottom.BottomSheetActivity" >
-
-        </activity>
-        <activity android:name=".ui.select.SelectActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-
         </activity>
-
+        <activity android:name=".ui.start.StartupActivity"/>
+        <activity android:name=".ui.password.PasswordActivity" />
+        <activity android:name=".ui.message.MessageActivity" />
+        <activity android:name=".ui.bottom.BottomSheetActivity" />
+        <activity android:name=".ui.select.SelectActivity" />
     </application>
 </manifest>
