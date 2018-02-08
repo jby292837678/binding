@@ -124,7 +124,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
         boolean success = true;
         E out = null;
         if (!check) {
-            if (isTakeBack(in)) in.check(true);
+            if (!isTakeBack(in)) in.check(true);
             else {
                 in.check(false);
                 checkList.remove(in);

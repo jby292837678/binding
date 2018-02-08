@@ -100,4 +100,9 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
         return super.getItemPosition(object);
     }
 
+    @Override
+    public void clear() {
+        list.clear();
+        notifyDataSetChanged();
+    }
 }

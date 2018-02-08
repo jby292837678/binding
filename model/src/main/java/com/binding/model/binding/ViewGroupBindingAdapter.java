@@ -30,8 +30,14 @@ public class ViewGroupBindingAdapter {
     public static void addInflates(ViewGroup group, List<? extends Inflate> inflates) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
-        for (Inflate inflate : inflates)
-            inflate.attachView(group.getContext(), group, true, null).getRoot();
+        for (Inflate inflate : inflates){
+            if(inflate instanceof Measure){
+                View view = inflate.attachView(group.getContext(), group, false, null).getRoot();
+                ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,group);
+                group.addView(view,params);
+            }else
+                inflate.attachView(group.getContext(), group, true, null);
+        }
     }
 
 

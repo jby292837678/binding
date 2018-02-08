@@ -1,4 +1,4 @@
-package com.binding.model.layout;
+package com.binding.model.model;
 
 import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
@@ -9,9 +9,16 @@ import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.bit.Bit;
 import com.binding.model.cycle.Container;
 import com.binding.model.model.ViewHttpModel;
+import com.binding.model.model.inter.Http;
+import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.Parse;
 
 import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+
+import static com.binding.model.adapter.AdapterType.add;
 
 /**
  * project：cutv_ningbo
@@ -30,6 +37,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         extends ViewHttpModel<C, Binding, List<E>> {
     public ObservableBoolean empty = new ObservableBoolean(true);
     private final Adapter adapter;
+    private HttpObservable<E> ecHttp;
 
     public ViewArrayModel(Adapter adapter) {
         this.adapter = adapter;
@@ -39,6 +47,29 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
         return adapter.getList();
     }
 
+    private void setEcHttp(HttpObservable<E> ecHttp){
+       this.ecHttp = ecHttp;
+    }
+
+    @Override
+    void onSubscribe(Disposable disposable) {
+        super.onSubscribe(disposable);
+        if(offset == 0)getAdapter().clear();
+        else if(pageWay) offset =  offset / getPageCount() * getPageCount();
+
+    }
+
+    @Override
+    public void onHttp(int offset, int refresh) {
+        super.onHttp(refresh);
+        if(ecHttp !=null)
+            ecHttp.http(offset,refresh)
+                    .subscribe(this::onNext,this::onThrowable,this::onComplete,this::onSubscribe);
+    }
+
+    private void onNext(E e) {
+        getAdapter().setEntity(IEventAdapter.NO_POSITION,e,add,null);
+    }
 
     /**
      * 0: refresh = true  offset
@@ -50,6 +81,11 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     public void accept(List<E> es) throws Exception {
         int position = pageWay ? offset / getPageCount() * getPageCount(): offset;
         adapter.setList(position, es,AdapterType.refresh);
+    }
+
+    @Override
+    void onComplete() {
+        super.onComplete();
         empty.set(getAdapter().size() == 0);
         error.set("暂无数据");
     }

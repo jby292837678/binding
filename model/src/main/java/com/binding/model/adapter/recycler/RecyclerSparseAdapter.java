@@ -246,4 +246,11 @@ public class RecyclerSparseAdapter<E extends Inflate>
         notifyDataSetChanged();
     }
 
+
+    @Override
+    public void clear() {
+        int size = size();
+        holderList.clear();
+        notifyItemRangeRemoved(0, size);
+    }
 }

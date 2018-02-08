@@ -112,4 +112,9 @@ public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements
         return list.size();
     }
 
+    @Override
+    public void clear() {
+        list.clear();
+        notifyDataSetChanged();
+    }
 }

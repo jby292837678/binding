@@ -2,9 +2,12 @@ package com.binding.model;
 
 import android.util.SparseArray;
 
+import com.binding.model.util.ReflectUtil;
+
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,5 +67,19 @@ public class ExampleUnitTest {
 //        }
 
         System.out.println(list.indexOf(100));
+    }
+
+    static class B{
+        private void array(List<A> es){
+            System.out.println("method invoke");
+        }
+    }
+
+    @Test
+    public void dispatchModel(){
+        ArrayList<A> list = new ArrayList<>();
+        B b = new B();
+        ReflectUtil.invoke("array",b,list);
+//        Method method = ReflectUtil.getAllClassMethod("array",list);
     }
 }

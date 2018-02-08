@@ -201,4 +201,9 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
     }
 
 
+    @Override
+    public void clear() {
+        holderList.clear();
+        notifyDataSetChanged();
+    }
 }

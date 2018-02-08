@@ -1,7 +1,5 @@
 package com.binding.model.layout.rotate;
 
-import com.binding.model.layout.ViewArrayModel;
-import com.binding.model.model.ViewInflate;
 import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Parse;
 

@@ -8,6 +8,7 @@ import android.view.View;
 
 public interface IEventAdapter<E> {
     int NO_POSITION = Integer.MIN_VALUE;
+    int NO_CONTAINS = Integer.MAX_VALUE;
     int ENABLE = 1;
     int CHECK = 2;
     int SELECT = 3;

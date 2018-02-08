@@ -194,5 +194,11 @@ public class App implements Application.ActivityLifecycleCallbacks {
         return px / getCurrentActivity().getResources().getDisplayMetrics().density;
     }
 
+    public static int getWeightWidth(int sum){
+        return getScreenWidth()/sum;
+    }
 
+    public static int getWeightHeight(int sum){
+        return getScreenHeight()/sum;
+    }
 }

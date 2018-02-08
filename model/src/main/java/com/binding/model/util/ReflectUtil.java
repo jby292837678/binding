@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.binding.model.model.inter.Inflate;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.InvocationTargetException;
@@ -106,27 +105,18 @@ public class ReflectUtil {
         char[] cs = f.getName().toCharArray();
 //        char[] cs = name.toCharArray();
         if (cs[0] >= 97 && cs[0] <= 122) cs[0] -= 32;
-        Method method = null;
-        try {
-//            StringBuilder builder = new StringBuilder();
-//            for(Class param:params){
-//                builder.append(param.getSimpleName());
-//                builder.append(" ");
-//                builder.append(param.getSimpleName().toLowerCase());
-//                builder.append(",");
-//            }
-//            if(builder.length()>0)builder.deleteCharAt(builder.length()-1);
-//            Timber.i("void %1s%2s(%3s){}",prefix,String.valueOf(cs),builder);
-            method = c.getDeclaredMethod(prefix + String.valueOf(cs), params);
-        } catch (Exception e) {
-//            e.printStackTrace();
-        }
-        return method;
+//        Method method = null;
+//        try {
+//            method = c.getDeclaredMethod(prefix + String.valueOf(cs), params);
+//        } catch (Exception e) {
+////            e.printStackTrace();
+//        }
+        return getAllClassMethod(c, prefix + String.valueOf(cs), params);
     }
 
 
-    public static Field getField(String fieldName,Class<?> c){
-        if(c == null)return null;
+    public static Field getField(String fieldName, Class<?> c) {
+        if (c == null) return null;
         try {
             return c.getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
@@ -135,20 +125,20 @@ public class ReflectUtil {
         return null;
     }
 
-    public static <T> T getFieldValue(String fieldName,Object bean){
+    public static <T> T getFieldValue(String fieldName, Object bean) {
         try {
-            return getFieldValue(bean.getClass().getDeclaredField(fieldName),bean);
+            return getFieldValue(bean.getClass().getDeclaredField(fieldName), bean);
         } catch (NoSuchFieldException e) {
             Timber.i(e);
             return null;
         }
     }
 
-    public static <T> T getFieldValue(Field field, Object bean){
-        if(field == null)return null;
+    public static <T> T getFieldValue(Field field, Object bean) {
+        if (field == null) return null;
         try {
             field.setAccessible(true);
-            return (T)field.get(bean);
+            return (T) field.get(bean);
         } catch (IllegalAccessException e) {
             Timber.i(e);
             return null;
@@ -220,15 +210,6 @@ public class ReflectUtil {
         return new Type[0];
     }
 
-//    public static AdapterType[] getSuperGenericType(Class clazz) {
-//        AdapterType classType = clazz.getGenericSuperclass();
-//        if (classType instanceof ParameterizedType) {
-//            ParameterizedType parameterizedType = (ParameterizedType) classType;
-//            return parameterizedType.getActualTypeArguments();
-//        }
-//        return new AdapterType[0];
-//    }
-
 
     public static Class getSuperGenericType(Class clazz, int index) {
         Type genType = clazz.getGenericSuperclass();
@@ -266,36 +247,56 @@ public class ReflectUtil {
     }
 
     public static void invoke(String methodName, Object o, Object... args) {
-            Class<?>[] cs = new Class<?>[args.length];
-            for (int i = 0; i < args.length; i++) cs[i] = args[i].getClass();
-            Method method = getAllClassMethod(o.getClass(),methodName,cs);
-            if (method != null) {
-                method.setAccessible(true);
-                invoke(method, o, args);
-            }else Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
+        Class<?>[] cs = new Class<?>[args.length];
+        for (int i = 0; i < args.length; i++) cs[i] = args[i].getClass();
+        Method method = getAllClassMethod(o.getClass(), methodName, cs);
+        if (method != null) {
+            method.setAccessible(true);
+            invoke(method, o, args);
+        } else
+            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
     }
 
-    public static Method getAllClassMethod(Class<?> c,String methodName, Class<?>[] cs){
+    public static Method getAllClassMethod(Class<?> c, String methodName, Class<?>[] cs) {
+        if (TextUtils.isEmpty(methodName)) return null;
         Method method = null;
         try {
             method = c.getDeclaredMethod(methodName, cs);
-            if(method == null&&c!=Object.class){
-                return getAllClassMethod(c.getSuperclass(),methodName,cs);
-            }
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             Timber.e("no such method method:%1s", methodName);
         }
+        if (method == null) {
+            for (Method declareMethod : c.getDeclaredMethods()) {
+                if (isValid(methodName, declareMethod, cs)) {
+                    method = declareMethod;
+                    break;
+                }
+            }
+        }
+        if (method == null && c != Object.class)
+            return getAllClassMethod(c.getSuperclass(), methodName, cs);
         return method;
     }
 
-    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list){
+    private static boolean isValid(String methodName, Method declareMethod, Class<?>[] cs) {
+        if (!declareMethod.getName().equals(methodName)) return false;
+        Class<?>[] params = declareMethod.getParameterTypes();
+        if (cs.length != params.length) return false;
+        int index = -1;
+        for (Class<?> param : params) {
+            if(!param.isAssignableFrom(cs[++index]))return false;
+        }
+        return true;
+    }
+
+    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list) {
         ArrayList<E> copy = new ArrayList<>();
         for (E e : list)
             copy.add(copy(e));
         return copy;
     }
 
-    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list, int modelIndex){
+    public static <E extends Inflate> ArrayList<E> copyList(List<? extends E> list, int modelIndex) {
         ArrayList<E> copy = new ArrayList<>();
         for (E e : list) {
             E c = copy(e);
@@ -476,14 +477,26 @@ public class ReflectUtil {
     }
 
 
-    public <T> T copy(T t,Object...args){
-        T coyp = newInstance((Class<T>) t.getClass(),args);
+    public <T> T copy(T t, Object... args) {
+        T coyp = newInstance((Class<T>) t.getClass(), args);
         for (Field field : ReflectUtil.getAllFields(getClass())) {
-            Object object = ReflectUtil.beanGetValue(field,this);
-            if(object!=null)
-                ReflectUtil.beanSetValue(field,coyp,object);
+            Object object = ReflectUtil.beanGetValue(field, this);
+            if (object != null)
+                ReflectUtil.beanSetValue(field, coyp, object);
         }
         return coyp;
+    }
+
+
+    public static Object getField(Class<?> c, String feildName) {
+        Object o = ReflectUtil.newInstance(c);
+        Field f = ReflectUtil.getField(feildName, c);
+        try {
+            return f.get(o);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

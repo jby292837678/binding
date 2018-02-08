@@ -193,6 +193,12 @@ public class RecyclerAdapter<E extends Inflate>
         notifyDataSetChanged();
     }
 
+    @Override
+    public void clear() {
+        int size = size();
+        holderList.clear();
+        notifyItemRangeRemoved(0, size);
+    }
 }
 //    private AtomicBoolean refresh = new AtomicBoolean(false);
 //        if (!refresh.get()) {

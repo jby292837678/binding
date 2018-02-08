@@ -3,21 +3,16 @@ package com.binding.model.layout.recycler;
 import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
-import com.binding.model.adapter.recycler.GridSpanSizeLookup;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
-import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
 import com.binding.model.cycle.Container;
-import com.binding.model.layout.ViewArrayModel;
+import com.binding.model.model.ViewArrayModel;
 import com.binding.model.model.inter.Inflate;
-import com.binding.model.model.inter.Recycler;
 
 /**
  * project：cutv_ningbo

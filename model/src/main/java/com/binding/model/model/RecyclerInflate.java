@@ -54,7 +54,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
     private transient IEventAdapter iEventAdapter;
     private final transient ModelView modelView;
     private transient int modelIndex = 0;
-
+    private boolean live = false;
 
     public RecyclerInflate(IModelAdapter<E> adapter, boolean page,int spanCount) {
         this.adapter = adapter;
@@ -137,6 +137,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
     }
     @Override
     public final void registerEvent() {
+        live = true;
         for (int eventId : getModelView().event()) {
             eventSet.put(eventId, this);
         }
@@ -144,6 +145,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
 
     @Override
     public final void unRegisterEvent() {
+        live = false;
         for (int eventId : getModelView().event()) {
             eventSet.remove(eventId);
         }
@@ -238,5 +240,10 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
 
     public void addEventAdapter(IEventAdapter<E> iEventAdapter) {
         getAdapter().addEventAdapter(iEventAdapter);
+    }
+
+    @Override
+    public boolean isLive() {
+        return live;
     }
 }

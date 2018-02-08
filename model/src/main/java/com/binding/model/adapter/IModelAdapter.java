@@ -24,4 +24,5 @@ public interface IModelAdapter<E> extends IEventAdapter<E>, IListAdapter<E> {
     void addEventAdapter(IEventAdapter<E> eventAdapter);
     boolean setIEntity(int position, E e, @AdapterHandle int type, View view);
 
+    void clear();
 }

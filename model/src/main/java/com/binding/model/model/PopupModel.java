@@ -18,7 +18,7 @@ import io.reactivex.functions.Consumer;
  * Created by arvin on 2017/11/19.
  */
 
-public class PopupModel<T extends Container, Binding extends ViewDataBinding>  extends ViewModel<T,Binding> {
+public class PopupModel<T extends Container, Binding extends ViewDataBinding> extends ViewModel<T, Binding> {
     private final PopupWindow window = new PopupWindow();
     private float alpha = App.popupAlhpa;
     private PopupWindow.OnDismissListener onDismissListener;
@@ -34,10 +34,10 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         window.setOutsideTouchable(true);
         window.setTouchable(true);
         window.setOnDismissListener(() -> {
-            WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
-            params.alpha=1f;
+            WindowManager.LayoutParams params = getT().getDataActivity().getWindow().getAttributes();
+            params.alpha = 1f;
             getT().getDataActivity().getWindow().setAttributes(params);
-            if(onDismissListener!=null)onDismissListener.onDismiss();
+            if (onDismissListener != null) onDismissListener.onDismiss();
         });
     }
 
@@ -45,7 +45,7 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         this.onDismissListener = onDismissListener;
     }
 
-    public  void setAlpha(float alpha){
+    public void setAlpha(float alpha) {
         this.alpha = alpha;
     }
 
@@ -53,28 +53,29 @@ public class PopupModel<T extends Container, Binding extends ViewDataBinding>  e
         return window;
     }
 
-    public void show(Consumer<PopupWindow> consumer){
-        if(window.isShowing()){
+    public void show(Consumer<PopupWindow> consumer) {
+        if (window.isShowing()) {
             window.dismiss();
-        }else{
-            try{
-                WindowManager.LayoutParams params= getT().getDataActivity().getWindow().getAttributes();
-                params.alpha=alpha;
-                getT().getDataActivity().getWindow().setAttributes(params);
-
-                getDataBinding().setVariable(App.vm,this);
+        } else {
+            try {
+                if (getT() != null) {
+                    WindowManager.LayoutParams params = getT().getDataActivity().getWindow().getAttributes();
+                    params.alpha = alpha;
+                    getT().getDataActivity().getWindow().setAttributes(params);
+                }
+                getDataBinding().setVariable(App.vm, this);
                 consumer.accept(window);
-            }catch (Throwable e){
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public void dismiss(){
+    public void dismiss() {
         window.dismiss();
     }
 
-    public void onCancelClick(View view){
+    public void onCancelClick(View view) {
         getWindow().dismiss();
     }
 }

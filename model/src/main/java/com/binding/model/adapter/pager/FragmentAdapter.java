@@ -104,4 +104,9 @@ public class FragmentAdapter<F extends Item<? extends Fragment>> extends Fragmen
     }
 
 
+    @Override
+    public void clear() {
+        list.clear();
+        notifyDataSetChanged();
+    }
 }

@@ -57,7 +57,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
             rcHttp.http(p, refresh).subscribe(this::accept, this::onThrowable, this::onComplete, this::onSubscribe);
     }
 
-    private void onThrowable(Throwable throwable) {
+     void onThrowable(Throwable throwable) {
         loading.set(false);
         String msg = throwable.getMessage();
         if(TextUtils.isEmpty(msg))msg = "请求失败";
@@ -65,8 +65,9 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         BaseUtil.toast(throwable);
     }
 
-    private void onSubscribe(Disposable disposable) {
+    void onSubscribe(Disposable disposable) {
         loading.set(true);
+
         listCompositeDisposable.add(disposable);
     }
 
@@ -81,7 +82,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         }
     }
 
-    private void onComplete() {
+    void onComplete() {
         loading.set(false);
         error.set("");
     }

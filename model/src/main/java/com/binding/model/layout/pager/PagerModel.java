@@ -4,11 +4,10 @@ import android.databinding.ObservableInt;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.widget.RadioGroup;
 
 import com.binding.model.adapter.ILayoutAdapter;
 import com.binding.model.cycle.Container;
-import com.binding.model.layout.ViewArrayModel;
+import com.binding.model.model.ViewArrayModel;
 import com.binding.model.layout.rotate.PagerEntity;
 import com.binding.model.layout.rotate.PagerRotateListener;
 import com.binding.model.layout.rotate.TimeUtil;
