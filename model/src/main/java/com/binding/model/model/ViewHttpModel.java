@@ -50,6 +50,10 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         onHttp(0, 1);
     }
 
+    public boolean isPageWay() {
+        return pageWay;
+    }
+
     public void onHttp(int offset, int refresh) {
         if(refresh>0)offset = 0;
         this.offset = offset;

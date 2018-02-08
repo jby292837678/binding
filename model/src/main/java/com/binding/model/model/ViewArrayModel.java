@@ -55,7 +55,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     void onSubscribe(Disposable disposable) {
         super.onSubscribe(disposable);
         if(offset == 0)getAdapter().clear();
-        else if(pageWay) {
+        else if(isPageWay()) {
             int index = offset;
             offset =  offset / getPageCount() * getPageCount();
             if(index !=offset)
@@ -67,7 +67,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     @Override
     public void onHttp(int offset, int refresh) {
         super.onHttp(refresh);
-        int p = pageWay ? offset / getPageCount() + 1 : offset;
+        int p = isPageWay() ? offset / getPageCount() + 1 : offset;
         if(ecHttp !=null)
             ecHttp.http(p,refresh)
                     .subscribe(this::onNext,this::onThrowable,this::onComplete,this::onSubscribe);
@@ -78,14 +78,10 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     }
 
     /**
-     * 0: refresh = true  offset
-     * 1: refresh = false offset
-     * 2: refresh = true  page
-     * 3: refresh = false page
      */
     @Override
     public void accept(List<E> es) throws Exception {
-        int position = pageWay ? offset / getPageCount() * getPageCount(): offset;
+        int position = isPageWay() ? offset / getPageCount() * getPageCount(): offset;
         adapter.setList(position, es,AdapterType.refresh);
     }
 
