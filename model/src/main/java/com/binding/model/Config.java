@@ -7,4 +7,6 @@ package com.binding.model;
 public interface Config {
     String title = "title";
     String user = "user";
+    String path = "path";
+    String bundle = "bundle";
 }

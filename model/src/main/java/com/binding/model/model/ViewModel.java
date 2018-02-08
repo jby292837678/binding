@@ -11,6 +11,8 @@ import android.support.annotation.CallSuper;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.binding.model.Config;
 import com.binding.model.cycle.Container;
 import com.binding.model.cycle.CycleContainer;
 import com.binding.model.model.inter.Model;
@@ -35,11 +37,12 @@ import timber.log.Timber;
 public class ViewModel<T extends Container, Binding extends ViewDataBinding> extends ViewInflate<Binding>
         implements Model<T, Binding> {
     private transient WeakReference<T> weakReference;
+    private String path;
+    private Bundle bundle;
 
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
         attachView(savedInstanceState, t);
-
         return binding;
     }
 
@@ -49,7 +52,8 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
         if (getModelView().model()) eventModel.add(this);
         weakReference = new WeakReference<>(t);
         if (t instanceof CycleContainer) ((CycleContainer) t).getLifecycle().addObserver(this);
-
+        path = t.getDataActivity().getIntent().getStringExtra(Config.path);
+        bundle = t.getDataActivity().getIntent().getBundleExtra(Config.bundle);
     }
 
     public void addLifeCycleObserver(LifecycleObserver observer) {
@@ -91,6 +95,10 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+    }
+
+    public void goPath(){
+        ARouter.getInstance().build(path).with(bundle).navigation();
     }
 
     public void startActivity(Class<? extends Activity> c,Bundle bundle) {
