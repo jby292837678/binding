@@ -55,15 +55,21 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     void onSubscribe(Disposable disposable) {
         super.onSubscribe(disposable);
         if(offset == 0)getAdapter().clear();
-        else if(pageWay) offset =  offset / getPageCount() * getPageCount();
+        else if(pageWay) {
+            int index = offset;
+            offset =  offset / getPageCount() * getPageCount();
+            if(index !=offset)
+                getAdapter().setList(offset,getAdapter().getList().subList(offset,index),AdapterType.remove);
+        }
 
     }
 
     @Override
     public void onHttp(int offset, int refresh) {
         super.onHttp(refresh);
+        int p = pageWay ? offset / getPageCount() + 1 : offset;
         if(ecHttp !=null)
-            ecHttp.http(offset,refresh)
+            ecHttp.http(p,refresh)
                     .subscribe(this::onNext,this::onThrowable,this::onComplete,this::onSubscribe);
     }
 

@@ -8,6 +8,7 @@ import android.databinding.ViewDataBinding;
 import android.support.annotation.CallSuper;
 import android.text.TextUtils;
 
+import com.binding.model.App;
 import com.binding.model.cycle.Container;
 import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.HttpObservableRefresh;
@@ -34,11 +35,11 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     public final ObservableField<String> error = new ObservableField<>();
     private int pageCount = 16;
     protected int offset = 0;
-//    private R r;
     private final ListCompositeDisposable listCompositeDisposable = new ListCompositeDisposable();
     private HttpObservable<R> rcHttp;
 
-    public static boolean pageWay = false;
+    private boolean pageWay = App.pageWay;
+
 
     public final void setRcHttp(HttpObservableRefresh<R> rcHttp1){
         setRoHttp((offset1, refresh) -> rcHttp1.http(offset1,refresh>0));
@@ -99,6 +100,10 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
     public void setEnable(boolean enable) {
         this.enable.set(enable);
+    }
+
+    public void setPageWay(boolean pageWay) {
+        this.pageWay = pageWay;
     }
 
     public void setPageCount(int pageCount) {
