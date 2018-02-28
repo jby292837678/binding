@@ -253,8 +253,9 @@ public class ReflectUtil {
         if (method != null) {
             method.setAccessible(true);
             invoke(method, o, args);
-        } else
-            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
+        }
+//        else
+//            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
     }
 
     public static Method getAllClassMethod(Class<?> c, String methodName, Class<?>[] cs) {

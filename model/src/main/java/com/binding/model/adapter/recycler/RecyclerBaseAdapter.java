@@ -31,7 +31,7 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
     private final List<E> holderList = new ArrayList<>();
     private final SparseArray<E> sparseArray = new SparseArray<>();
     private int count;
-    private final List<IEventAdapter<I>> eventAdapters = new ArrayList<>();
+    protected final List<IEventAdapter<I>> eventAdapters = new ArrayList<>();
 
     public RecyclerBaseAdapter() {
         eventAdapters.add(iEventAdapter);
@@ -60,12 +60,17 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
     public boolean setEntity(int position, I i, int type, View view) {
         for (IEventAdapter<I> eventAdapter : eventAdapters) {
             if(eventAdapter instanceof IModelAdapter){
-                try{
-                    return ((IModelAdapter) eventAdapter).setIEntity(position,i,type,view);
-                }catch (ClassCastException e){
-                    e.printStackTrace();
-                }
+                return setISEntity((IModelAdapter<I>) eventAdapter,position,i,type,view);
             }else if(eventAdapter.setEntity(position, i, type, view))return true;
+        }
+        return false;
+    }
+
+    protected boolean setISEntity(IModelAdapter<I> eventAdapter,int position, I i, int type, View view) {
+        try{
+            return eventAdapter.setIEntity(position,i,type,view);
+        }catch (ClassCastException e){
+            e.printStackTrace();
         }
         return false;
     }

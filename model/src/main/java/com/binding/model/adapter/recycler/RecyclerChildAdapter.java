@@ -4,6 +4,7 @@ import android.view.View;
 import android.widget.Checkable;
 
 import com.binding.model.adapter.AdapterType;
+import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.Recycler;
 
@@ -15,9 +16,8 @@ import static com.binding.model.adapter.AdapterType.select;
  * Created by arvin on 2018/2/27.
  */
 
-public class RecyclerChildAdapter<E extends Recycler,I extends Recycler>
-        extends RecyclerBaseAdapter<E,I> implements IModelAdapter<E>
-{
+public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
+        extends RecyclerBaseAdapter<E, I> implements IModelAdapter<E> {
 
     private final ArrayList<I> checkList = new ArrayList<>();
     private int max;
@@ -31,10 +31,12 @@ public class RecyclerChildAdapter<E extends Recycler,I extends Recycler>
     }
 
     @Override
-    public boolean setEntity(int position, I i, int type, View view) {
-        switch (type){
-            case select:return select(position, i, view);
-            default:return super.setEntity(position, i, type, view);
+    protected boolean setISEntity(IModelAdapter<I> eventAdapter, int position, I i, int type, View view) {
+        switch (type) {
+            case select:
+                return select(position,i,view);
+            default:
+                return super.setISEntity(eventAdapter, position, i, type, view);
         }
     }
 

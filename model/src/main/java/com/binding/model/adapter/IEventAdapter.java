@@ -16,4 +16,5 @@ public interface IEventAdapter<E> {
      * please don't use method getAdapter at body
      * */
     boolean setEntity(int position, E e, @AdapterHandle int type, View view);
+
 }
