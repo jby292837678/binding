@@ -135,15 +135,22 @@ public class ReflectUtil {
     }
 
     public static <T> T getFieldValue(Field field, Object bean) {
-        if (field == null) return null;
+        if (field == null||bean == null) return null;
         try {
             field.setAccessible(true);
             return (T) field.get(bean);
         } catch (IllegalAccessException e) {
             Timber.i(e);
             return null;
-
         }
+    }
+
+    public static Object getFieldStaticValue(Class<?> c, String fieldName) {
+        if (!TextUtils.isEmpty(fieldName)) {
+            Object bean = ReflectUtil.newInstance(c);
+            return getFieldValue(ReflectUtil.getField(fieldName, c),bean);
+        }
+        return null;
     }
 
     public static Type[] getFieldGenericType(Field field) {
