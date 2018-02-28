@@ -39,6 +39,7 @@ import android.widget.Toolbar;
 import com.binding.model.App;
 import com.binding.model.R;
 import com.binding.model.adapter.AdapterType;
+import com.binding.model.cycle.MainLooper;
 import com.binding.model.data.encrypt.Params;
 import com.binding.model.model.ModelView;
 import com.binding.model.layout.rotate.ObtainCodeEntity;
@@ -473,7 +474,7 @@ public class BaseUtil {
     public static boolean toast(Context context, String message) {
         if(TextUtils.isEmpty(message))return false;
         if(TextUtils.isEmpty(message.trim()))return false;
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        MainLooper.runOnUiThread(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
         return true;
     }
 

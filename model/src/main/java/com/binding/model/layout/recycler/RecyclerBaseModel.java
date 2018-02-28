@@ -8,12 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IRecyclerAdapter;
-import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.model.ViewArrayModel;
-import com.binding.model.model.ViewInflate;
 import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Recycler;
 
@@ -28,18 +25,17 @@ import com.binding.model.model.inter.Recycler;
  *
  * @version 2.0
  */
-
-public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate>
-        extends ViewArrayModel<C, Binding, E,RecyclerAdapter<E>> {
+public class RecyclerBaseModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate,S extends Recycler>
+        extends ViewArrayModel<C, Binding, E,RecyclerBaseAdapter<E,S>> {
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
 
-    public RecyclerModel(RecyclerAdapter<E> adapter) {
+    public RecyclerBaseModel(RecyclerBaseAdapter<E,S> adapter) {
         super(adapter);
     }
 
-    public RecyclerModel() {
-        this(new RecyclerAdapter<>());
+    public RecyclerBaseModel() {
+        this(new RecyclerBaseAdapter<>());
     }
 
     @Override
@@ -64,7 +60,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         onHttp(0,3);
     }
 
-    public void addEventAdapter(IEventAdapter<E> iEventAdapter) {
+    public void addEventAdapter(IEventAdapter<S> iEventAdapter) {
         getAdapter().addEventAdapter(iEventAdapter);
     }
 
@@ -93,9 +89,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         }
     };
 
-    @Override
-    public RecyclerAdapter<E> getAdapter() {
-        return super.getAdapter();
-    }
+
 }
 

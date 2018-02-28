@@ -28,16 +28,14 @@ import java.util.List;
 
 
 @SuppressWarnings("unchecked")
-public class FragmentAdapter<F extends Item<? extends Fragment>> extends FragmentPagerAdapter implements ILayoutAdapter<F> {
+public class FragmentAdapter<F extends Item<? extends Fragment>> extends FragmentPagerAdapter implements ILayoutAdapter<F> ,IEventAdapter<F>{
     private List<F> list = new ArrayList<>();
     private int count = -1;
 
     protected final IEventAdapter<F> iEventAdapter = this;
-    private final List<IEventAdapter<F>> eventAdapters = new ArrayList<>();
 
     public FragmentAdapter(FragmentManager fm) {
         super(fm);
-        eventAdapters.add(iEventAdapter);
     }
 
     @Override
@@ -77,12 +75,8 @@ public class FragmentAdapter<F extends Item<? extends Fragment>> extends Fragmen
 
     @Override
     public boolean setEntity(int position, F f, int type, View view){
-        for (IEventAdapter<F> eventAdapter : eventAdapters) {
-            if(eventAdapter instanceof IModelAdapter){
-                return ((IModelAdapter) eventAdapter).setIEntity(position,f,type,view);
-            }else if(eventAdapter.setEntity(position, f, type, view))return true;
-        }
-        return false;
+
+        return setIEntity(position, f, type, view);
     }
 
     @Override
@@ -91,10 +85,6 @@ public class FragmentAdapter<F extends Item<? extends Fragment>> extends Fragmen
     }
 
 
-    @Override
-    public void addEventAdapter(IEventAdapter<F> eventAdapter) {
-        eventAdapters.add(0,eventAdapter);
-    }
 
     @Override
     public boolean setIEntity(int position, F f, int type, View view) {

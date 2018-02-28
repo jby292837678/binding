@@ -29,11 +29,10 @@ import java.util.List;
 
 @SuppressWarnings("unchecked")
 public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends FragmentStatePagerAdapter
-        implements ILayoutAdapter<F> {
+        implements ILayoutAdapter<F>,IEventAdapter<F> {
     private List<F> list = new ArrayList<>();
     private int count = -1;
     private final IEventAdapter<F> iEventAdapter = this;
-    private final List<IEventAdapter<F>> eventAdapters = new ArrayList<>();
 
     public FragmentStateAdapter(FragmentManager fm) {
         super(fm);
@@ -69,12 +68,7 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
 
     @Override
     public boolean setEntity(int position, F f, int type, View view){
-        for (IEventAdapter<F> eventAdapter : eventAdapters) {
-            if(eventAdapter instanceof IModelAdapter)
-                return ((IModelAdapter) eventAdapter).setIEntity(position,f,type,view);
-            if(eventAdapter.setEntity(position, f, type, view))return true;
-        }
-        return false;
+        return setIEntity(position, f, type, view);
     }
 
     @Override
@@ -89,10 +83,6 @@ public class FragmentStateAdapter<F extends Item<? extends Fragment>> extends Fr
         return list;
     }
 
-    @Override
-    public void addEventAdapter(IEventAdapter<F> eventAdapter) {
-        eventAdapters.add(0,eventAdapter);
-    }
 
     @Override
     public int getItemPosition(Object object) {

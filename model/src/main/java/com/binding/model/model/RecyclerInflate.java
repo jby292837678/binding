@@ -19,6 +19,8 @@ import com.binding.model.App;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.IRecyclerAdapter;
+import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.model.inter.Event;
 import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.HttpObservableRefresh;
@@ -33,8 +35,9 @@ import io.reactivex.disposables.Disposable;
  * Created by arvin on 2018/1/6.
  */
 
-public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate> extends RecyclerView.OnScrollListener implements Inflate<Binding>, Event {
-    private final IModelAdapter<E> adapter;
+public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate> extends RecyclerView.OnScrollListener
+        implements Inflate<Binding>, Event {
+    private final IRecyclerAdapter<E> adapter;
     private final boolean page;
     private int lastVisibleItem;
     private int dy;
@@ -56,7 +59,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
     private transient int modelIndex = 0;
     private boolean live = false;
 
-    public RecyclerInflate(IModelAdapter<E> adapter, boolean page,int spanCount) {
+    public RecyclerInflate(IRecyclerAdapter<E> adapter, boolean page,int spanCount) {
         this.adapter = adapter;
         this.page = page;
         this.spanCount = spanCount;
@@ -163,7 +166,7 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
         this.pagerFlag = pagerFlag;
     }
 
-    public final IModelAdapter<E> getAdapter() {
+    public final IRecyclerAdapter<E> getAdapter() {
         return adapter;
     }
 
@@ -246,4 +249,6 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
     public boolean isLive() {
         return live;
     }
+
+
 }

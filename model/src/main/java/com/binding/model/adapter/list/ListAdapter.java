@@ -10,6 +10,7 @@ import com.binding.model.R;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
+import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.model.inter.Inflate;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ import static com.binding.model.util.BaseUtil.containsList;
  * @version 2.0
  */
 
-public class ListAdapter<E extends Inflate> extends BaseAdapter implements IModelAdapter<E>, IEventAdapter<E> {
+public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecyclerAdapter<E>, IEventAdapter<E> {
     private final List<E> holderList = new ArrayList<>();
     private final IEventAdapter<E> iEventAdapter = this;
     private final List<IEventAdapter<E>> eventAdapters = new ArrayList<>();
@@ -115,6 +116,7 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
             case AdapterType.refresh:
                 return refreshListAdapter(position, es);
             case AdapterType.remove:
+                return removeListAdapter(position,es);
             case AdapterType.set:
             case AdapterType.move:
             case AdapterType.select:
@@ -205,5 +207,20 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IMode
     public void clear() {
         holderList.clear();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean setListAdapter(int position, List<E> list) {
+        return false;
+    }
+
+    @Override
+    public boolean removeListAdapter(int position, List<E> list) {
+        return false;
+    }
+
+    @Override
+    public boolean moveListAdapter(int position, List<E> list) {
+        return false;
     }
 }

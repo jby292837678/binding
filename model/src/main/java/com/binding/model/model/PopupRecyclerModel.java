@@ -11,6 +11,7 @@ import android.widget.PopupWindow;
 import com.binding.model.App;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.adapter.IRecyclerAdapter;
+import com.binding.model.adapter.recycler.RecyclerAdapter;
 import com.binding.model.adapter.recycler.RecyclerSelectAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.layout.recycler.RecyclerModel;
@@ -24,9 +25,10 @@ import io.reactivex.functions.Consumer;
 
 public class PopupRecyclerModel<T extends Container, Binding extends ViewDataBinding, E extends Inflate> extends RecyclerModel<T, Binding, E> {
     public PopupRecyclerModel(){}
-    public PopupRecyclerModel(IRecyclerAdapter<E> adapter) {
+    public PopupRecyclerModel(RecyclerAdapter<E> adapter) {
         super(adapter);
     }
+
     private float alpha = App.popupAlhpa;
     private PopupWindow.OnDismissListener onDismissListener;
     private final PopupWindow window = new PopupWindow();

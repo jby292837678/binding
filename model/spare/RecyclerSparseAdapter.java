@@ -63,6 +63,11 @@ public class RecyclerSparseAdapter<E extends Inflate>
     }
 
     @Override
+    public boolean moveListAdapter(int position, List<E> list) {
+        return false;
+    }
+
+    @Override
     public boolean setList(int position, List<E> es, @AdapterHandle int type) {
         if (es == null || es.isEmpty()) return false;
         switch (type) {

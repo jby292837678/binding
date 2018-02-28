@@ -21,6 +21,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.binding.model.crash.CrashHandler;
 
 import java.io.File;
@@ -48,8 +49,12 @@ public class App implements Application.ActivityLifecycleCallbacks {
         App.vm = vm;
         App.debug = debug;
         application.registerActivityLifecycleCallbacks(this);
-        if (debug) Timber.plant(new Timber.DebugTree());
-        else CrashHandler.getInstance().init(application);
+        if (debug) {
+            Timber.plant(new Timber.DebugTree());
+            ARouter.openDebug();
+            ARouter.openLog();
+        } else CrashHandler.getInstance().init(application);
+        ARouter.init(application);
     }
 
     public static Stack<Activity> getStack() {
@@ -195,11 +200,11 @@ public class App implements Application.ActivityLifecycleCallbacks {
         return px / getCurrentActivity().getResources().getDisplayMetrics().density;
     }
 
-    public static int getWeightWidth(int sum){
-        return getScreenWidth()/sum;
+    public static int getWeightWidth(int sum) {
+        return getScreenWidth() / sum;
     }
 
-    public static int getWeightHeight(int sum){
-        return getScreenHeight()/sum;
+    public static int getWeightHeight(int sum) {
+        return getScreenHeight() / sum;
     }
 }

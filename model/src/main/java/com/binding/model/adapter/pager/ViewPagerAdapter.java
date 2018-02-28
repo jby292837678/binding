@@ -27,11 +27,10 @@ import java.util.List;
  */
 
 
-public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements ILayoutAdapter<E> {
+public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements ILayoutAdapter<E> ,IEventAdapter<E>{
     private List<E> list = new ArrayList<>();
     private int count = Integer.MAX_VALUE;
     private final IEventAdapter<E> iEntityAdapter = this;
-    private final List<IEventAdapter<E>>  eventAdapters = new ArrayList<>();
 
     @Override
     public void setCount(int count) {
@@ -76,17 +75,7 @@ public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements
 
     @Override
     public boolean setEntity(int position, E f, int type, View view){
-        for (IEventAdapter<E> eventAdapter : eventAdapters) {
-            if(eventAdapter instanceof IModelAdapter)
-                return ((IModelAdapter) eventAdapter).setIEntity(position,f,type,view);
-            if(eventAdapter.setEntity(position, f, type, view))return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void addEventAdapter(IEventAdapter<E> eventAdapter) {
-        eventAdapters.add(0,eventAdapter);
+        return setIEntity(position, f, type, view);
     }
 
     @Override

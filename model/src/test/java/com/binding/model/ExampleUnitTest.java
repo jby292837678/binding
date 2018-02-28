@@ -75,11 +75,11 @@ public class ExampleUnitTest {
         }
     }
 
-    @Test
-    public void dispatchModel(){
-        ArrayList<A> list = new ArrayList<>();
-        B b = new B();
-        ReflectUtil.invoke("array",b,list);
-//        Method method = ReflectUtil.getAllClassMethod("array",list);
-    }
+//    @Test
+//    public void dispatchModel(){
+//        ArrayList<A> list = new ArrayList<>();
+//        B b = new B();
+//        ReflectUtil.invoke("array",b,list);
+////        Method method = ReflectUtil.getAllClassMethod("array",list);
+//    }
 }
