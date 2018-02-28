@@ -24,7 +24,7 @@ import static com.binding.model.util.BaseUtil.containsList;
  */
 
 @SuppressWarnings("unchecked")
-public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
+public abstract class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
         extends RecyclerView.Adapter<RecyclerHolder<E>> implements IModelAdapter<E>, IEventAdapter<I>,IListAdapter<E>{
 
     private final IEventAdapter<I> iEventAdapter = this;
@@ -66,16 +66,11 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
         return false;
     }
 
-    protected boolean setISEntity(IModelAdapter<I> eventAdapter,int position, I i, int type, View view) {
-        try{
-            return eventAdapter.setIEntity(position,i,type,view);
-        }catch (ClassCastException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+    abstract boolean setISEntity(IModelAdapter<I> eventAdapter,int position, I i, int type, View view);
+
 
     public boolean setIEntity(int position, E e, int type, View v) {
+        if(e == null)return false;
         switch (type) {
             case AdapterType.add:
                 return addToAdapter(position, e);
@@ -237,7 +232,7 @@ public class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
     }
 
     public final boolean moveToAdapter(int position, E e,List<E> holderList) {
-        if ( position < 0) return false;
+        if (position < 0) return false;
         if(position>=holderList.size())position = holderList.size()-1;
         int from = holderList.indexOf(e);
         if (from != position && holderList.remove(e)) {

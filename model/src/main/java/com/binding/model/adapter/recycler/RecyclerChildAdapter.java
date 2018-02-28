@@ -16,10 +16,11 @@ import static com.binding.model.adapter.AdapterType.select;
  * Created by arvin on 2018/2/27.
  */
 
-public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
-        extends RecyclerBaseAdapter<E, I> implements IModelAdapter<E> {
+@SuppressWarnings("unchecked")
+public class RecyclerChildAdapter<E extends Recycler>
+        extends RecyclerBaseAdapter<E, Recycler> implements IModelAdapter<E> {
 
-    private final ArrayList<I> checkList = new ArrayList<>();
+    private final ArrayList<Recycler> checkList = new ArrayList<>();
     private int max;
 
     public RecyclerChildAdapter() {
@@ -31,21 +32,23 @@ public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
     }
 
     @Override
-    protected boolean setISEntity(IModelAdapter<I> eventAdapter, int position, I i, int type, View view) {
+    protected boolean setISEntity(IModelAdapter<Recycler> eventAdapter, int position, Recycler i, int type, View view) {
         switch (type) {
             case select:
-                return select(position,i,view);
+                return select(position, i, view);
             default:
-                return super.setISEntity(eventAdapter, position, i, type, view);
+                if (size() == 0) return false;
+                E e = getList().get(0);
+                return setIEntity(position,e.getClass().isAssignableFrom(i.getClass())?(E)i:null,type,view);
         }
     }
 
-    private boolean isPush(I e) {
+    private boolean isPush(Recycler e) {
         int status = e.checkWay() & 1;
         return status == 1;
     }
 
-    private boolean isTakeBack(I e) {
+    private boolean isTakeBack(Recycler e) {
         int status = e.checkWay() >> 1 & 1;
         return status == 1;
     }
@@ -61,13 +64,13 @@ public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
             }
         } else
             for (int i = checkList.size() - 1; i >= 0; i--) {
-                I e = checkList.get(i);
+                Recycler e = checkList.get(i);
                 if (e == null) continue;
                 e.check(false);
             }
     }
 
-    public final boolean select(int position, I e, View v) {
+    public final boolean select(int position, Recycler e, View v) {
         if (v != null) {
             if (e == null) {
                 return false;
@@ -87,9 +90,9 @@ public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
         } else return select(e, !checkList.contains(e), isPush(e));
     }
 
-    public final boolean select(I in, boolean check, boolean push) {
+    public final boolean select(Recycler in, boolean check, boolean push) {
         boolean success = true;
-        I out = null;
+        Recycler out = null;
         if (!check) {
             if (!isTakeBack(in)) in.check(true);
             else {
@@ -110,21 +113,21 @@ public class RecyclerChildAdapter<E extends Recycler, I extends Recycler>
         return success;
     }
 
-    private boolean add(I in) {
+    private boolean add(Recycler in) {
         boolean success = checkList.size() < max;
         return success && checkList.add(in);
     }
 
 
-    private I push(I in) {
+    private Recycler push(Recycler in) {
         checkList.add(in);
-        I out = null;
+        Recycler out = null;
         while (checkList.size() > max)
             out = checkList.remove(0);
         return out;
     }
 
-    public ArrayList<I> getCheckList() {
+    public ArrayList<Recycler> getCheckList() {
         return checkList;
     }
 }
