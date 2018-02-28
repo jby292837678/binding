@@ -13,6 +13,8 @@ import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Measure;
 
+import java.util.List;
+
 
 /**
  * Created by apple on 2017/9/8.
@@ -59,5 +61,13 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
         this.dataBinding = null;
         iEventAdapter = null;
         unRegisterEvent();
+    }
+
+
+    public void clear(List<? extends Inflate> list) {
+        if (list != null)
+            for (Inflate inflate : list) {
+                inflate.setIEventAdapter(null);
+            }
     }
 }

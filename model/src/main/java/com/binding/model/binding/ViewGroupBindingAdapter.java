@@ -21,10 +21,30 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class ViewGroupBindingAdapter {
 
+    @BindingAdapter(value = {"inflate","eventAdapter"})
+    public static void addInflate(ViewGroup viewGroup, Inflate inflate,IEventAdapter eventAdapter){
+        inflate.setIEventAdapter(eventAdapter);
+        if(inflate instanceof Measure){
+            View view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
+            ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,viewGroup);
+            viewGroup.addView(view,params);
+        }else {
+            inflate.attachView(viewGroup.getContext(), viewGroup, true, null);
+        }
+    }
+
     @BindingAdapter("inflate")
     public static void addInflate(ViewGroup viewGroup, Inflate inflate){
-        viewGroup.removeAllViews();
-        inflate.attachView(viewGroup.getContext(),viewGroup,true,null);
+        addInflate(viewGroup, inflate,null);
+    }
+
+    @BindingAdapter(value = {"inflates","eventAdapter"})
+    public static void addInflates(ViewGroup group, List<? extends Inflate> inflates, IEventAdapter eventAdapter) {
+        group.removeAllViews();
+        if (inflates == null || inflates.isEmpty()) return;
+        for (Inflate inflate : inflates){
+            addInflate(group,inflate,eventAdapter);
+        }
     }
 
     @BindingAdapter("inflates")
@@ -32,15 +52,9 @@ public class ViewGroupBindingAdapter {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
         for (Inflate inflate : inflates){
-            if(inflate instanceof Measure){
-                View view = inflate.attachView(group.getContext(), group, false, null).getRoot();
-                ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,group);
-                group.addView(view,params);
-            }else
-                inflate.attachView(group.getContext(), group, true, null);
+            addInflate(group,inflate);
         }
     }
-
 
     @BindingAdapter("parses")
     public static void parses(ViewGroup viewGroup, Collection<? extends ViewParse> parses) {
@@ -56,21 +70,4 @@ public class ViewGroupBindingAdapter {
             }
         }
     }
-
-
-    @BindingAdapter(value = {"inflates","eventAdapter"})
-    public static void addInflates(ViewGroup group, List<? extends Inflate> inflates, IEventAdapter eventAdapter) {
-        group.removeAllViews();
-        if (inflates == null || inflates.isEmpty()) return;
-        for (Inflate inflate : inflates){
-            inflate.setIEventAdapter(eventAdapter);
-            if(inflate instanceof Measure){
-                View view = inflate.attachView(group.getContext(), group, false, null).getRoot();
-                ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,group);
-                group.addView(view,params);
-            }else
-                inflate.attachView(group.getContext(), group, true, null);
-        }
-    }
-
 }
