@@ -6,7 +6,7 @@ publish {
     repoName = "wmt"
     groupId = 'com.binding'
     artifactId = 'model'
-    publishVersion = '1.1.2'
+    publishVersion = '1.1.3'
     desc = 'use this binding framework'
     website = 'https://github.com/striveprince/binding'
 }

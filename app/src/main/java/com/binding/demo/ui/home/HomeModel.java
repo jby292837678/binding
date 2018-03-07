@@ -12,6 +12,7 @@ import com.binding.model.model.ViewModel;
 import com.binding.demo.R;
 import com.binding.demo.base.cycle.BaseFragment;
 import com.binding.demo.databinding.ActivityHomeBinding;
+import com.binding.model.util.BaseUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,9 @@ public class HomeModel extends ViewModel<HomeActivity,ActivityHomeBinding> {
         super.attachView(savedInstanceState, homeActivity);
         RadioGroup radioGroup = getDataBinding().radioGroup;
         radioGroup.check(radioGroup.getChildAt(0).getId());
+        for (int i = 0; i < 100; i++) {
+            BaseUtil.toast("hahahaha");
+        }
     }
 
     public void onCheckedChanged(RadioGroup radioGroup, int id) {

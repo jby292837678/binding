@@ -24,6 +24,7 @@ import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -63,6 +64,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -90,6 +92,8 @@ public class BaseUtil {
     public static final String FORMAT_DATE_DAY = "yyyy-MM-dd";
     public static final String FORMAT_TIME = "HH:mm:ss";
     public static final String FORMAT_DATE_MIN = "yyyy-MM-dd HH:mm";
+    private static final HashSet<String> toastSet = new HashSet<>();
+    private static int initFlag = 0;
 
     public static Class getSuperGenericType(Class clazz) {
         return getSuperGenericType(clazz, 0);
@@ -474,8 +478,25 @@ public class BaseUtil {
     public static boolean toast(Context context, String message) {
         if(TextUtils.isEmpty(message))return false;
         if(TextUtils.isEmpty(message.trim()))return false;
-        MainLooper.runOnUiThread(() -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show());
+        toastSet.add(message);
+        if(toastSet.size() == 1){
+            showToast();
+        }
         return true;
+    }
+
+    private static void showToast(){
+        if(initFlag==0) TimeUtil.getInstance().add(BaseUtil::showToast);
+        if((++initFlag&1) == 1){//2秒一次
+            String key = null;
+            for (String msg : toastSet) {
+                key = msg;
+                MainLooper.runOnUiThread(() ->
+                        Toast.makeText(App.getCurrentActivity(),msg, Toast.LENGTH_SHORT).show());
+                break;
+            }
+            if(key!=null)toastSet.remove(key);
+        }
     }
 
     public static void snack(View view, Throwable e, View.OnClickListener action, String actionText) {

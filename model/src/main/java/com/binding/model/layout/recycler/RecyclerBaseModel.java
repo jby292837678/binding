@@ -34,10 +34,6 @@ public class RecyclerBaseModel<C extends Container, Binding extends ViewDataBind
         super(adapter);
     }
 
-    public RecyclerBaseModel() {
-        this(new RecyclerBaseAdapter<>());
-    }
-
     @Override
     public void attachView(Bundle savedInstanceState, C c) {
         super.attachView(savedInstanceState, c);
