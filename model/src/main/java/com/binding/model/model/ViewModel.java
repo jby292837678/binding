@@ -20,6 +20,8 @@ import com.binding.model.model.inter.Model;
 
 import java.lang.ref.WeakReference;
 
+import io.reactivex.disposables.Disposable;
+import io.reactivex.internal.disposables.ListCompositeDisposable;
 import timber.log.Timber;
 
 /**
@@ -40,6 +42,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     private transient WeakReference<T> weakReference;
     private String path;
     private Bundle bundle;
+    private final ListCompositeDisposable disposables = new ListCompositeDisposable();
 
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
@@ -74,6 +77,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void onDestroy() {
         if (getModelView().model()) eventModel.remove(this);
+        disposables.dispose();
         if (getT() != null) {
             unRegisterEvent();
             weakReference.clear();
@@ -97,6 +101,12 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     }
+
+
+    public final void addDisposable(Disposable disposable){
+        disposables.add(disposable);
+    }
+
 
     public void goPath(){
         if(!TextUtils.isEmpty(path)){

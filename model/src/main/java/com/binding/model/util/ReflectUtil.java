@@ -262,7 +262,7 @@ public class ReflectUtil {
             invoke(method, o, args);
         }
 //        else
-//            Timber.e("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
+//            Timber.w("no such method method:%1s \tobject:%2s \t params: %2s", methodName, o.getClass().getName(), arrayToString(args));
     }
 
     public static Method getAllClassMethod(Class<?> c, String methodName, Class<?>[] cs) {
@@ -271,7 +271,7 @@ public class ReflectUtil {
         try {
             method = c.getDeclaredMethod(methodName, cs);
         } catch (Exception e) {
-            Timber.e("no such method method:%1s", methodName);
+            Timber.w("no such method method:%1s", methodName);
         }
         if (method == null) {
             for (Method declareMethod : c.getDeclaredMethods()) {
@@ -318,7 +318,7 @@ public class ReflectUtil {
         try {
             method.invoke(t, args);
         } catch (Exception e) {
-            Timber.e("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), arrayToString(args));
+            Timber.w("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), arrayToString(args));
         }
     }
 

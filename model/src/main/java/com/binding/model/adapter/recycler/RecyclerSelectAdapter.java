@@ -123,7 +123,6 @@ public class RecyclerSelectAdapter<E extends Recycler>
 
     public final boolean select(E in, boolean check, boolean push) {
         boolean success = true;
-        E out = null;
         if (!check) {
             if (!isTakeBack(in)) in.check(true);
             else {
@@ -132,14 +131,18 @@ public class RecyclerSelectAdapter<E extends Recycler>
             }
         } else {
             if (push) {
-                out = push(in);
                 in.check(true);
+                checkList.add(in);
+                while (checkList.size() > max){
+                    E out = checkList.remove(0);
+                    out.check(false);
+                }
             } else {
                 success = add(in);
                 if (success) in.check(true);
-                else out = in;
+                else in.check(false);
             }
-            if (out != null) out.check(false);
+
         }
         return success;
     }
@@ -149,13 +152,8 @@ public class RecyclerSelectAdapter<E extends Recycler>
         return success && checkList.add(in);
     }
 
-
-    private E push(E in) {
-        checkList.add(in);
-        E out = null;
-        while (checkList.size() > max)
-            out = checkList.remove(0);
-        return out;
+    public void setMax(int max) {
+        this.max = max;
     }
 
     public ArrayList<E> getCheckList() {

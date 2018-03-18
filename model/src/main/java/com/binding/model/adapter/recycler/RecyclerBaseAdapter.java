@@ -155,7 +155,12 @@ public abstract class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
 
 
     public final boolean addToAdapter(int position, E e) {
-        return addToAdapter(position, e,holderList);
+        if (!containsList(position,holderList)) {
+            position = holderList.size();
+            holderList.add(e);
+        } else holderList.add(position, e);
+        notifyItemInserted(position);
+        return true;
     }
 
 

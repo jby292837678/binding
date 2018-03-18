@@ -488,14 +488,12 @@ public class BaseUtil {
     private static void showToast(){
         if(initFlag==0) TimeUtil.getInstance().add(BaseUtil::showToast);
         if((++initFlag&1) == 1){//2秒一次
-            String key = null;
             for (String msg : toastSet) {
-                key = msg;
                 MainLooper.runOnUiThread(() ->
                         Toast.makeText(App.getCurrentActivity(),msg, Toast.LENGTH_SHORT).show());
+                toastSet.remove(msg);
                 break;
             }
-            if(key!=null)toastSet.remove(key);
         }
     }
 
