@@ -146,6 +146,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate,I extends Inflate>
 
     public final boolean setToAdapter(int position, E e) {
         if (containsList(position,holderList)) {
+            e.setIEventAdapter(iEventAdapter);
             holderList.set(position, e);
             notifyItemChanged(position);
             return true;

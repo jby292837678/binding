@@ -492,7 +492,7 @@ public class BaseUtil {
                 MainLooper.runOnUiThread(() ->
                         Toast.makeText(App.getCurrentActivity(),msg, Toast.LENGTH_SHORT).show());
                 toastSet.remove(msg);
-                break;
+                return;
             }
         }
     }
