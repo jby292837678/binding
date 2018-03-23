@@ -59,7 +59,6 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
     @Override
     public void removeBinding() {
         this.dataBinding = null;
-        iEventAdapter = null;
         unRegisterEvent();
     }
 
