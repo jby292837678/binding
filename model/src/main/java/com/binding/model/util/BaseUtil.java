@@ -684,4 +684,8 @@ public class BaseUtil {
         }
     }
 
+    public static boolean isEncoded(Field field) {
+        Params key = field.getAnnotation(Params.class);
+        return key==null||key.encode();
+    }
 }

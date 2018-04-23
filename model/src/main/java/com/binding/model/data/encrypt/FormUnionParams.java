@@ -28,7 +28,7 @@ public abstract class FormUnionParams extends FormSingleParams implements UnionT
             if (o == null) continue;
             hashMap.put(BaseUtil.findQuery(field), o);
         }
-        builder.add(getKey(), encrypt(hashMap));
+        builder.addEncoded(getKey(), encrypt(hashMap));
         return builder.build();
     }
 }

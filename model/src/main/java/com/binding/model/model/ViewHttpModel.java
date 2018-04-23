@@ -56,7 +56,12 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         this.offset = offset;
         int p = pageWay ? offset / pageCount + 1 : offset;
         if (rcHttp != null)
-            rcHttp.http(p, refresh).subscribe(this::accept, this::onThrowable, this::onComplete, this::onSubscribe);
+            rcHttp.http(p, refresh)
+                    .subscribe(
+                            this::accept,
+                            this::onThrowable,
+                            this::onComplete,
+                            this::onSubscribe);
     }
 
     @CallSuper
@@ -86,7 +91,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     }
 
     @CallSuper
-    void onComplete() {
+    public void onComplete() {
         loading.set(false);
         error.set("");
     }

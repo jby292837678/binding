@@ -5,3 +5,11 @@
 /.idea
 /account
 /ike
+/gradlew
+/gradlew.bat
+app/libs/
+gradlew
+gradlew.bat
+model/libs/
+model/src/main/java/com/binding/model/view/back/
+model/src/main/res/drawable/

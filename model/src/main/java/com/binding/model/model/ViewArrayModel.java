@@ -57,7 +57,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     void onComplete() {
         super.onComplete();
         empty.set(getAdapter().size() == 0);
-        error.set("暂无数据");
+        error.set(empty.get()?"暂无数据":"");
     }
 
     public Adapter getAdapter() {

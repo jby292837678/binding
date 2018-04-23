@@ -69,6 +69,16 @@ public class App implements Application.ActivityLifecycleCallbacks {
         return false;
     }
 
+    public static boolean finish(Class c){
+        for (Activity activity : app.stack) {
+            if (activity.getClass().isAssignableFrom(c)){
+                activity.finish();
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void init(Application application) {
         init(application, debug, vm);
     }

@@ -24,6 +24,7 @@
             android:layout_height="63dp">
 
             <com.binding.model.view.radio.CheckRadioGroup
+                app:position="@={vm.position}"
                 app:checkedChange="@{vm::onCheckedChanged}"
                 android:background="@color/white"
                 android:id="@+id/radio_group"

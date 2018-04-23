@@ -21,7 +21,7 @@ import com.binding.model.util.BaseUtil;
 
 
 public class ViewParse implements Parse {
-    private final transient ModelView modelView;
+    private transient ModelView modelView;
     private transient int modelIndex = 0;
 
     public ViewParse(){
@@ -41,7 +41,10 @@ public class ViewParse implements Parse {
 
     @Override
     public final ModelView getModelView() {
-        if(modelView == null)throw new RuntimeException("should to add @ModelView to the class:" + getClass());
+        if(modelView == null){
+            modelView = BaseUtil.findModelView(getClass());
+            if(modelView == null) throw new RuntimeException("should to add @ModelView to the class:" + getClass());
+        }
         return modelView;
     }
 
