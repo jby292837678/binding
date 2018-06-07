@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="vm"
+            type="binding.com.demo.ui.address.AddressEntity" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="120dp">
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:onClick="@{vm::onEditClick}"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="@{vm.name,default = name}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="@{vm.phone,default = name}" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:text="@{vm.address,default = name}" />
+
+        <CheckBox
+            android:onClick="@{vm::onCheckedClick}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="默认地址"
+            android:checked="@={vm.checked,default = true}"/>
+    </LinearLayout>
+</layout>

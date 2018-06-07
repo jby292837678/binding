@@ -1,0 +1,40 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="binding.com.demo">
+
+    <application
+        android:allowBackup="true"
+        android:name=".ui.DemoApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme" >
+        <activity android:name=".ui.home.HomeActivity"
+            android:theme="@style/Theme.Swipe.Back.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".base.arouter.SchemaFilterActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <data android:host="www.binding" android:scheme="model" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.address.AddressActivity"
+            android:theme="@style/Theme.Swipe.Back.NoActionBar">
+
+        </activity>
+        <activity android:name=".ui.address.edit.AddressEditActivity"
+            android:theme="@style/Theme.Swipe.Back.NoActionBar"/>
+        <activity android:name=".ui.drag.DragActivity"
+            android:theme="@style/Theme.Swipe.Back.NoActionBar">
+
+        </activity>
+    </application>
+</manifest>

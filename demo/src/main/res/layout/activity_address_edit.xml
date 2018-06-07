@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="vm"
+            type="binding.com.demo.ui.address.edit.AddressEditModel"/>
+        <variable
+            name="entity"
+            type="binding.com.demo.ui.address.AddressEntity"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="姓名"
+            android:text="@={entity.name}"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="手机号"
+            android:text="@={entity.phone}"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:hint="地址"
+            android:text="@={entity.address}"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:layout_gravity="center"
+            android:text="保存"
+            android:onClick="@{vm::onSaveClick}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</layout>

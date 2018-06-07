@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <import type="android.view.View"/>
@@ -13,15 +14,15 @@
         android:layout_height="match_parent">
 
         <android.support.v4.widget.SwipeRefreshLayout
-            onRefreshListener="@{vm::onRefresh}"
-            refreshing="@={vm.loading}"
+            app:onRefreshListener="@{vm::onRefresh}"
+            app:refreshing="@={vm.loading}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:enabled="@{vm.enabled}">
             <android.support.v7.widget.RecyclerView
-                adapter="@{vm.adapter}"
-                layout_manager="@{vm.layoutManager}"
-                scroll_listener="@{vm}"
+                app:adapter="@{vm.adapter}"
+                app:layout_manager="@{vm.layoutManager}"
+                app:scroll_listener="@{vm}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </android.support.v4.widget.SwipeRefreshLayout>

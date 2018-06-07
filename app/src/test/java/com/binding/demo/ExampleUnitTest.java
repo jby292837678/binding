@@ -1,4 +1,4 @@
-package com.binding.demo;
+package binding.com.demo;
 
 import org.junit.Test;
 
@@ -14,4 +14,11 @@ public class ExampleUnitTest {
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void getAValue(){
+        DataEntity entity =new DataEntity();
+        assertEquals(19,entity.getMethodValue());
+    }
+
 }

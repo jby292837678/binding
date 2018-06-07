@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="binding.com.demo.ui.address.AddressModel"/>
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加"
+            android:layout_gravity="center"
+            android:padding="20dp"
+            android:onClick="@{vm::onAddClick}"/>
+        <com.binding.model.view.recycler.BetterRecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:adapter="@{vm.adapter}"
+            app:layoutManager="@{vm.layoutManager}"
+            app:scroll_listener="@{vm.scrollListener}" />
+      <!--<include-->
+          <!--android:id="@+id/layout_recycler"-->
+          <!--layout="@layout/layout_recycler_view"/>-->
+    </LinearLayout>
+</layout>

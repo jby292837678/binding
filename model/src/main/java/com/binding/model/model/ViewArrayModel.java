@@ -54,7 +54,7 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     }
 
     @Override
-    void onComplete() {
+    public void onComplete() {
         super.onComplete();
         empty.set(getAdapter().size() == 0);
         error.set(empty.get()?"暂无数据":"");

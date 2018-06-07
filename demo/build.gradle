@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+
+    dataBinding.enabled=true
+
+    defaultConfig {
+        applicationId "binding.com.demo"
+        minSdkVersion 16
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName: project.getName()]
+            }
+        }
+    }
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':model')
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:recyclerview-v7:$support_version"
+    implementation "com.android.support:support-vector-drawable:$support_version"
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation 'com.jakewharton.timber:timber:4.5.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    implementation 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.4@aar'
+    implementation 'com.github.bumptech.glide:glide:4.4.0'
+    implementation 'com.alibaba:arouter-api:1.2.4'
+    annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
+    implementation 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    implementation 'com.pgyersdk:sdk:2.8.1'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}

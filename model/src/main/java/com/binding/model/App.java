@@ -86,6 +86,10 @@ public class App implements Application.ActivityLifecycleCallbacks {
     public static Activity getCurrentActivity() {
         return app.stack.lastElement();
     }
+    
+    public static Activity getIndexActivity(int index) {
+        return app.stack.size() >= index ? app.stack.get(app.stack.size() - index) : null;
+    }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle bundle) {

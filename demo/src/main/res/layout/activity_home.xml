@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="binding.com.demo.ui.home.HomeModel"/>
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/toolbar"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            app:position="@={vm.currentItem}"
+            app:adapter="@{vm.adapter}"
+            android:layout_height="0dp"/>
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:paddingTop="5dp"
+            app:position="@={vm.currentItem}"
+            android:layout_height="55dp">
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/home_page"
+                android:textSize="12sp" />
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/system"
+                android:textSize="12sp" />
+
+            <android.support.design.widget.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/app_name"
+                android:textSize="12sp" />
+
+        </android.support.design.widget.TabLayout>
+    </LinearLayout>
+
+</layout>
