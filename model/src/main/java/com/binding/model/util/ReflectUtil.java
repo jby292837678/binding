@@ -34,6 +34,7 @@ import timber.log.Timber;
 @SuppressWarnings("unchecked")
 public class ReflectUtil {
 
+
     public static List<Field> getAllFields(Class<?> aClass) {
         return getAllFields(aClass, null);
     }
@@ -161,6 +162,18 @@ public class ReflectUtil {
             return parameterizedType.getActualTypeArguments();
         }
         return new Type[0];
+    }
+
+    public static boolean isBaseType(Object o) {
+        return (o instanceof String
+                ||o instanceof Integer
+                ||o instanceof Boolean
+                ||o instanceof Long
+                ||o instanceof Double
+                ||o instanceof Float
+                ||o instanceof Byte
+                ||o instanceof Short
+                ||o instanceof Character);
     }
 
 
@@ -318,7 +331,8 @@ public class ReflectUtil {
         try {
             method.invoke(t, args);
         } catch (Exception e) {
-            Timber.v("method:%1s \tobject:%2s \t params: %2s", method.getName(), t.getClass().getName(), arrayToString(args));
+            Timber.v("method:%1s \tobject:%2s \t params: %3s \t e.msg:%4s",
+                    method.getName(), t.getClass().getName(), arrayToString(args),e.getMessage());
         }
     }
 

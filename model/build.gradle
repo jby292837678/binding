@@ -6,7 +6,7 @@ publish {
     repoName = "wmt"
     groupId = 'com.binding'
     artifactId = 'model'
-    publishVersion = '1.2.5'
+    publishVersion = '1.2.8'
     desc = 'use this binding framework'
     website = 'https://github.com/striveprince/binding'
 }
@@ -16,7 +16,7 @@ android {
     compileSdkVersion compile_sdk_version
     dataBinding.enabled = true
     lintOptions.abortOnError false
-    buildToolsVersion '28.0.0 rc1'
+    buildToolsVersion build_tools_version
     defaultConfig {
         minSdkVersion min_sdk_version
         targetSdkVersion target_sdk_version

@@ -15,16 +15,19 @@ public class RecyclerInflateAdapter extends RecyclerAdapter<Inflate> {
     private SparseArray<Inflate> array = new SparseArray<>();
 
     public boolean addInflate(int position,Inflate inflate){
+        if(!isDisposed())return false;
         array.put(position,inflate);
         return addToAdapter(position,inflate);
     }
 
     public boolean remove(int position){
+        if(!isDisposed())return false;
         Inflate inflate = array.get(position);
         return super.removeToAdapter(NO_POSITION,inflate);
     }
 
     public void clearArray(){
+        if(!isDisposed())return;
         for (int i = 0; i < array.size(); i++) {
             removeToAdapter(NO_POSITION,array.valueAt(i));
         }
@@ -34,6 +37,7 @@ public class RecyclerInflateAdapter extends RecyclerAdapter<Inflate> {
      * synchronized the list
      * */
     public final void syncArray(List<Inflate> holderList){
+        if(!isDisposed())return;
         for (int i = 0; i < array.size(); i++) {
             int key = array.keyAt(i);
             Inflate viewInflate = array.get(key);

@@ -16,6 +16,7 @@ import java.lang.annotation.RetentionPolicy;
         AdapterType.no,
         AdapterType.onClick,
         AdapterType.onLongClick,
+        AdapterType.refreshAsync,
 })
 public @interface AdapterHandle {
 }

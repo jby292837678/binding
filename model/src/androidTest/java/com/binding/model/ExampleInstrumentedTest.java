@@ -5,8 +5,14 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.SparseArray;
 
+import com.binding.model.data.util.JsonDeepUtil;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
+
+import timber.log.Timber;
 
 import static org.junit.Assert.*;
 
@@ -41,4 +47,6 @@ public class ExampleInstrumentedTest {
             System.out.println("key:"+array.keyAt(i)+"value:"+array.valueAt(i));
         }
     }
+
+
 }

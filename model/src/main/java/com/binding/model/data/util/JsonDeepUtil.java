@@ -1,8 +1,9 @@
 package com.binding.model.data.util;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import com.binding.model.util.ReflectUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -10,251 +11,180 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Collection;
+
+import timber.log.Timber;
+
+import static com.binding.model.util.ReflectUtil.arrayToString;
+import static com.binding.model.util.ReflectUtil.invoke;
 
 @SuppressWarnings("unchecked")
 @SuppressLint("DefaultLocale")
 public class JsonDeepUtil {
-    private static final JsonDeepUtil jsonDeepUtil = new JsonDeepUtil();
 
-    private JsonDeepUtil() {
+    public static <T> T parse(String json, Class<T> c) {
+        if (TextUtils.isEmpty(json)) return null;
+        try {
+            if (json.trim().charAt(0) == '{') {
+                return parse(new JSONObject(json), c);
+            } else if (json.trim().charAt(0) == '[') {
+                Timber.w("please use method parses(json,type)");
+            }
+        } catch (JSONException e) {
+            Timber.w("please use json parse data");
+        }
+        return null;
     }
 
-    public static JsonDeepUtil getInstance() {
-        return jsonDeepUtil;
-    }
-
-    /**
-     * 使用该方法可以将json字符串转为一个实体类
-     *
-     * @param json 解析的json
-     * @param c    解析类
-     * @return array数组，如果不是json字符串，在数组的第一个
-     */
-    public <T> T[] getEntity(String json, Class<T> c) {
-        T[] array = (T[]) Array.newInstance(c, 1);
-        if (TextUtils.isEmpty(json)) return array;
+    public static <T> T[] parses(String json, Class<T> c) {
+        if (TextUtils.isEmpty(json)) return null;
         try {
             if (json.charAt(0) == '[') {
-                JSONArray jsonArray = new JSONArray(json);
-                return getEntity(jsonArray, c);
+                return parses(new JSONArray(json), c);
             } else if (json.charAt(0) == '{') {
-                JSONObject jsonObject = new JSONObject(json);
-                array[0] = getEntity(jsonObject, c);
+                Timber.w("please use method parse(json,class)");
             }
         } catch (JSONException e) {
-            throw new RuntimeException("please check the json character :" + json, e);
+            Timber.w("please use json parse data");
         }
-
-        return array;
+        return null;
     }
-
-    /**
-     * @param jsonStr 需要解析的json
-     * @param c       解析类
-     * @return t实例
-     */
-    public <T> T getEntityJson(@NonNull String jsonStr, @NonNull Class<T> c) {
-        try {
-            if (!TextUtils.isEmpty(jsonStr)) return getEntity(new JSONObject(jsonStr), c);
-            else return c.newInstance();
-        } catch (Exception e) {
-            throw new RuntimeException("the json is a wrong format:", e);
-        }
-    }
-
-    public <T> T getEntity(JSONObject jsonObject, @NonNull Class<T> c) {
-        try {
-            return getEntity(jsonObject, c.newInstance());
-        } catch (Exception e) {
-            throw new RuntimeException("can create this obj:" + c.getName() + " please check you constructor type!", e);
-        }
-    }
-
-
-    /**
-     * use this method can change json to be a object
-     *
-     * @param jsonObject jsonObject
-     * @param t          object of can to be a no data
-     * @return t return a object of has data;
-     */
-    public <T> T getEntity(JSONObject jsonObject, @NonNull T t) {
-        Class c = t.getClass();
-        Field[] fs = c.getDeclaredFields();
-        for (Field f : fs) {
-            Class clazz = f.getType();
-            String fName = f.getName();
-            if (TextUtils.isEmpty(fName)||jsonObject.isNull(fName)) continue;
-            f.setAccessible(true);
-            char[] cs = fName.toCharArray();
-            if (cs[0] >= 97 && cs[0] <= 122) cs[0] -= 32;//匹配ascii码表，发现是小写字母的话，-32变为小写
-            String keyU = String.valueOf(cs);
-            Method declareMethod;
-            try {
-                declareMethod = c.getDeclaredMethod("set" + keyU, clazz);
-            } catch (Exception e) {
-//                Logger.w(Logger.JSONERROR, "can't find the method: set" + keyU + " ("
-//                        + clazz.getName() + " " + keyU + "), please check the method in class");
-                continue;
-            }
-            boolean lean = clazz.isArray();
-            Object obj = getValue(fName, jsonObject, clazz);
-            if (obj == null) continue;
-            if (obj instanceof JSONArray && lean) {
-                JSONArray jsonArray = (JSONArray) obj;
-                Class<?> clazs = clazz.getComponentType();
-                try {
-                    Object[] array = (Object[]) Array.newInstance(clazs, jsonArray.length());
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        try {
-                            array[i] = getEntity(jsonArray.getJSONObject(i), clazs);
-                        } catch (Exception e1) {
-//                            Logger.w(Logger.JSONERROR, "getEntity in key:" + keyU + " json:" + jsonObject);
-                        }
-                    }
-                    invoke(declareMethod, t, new Object[]{array});
-                } catch (ClassCastException e) {
-                    if (clazs == int.class) {
-                        int[] array = (int[]) Array.newInstance(clazs, jsonArray.length());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            array[i] = getIntValue(i,jsonArray);//jsonArray.getInt(i);
-                        }
-                        invoke(declareMethod, t, new Object[]{array});
-                    } else if (clazs == long.class) {
-                        long[] array = (long[]) Array.newInstance(clazs, jsonArray.length());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            array[i] = getLongValue(i,jsonArray);//jsonArray.getLong(i);
-                        }
-                        invoke(declareMethod, t, new Object[]{array});
-                    } else if (clazs == boolean.class) {
-                        boolean[] array = (boolean[]) Array.newInstance(clazs, jsonArray.length());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            array[i] = getBooleanValue(i,jsonArray);//jsonArray.getBoolean(i);
-                        }
-                        invoke(declareMethod, t, new Object[]{array});
-                    } else if (clazs == double.class) {
-                        double[] array = (double[]) Array.newInstance(clazs, jsonArray.length());
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            array[i] = getDoubleValue(i,jsonArray);//jsonArray.getDouble(i);
-                        }
-                        invoke(declareMethod, t, new Object[]{array});
-                    }
-                }
-                //give the type and json is wrong，when json is JSONObject，but field is array,set json content to array[0];
-            } else if (obj instanceof JSONObject) {
-                if (lean) {
-                    Class<?> clazs = clazz.getComponentType();
-                    Object[] array = (Object[]) Array.newInstance(clazs, 1);
-                    array[0] = getEntity((JSONObject) obj, clazz);
-                    invoke(declareMethod, t, new Object[]{array});
-                } else {
-                    invoke(declareMethod, t, getEntity((JSONObject) obj, clazz));
-                }
-            } else {
-                invoke(declareMethod, t, obj);
-            }
-        }
-        return t;
-    }
-
-    private int getIntValue(int i,JSONArray jsonArray){
-        try {
-            return jsonArray.getInt(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
-    private long getLongValue(int i,JSONArray jsonArray){
-        try {
-            return jsonArray.getLong(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return 0L;
-    }
-
-    private Double getDoubleValue(int i,JSONArray jsonArray){
-        try {
-            return jsonArray.getDouble(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return 0.0d;
-    }
-    private boolean getBooleanValue(int i,JSONArray jsonArray){
-        try {
-            return jsonArray.getBoolean(i);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-
-    private void invoke(Method method, Object t, Object... args) {
-        try {
-            method.invoke(t, args);
-        } catch (Exception e) {
-//            Logger.e(Logger.JSONERROR, "method:" + method.getName() + "\t t:" + "\t args：" + args[0]);
-        }
-    }
-
-    /**
-     * use this method can change json to be a array object
-     *
-     * @param jsonArray jsonArray
-     * @param c         generics type
-     * @return array jsonArray object
-     */
-    public <T> T[] getEntity(JSONArray jsonArray, Class<T> c) {
-        int len = jsonArray.length();
-        T[] array = (T[]) Array.newInstance(c, len);
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject jsonObjectArray = jsonArray.getJSONObject(i);
-                array[i] = getEntity(jsonObjectArray, c);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return array;
-    }
-
 
     /**
      * 遍历json中的key值，让其与实体类属性名匹配,匹配成功则取出值
      *
-     * @param key        类中的key，做为json的key取出
      * @param jsonObject 需要解析的json
-     * @param clazz      value的类型
+     * @param field      value的类型
      * @return obj value的值
      */
-    private Object getValue(String key, JSONObject jsonObject, Class clazz) {
-//        jsonObject.keys();
+    public static Object getValue(JSONObject jsonObject, Field field) {
+        String key = field.getName();
+        Class clazz = field.getType();
         try {
             if (clazz == String.class) {
                 return jsonObject.getString(key);
-            } else if (clazz == int.class) {
-                return jsonObject.getInt(key);
-            } else if (clazz == long.class) {
-                return jsonObject.getLong(key);
-            } else if (clazz == boolean.class) {
+            } else if (clazz == boolean.class || clazz == Boolean.class) {
                 return jsonObject.getBoolean(key);
-            } else if (clazz == double.class) {
+            } else if (clazz == int.class || clazz == Integer.class) {
+                return jsonObject.getInt(key);
+            } else if (clazz == long.class || clazz == Long.class) {
+                return jsonObject.getLong(key);
+            } else if (clazz == double.class || clazz == Double.class) {
                 return jsonObject.getDouble(key);
-            } else if (clazz == JSONObject.class) {
-                return jsonObject.getJSONObject(key);
-            } else if (clazz == JSONArray.class) {
+            } else if (clazz.isArray() || Collection.class.isAssignableFrom(clazz)) {
                 return jsonObject.getJSONArray(key);
             } else {
-                return jsonObject.get(key);
+                return jsonObject.getJSONObject(key);
             }
         } catch (Exception e) {
-//            Logger.w(Logger.JSONERROR, " getValue:key:" + key + "  json:" + jsonObject.toString());
+            Timber.w(" getValue:key:" + key + "  json:" + jsonObject.toString());
         }
         return null;
+    }
+
+    public static <E> E getArrayValue(JSONArray jsonArray, Type type, int position) {
+        try {
+            if (type == String.class) {
+                return (E) jsonArray.getString(position);
+            } else if (type == int.class && type == Integer.class) {
+                Integer i = jsonArray.getInt(position);
+                return (E) i;
+            } else if (type == long.class && type == Long.class) {
+                Long i = jsonArray.getLong(position);
+                return (E) i;
+            } else if (type == boolean.class && type == Boolean.class) {
+                Boolean i = jsonArray.getBoolean(position);
+                return (E) i;
+            } else if (type == boolean.class && type == Double.class) {
+                Double i = jsonArray.getDouble(position);
+                return (E) i;
+            } else if (type instanceof Class) {
+                Class<E> c = (Class<E>) type;
+                if (c.isArray()) return (E) parses(jsonArray.getJSONArray(position), c);
+                else if (!Collection.class.isAssignableFrom(c)) {
+                    return parse(jsonArray.getJSONObject(position), c);
+                }
+            } else {
+                if (type instanceof ParameterizedType) {
+                    Type rawType = ((ParameterizedType) type).getRawType();
+                    if (Collection.class.isAssignableFrom((Class) rawType)) {
+                        Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0];
+                        return (E) Arrays.asList(parses(jsonArray.getJSONArray(position), type1));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Timber.w(" getArrayValue:key:" + position + "  json:" + jsonArray.toString());
+        }
+        return null;
+    }
+
+
+    public static <T> T parse(JSONObject json, Class<T> c) {
+        T entity = ReflectUtil.newInstance(c);
+        for (Field field : c.getDeclaredFields()) {
+            String fName = field.getName();
+            if (TextUtils.isEmpty(fName) || json.isNull(fName)) continue;
+            Object object = getValue(json, field);
+            if (ReflectUtil.isFieldNull(object)) continue;
+            Method declareMethod = ReflectUtil.beanSetMethod(field, c);
+            if (ReflectUtil.isBaseType(object)) {
+                invoke(declareMethod, entity, object);
+            } else if (object instanceof JSONArray) {
+                if (c.isArray())
+                    invoke(declareMethod, entity, new Object[]{parses((JSONArray) object, c.getComponentType())});
+                else {
+                    Type type = field.getGenericType();
+                    if (type instanceof ParameterizedType)
+                        invoke(declareMethod, entity, Arrays.asList(parses((JSONArray) object,
+                                ((ParameterizedType) type).getActualTypeArguments()[0])));
+                }
+            } else {
+                invoke(declareMethod, entity, parse((JSONObject) object, field.getType()));
+            }
+        }
+        Timber.v("pares:%1s", entity + "");
+        return entity;
+    }
+
+    private static <E> E[] parses(JSONArray jsonArray, Type type) {
+        Class<E> c = null;
+        if (type instanceof Class)
+            c = (Class<E>) type;
+        else if (type instanceof ParameterizedType) {
+            Type t = ((ParameterizedType) type).getRawType();
+            if (t instanceof Class) c = (Class<E>) t;
+        } else if (type instanceof GenericArrayType) {
+            Type t = ((GenericArrayType) type).getGenericComponentType();
+            return getGenericArray(jsonArray, t);
+        }
+        if(c == null)return (E[]) new Object[0];
+        E[] array = (E[]) Array.newInstance(c, jsonArray.length());
+        for (int i = 0; i < jsonArray.length(); i++) {
+            array[i] = getArrayValue(jsonArray, type, i);
+        }
+        Timber.v("pares:%1s", arrayToString(array));
+        return array;
+    }
+
+    private static <E> E[] getGenericArray(JSONArray jsonArray, Type t) {
+        try {
+            if (jsonArray.length() != 0) {
+                E e = (E) parses(jsonArray.getJSONArray(0), t);
+                E[] array = (E[]) Array.newInstance(e.getClass(), jsonArray.length());
+                array[0] = e;
+                for (int i = 1; i < array.length; i++)
+                    array[i] = (E) parses(jsonArray.getJSONArray(0), t);
+                return array;
+            }
+        } catch (Exception e) {
+            Timber.w(" getArrayValue:t:" + t + "  json:" + jsonArray.toString());
+        }
+        return (E[]) new Object[0];
     }
 }

@@ -20,6 +20,7 @@ public class DemoApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        App.pageWay = true;
         application = this;
         appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         App.getInstance().init(this,true, BR.vm);

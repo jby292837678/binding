@@ -1,15 +1,14 @@
 package binding.com.demo.ui.home;
 
 
-
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.binding.model.adapter.pager.FragmentAdapter;
+import com.binding.model.data.util.JsonDeepUtil;
 import com.binding.model.layout.pager.PagerModel;
 import com.binding.model.model.ModelView;
-import com.binding.model.model.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import binding.com.demo.base.arouter.ArouterUtil;
 import binding.com.demo.databinding.ActivityHomeBinding;
 import binding.com.demo.inject.qualifier.manager.ActivityFragmentManager;
 import io.reactivex.Observable;
+import timber.log.Timber;
 
 import static binding.com.demo.inject.component.ActivityComponent.Router.address;
 
@@ -46,4 +46,6 @@ public class HomeModel extends PagerModel<HomeActivity,ActivityHomeBinding,HomeE
         super.onRightClick(view);
         ArouterUtil.navigation(address);
     }
+
+
 }

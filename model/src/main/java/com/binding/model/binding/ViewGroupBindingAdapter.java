@@ -21,8 +21,15 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class ViewGroupBindingAdapter {
 
-    @BindingAdapter(value = {"inflate","eventAdapter"})
-    public static void addInflate(ViewGroup viewGroup, Inflate inflate,IEventAdapter eventAdapter){
+    @BindingAdapter("rmInflate")
+    public static <E extends Inflate>void removeInflate(ViewGroup viewGroup, E inflate){
+        if(inflate == null)return;
+        inflate.setIEventAdapter(null);
+        viewGroup.removeView(inflate.getDataBinding().getRoot());
+    }
+
+    @BindingAdapter(value = {"addInflate","eventAdapter"})
+    public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
         inflate.setIEventAdapter(eventAdapter);
         if(inflate instanceof Measure){
             View view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
@@ -33,25 +40,25 @@ public class ViewGroupBindingAdapter {
         }
     }
 
-    @BindingAdapter("inflate")
-    public static void addInflate(ViewGroup viewGroup, Inflate inflate){
+    @BindingAdapter("addInflate")
+    public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate){
         addInflate(viewGroup, inflate,null);
     }
 
-    @BindingAdapter(value = {"inflates","eventAdapter"})
-    public static void addInflates(ViewGroup group, List<? extends Inflate> inflates, IEventAdapter eventAdapter) {
+    @BindingAdapter(value = {"addInflates","eventAdapter"})
+    public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates, IEventAdapter<E> eventAdapter) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
-        for (Inflate inflate : inflates){
+        for (E inflate : inflates){
             addInflate(group,inflate,eventAdapter);
         }
     }
 
-    @BindingAdapter("inflates")
-    public static void addInflates(ViewGroup group, List<? extends Inflate> inflates) {
+    @BindingAdapter("addInflates")
+    public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
-        for (Inflate inflate : inflates){
+        for (E inflate : inflates){
             addInflate(group,inflate);
         }
     }

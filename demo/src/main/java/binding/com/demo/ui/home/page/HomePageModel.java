@@ -2,6 +2,7 @@ package binding.com.demo.ui.home.page;
 
 import android.os.Bundle;
 
+import com.binding.model.App;
 import com.binding.model.layout.recycler.RecyclerModel;
 import com.binding.model.model.ModelView;
 
@@ -19,6 +20,7 @@ import io.reactivex.Observable;
 public class HomePageModel extends RecyclerModel<HomePageFragment,FragmentHomePageBinding,HomePageEntity>{
     @Inject HomePageModel() {
     }
+
 
     @Override
     public void attachView(Bundle savedInstanceState, HomePageFragment homePageFragment) {

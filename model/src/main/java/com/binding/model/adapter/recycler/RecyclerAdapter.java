@@ -24,18 +24,3 @@ public class RecyclerAdapter<E extends Inflate>
         return eventAdapter.setIEntity(position, e, type, view);
     }
 }
-//    private AtomicBoolean refresh = new AtomicBoolean(false);
-//        if (!refresh.get()) {
-//            refresh.set(true);
-//            Observable.fromArray(es)
-//                    .map(s -> DiffUtil.calculateDiff(new DiffUtilCallback<>(holderList, s)))
-//                    .subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(diffResult -> {
-//                                diffResult.dispatchUpdatesTo(this);
-//                                holderList.clear();
-//                                holderList.addAll(es);
-//                                refresh.set(false);
-//                            }
-//                    );
-//        }

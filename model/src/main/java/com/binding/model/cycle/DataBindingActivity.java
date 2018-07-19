@@ -59,9 +59,9 @@ public abstract class DataBindingActivity<C> extends AppCompatActivity implement
         if (isSwipe() != SwipeBackLayout.FROM_NO) {
             setContentView(R.layout.activity_base);
             SwipeBackLayout swipeBackLayout = findViewById(R.id.swipe_back_layout);
-            ImageView imageView = findViewById(R.id.iv_shadow);
             swipeBackLayout.setDirectionMode(isSwipe());
-            swipeBackLayout.addView(rootView);
+            swipeBackLayout.addView(rootView,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            ImageView imageView = findViewById(R.id.iv_shadow);
             swipeBackLayout.setOnSwipeBackListener((mView, swipeBackFraction) -> imageView.setAlpha(1-swipeBackFraction));
         }else setContentView(rootView);
         initView();

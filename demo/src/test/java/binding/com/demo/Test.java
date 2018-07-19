@@ -8,7 +8,7 @@ public class Test {
 
 
 
-	@org.junit.Test
+//	@org.junit.Test
 	public void main() {
 		// -20<x<20
 		// 0<y+x<20
