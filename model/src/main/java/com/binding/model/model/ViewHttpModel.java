@@ -10,10 +10,13 @@ import android.text.TextUtils;
 
 import com.binding.model.App;
 import com.binding.model.cycle.Container;
+import com.binding.model.cycle.MainLooper;
 import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.HttpObservableRefresh;
 import com.binding.model.util.BaseUtil;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -51,18 +54,31 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         return pageWay;
     }
 
-    public void onHttp(int offset, int refresh) {
+    public static <T> Observable<T> from(T t){
+        return MainLooper.isUiThread()?Observable.fromArray(t):fromToMain(t);
+    }
+
+    public static <T> Observable<T> fromToMain(T t){
+        return Observable.fromArray(t).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public final void onHttp(int offset, int refresh) {
         if(refresh>0)offset = 0;
         this.offset = offset;
         int p = pageWay ? offset / pageCount + 1 : offset;
-        if (rcHttp != null)
-            rcHttp.http(p, refresh)
-                    .subscribe(
-                            this::accept,
-                            this::onThrowable,
-                            this::onComplete,
-                            this::onSubscribe);
+        if(rcHttp!=null)http(rcHttp,p,refresh);
     }
+
+    protected void http(HttpObservable<R> rcHttp, int p, int refresh) {
+        addDisposable(rcHttp.http(p, refresh)
+                .flatMap(ViewHttpModel::from)
+                .subscribe(
+                        this::accept,
+                        this::onThrowable,
+                        this::onComplete,
+                        this::onSubscribe));
+    }
+
 
     @CallSuper
     public void onThrowable(Throwable throwable) {
@@ -76,7 +92,6 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     @CallSuper
     public void onSubscribe(Disposable disposable) {
         loading.set(true);
-        addDisposable(disposable);
     }
 
     public abstract void accept(R r) throws Exception;

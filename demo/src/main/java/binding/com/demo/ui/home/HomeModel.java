@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.binding.model.adapter.pager.FragmentAdapter;
-import com.binding.model.data.util.JsonDeepUtil;
 import com.binding.model.layout.pager.PagerModel;
 import com.binding.model.model.ModelView;
 
@@ -17,10 +16,11 @@ import javax.inject.Inject;
 
 import binding.com.demo.R;
 import binding.com.demo.base.arouter.ArouterUtil;
+import binding.com.demo.base.util.InfoEntity;
 import binding.com.demo.databinding.ActivityHomeBinding;
+import binding.com.demo.inject.api.Api;
 import binding.com.demo.inject.qualifier.manager.ActivityFragmentManager;
 import io.reactivex.Observable;
-import timber.log.Timber;
 
 import static binding.com.demo.inject.component.ActivityComponent.Router.address;
 
@@ -30,6 +30,7 @@ public class HomeModel extends PagerModel<HomeActivity,ActivityHomeBinding,HomeE
         super(new FragmentAdapter<>(fragmentManager));
     }
 
+//    @Inject Api api;
     @Override
     public void attachView(Bundle savedInstanceState, HomeActivity homeActivity) {
         super.attachView(savedInstanceState, homeActivity);
@@ -39,6 +40,18 @@ public class HomeModel extends PagerModel<HomeActivity,ActivityHomeBinding,HomeE
         }
         setRcHttp((offset1, refresh) -> Observable.fromIterable(list).toList().toObservable());
         currentItem.set(0);
+    }
+
+    public void onClick(View view){
+
+//        Observable.fromArray(text).map();
+//        api.baidu().compose(new RestfulT)
+    }
+
+    String text = "";
+
+    public static class TestEntity{
+
     }
 
     @Override

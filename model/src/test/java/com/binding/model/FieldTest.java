@@ -103,4 +103,49 @@ public class FieldTest {
         }
     }
 
+    public static class TestEntity{
+
+    }
+
+
+    public static class InfoEntity<T>{
+        private T data;
+        private String msg;
+        private int code;
+
+        public T getData() {
+            return data;
+        }
+
+        public void setData(T data) {
+            this.data = data;
+        }
+
+        public String getMsg() {
+            return msg;
+        }
+
+        public void setMsg(String msg) {
+            this.msg = msg;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+    }
+
+
+    @Test
+    public void test1(){
+        InfoEntity<TestEntity> infoEntity = new InfoEntity<>();
+        for (Field field : infoEntity.getClass().getDeclaredFields()) {
+            System.out.println(field.getGenericType());
+            System.out.println(field.getType());
+        }
+    }
+
 }

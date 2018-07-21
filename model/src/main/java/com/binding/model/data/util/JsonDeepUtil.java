@@ -38,8 +38,41 @@ public class JsonDeepUtil {
         return jsonDeepUtil.jsonParses(json, c);
     }
 
+    public <T> T parse(String json,Type type){
+        return jsonDeepUtil.jsonParse(json,type);
+    }
+
     public void setConsumer(Consumer<Object> consumer) {
         this.consumer = consumer;
+    }
+
+
+
+    public <T> T jsonParse(String json,Type type){
+        try {
+            return jsonParse(new JSONObject(json),type);
+        } catch (JSONException e) {
+            Timber.w("please use json jsonParse data");
+        }
+        return null;
+    }
+
+    public <T> T jsonParse(JSONObject json,Type type){
+        if(type instanceof Class){
+            return jsonParse(json,(Class<T>)type);
+        }else if(type instanceof ParameterizedType){
+            Class<T> c = (Class<T>)((ParameterizedType) type).getRawType();
+            T t = ReflectUtil.newInstance(c);
+            for (Field field : c.getDeclaredFields()) {
+                Type fieldType = field.getType();
+                Timber.i(fieldType.getTypeName());
+            }
+//            for (Type type1 : ((ParameterizedType) type).getActualTypeArguments()) {
+//
+//            }
+            return t;
+        }
+        return null;
     }
 
     public <T> T jsonParse(String json, Class<T> c) {
@@ -130,6 +163,8 @@ public class JsonDeepUtil {
                     if (Collection.class.isAssignableFrom((Class) rawType)) {
                         Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0];
                         return (E) Arrays.asList(jsonParses(jsonArray.getJSONArray(position), type1));
+                    }else{
+                        return jsonParse(jsonArray.getJSONObject(position),rawType);
                     }
                 }
             }
@@ -165,7 +200,7 @@ public class JsonDeepUtil {
         }
         Timber.v("pares:%1s", entity + "");
         return entity;
-    }
+}
 
     public <E> E[] jsonParses(JSONArray jsonArray, Type type) {
         Class<E> c = null;

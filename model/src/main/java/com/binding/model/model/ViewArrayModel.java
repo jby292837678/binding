@@ -4,21 +4,11 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ViewDataBinding;
 
 import com.binding.model.adapter.AdapterType;
-import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.adapter.IModelAdapter;
-import com.binding.model.bit.Bit;
 import com.binding.model.cycle.Container;
-import com.binding.model.model.ViewHttpModel;
-import com.binding.model.model.inter.Http;
-import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.Parse;
 
 import java.util.List;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-
-import static com.binding.model.adapter.AdapterType.add;
 
 /**
  * project：cutv_ningbo

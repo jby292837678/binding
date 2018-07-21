@@ -15,10 +15,14 @@ public class MainLooper extends Handler {
     }
 
     public static void runOnUiThread(Runnable runnable) {
-        if (Looper.getMainLooper().equals(Looper.myLooper())) {
+        if (isUiThread()) {
             runnable.run();
         } else {
             instance.post(runnable);
         }
+    }
+
+    public static boolean isUiThread() {
+        return Looper.getMainLooper().equals(Looper.myLooper());
     }
 }
