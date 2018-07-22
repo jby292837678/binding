@@ -143,7 +143,8 @@ public class FieldTest {
     public void test1(){
         InfoEntity<TestEntity> infoEntity = new InfoEntity<>();
         for (Field field : infoEntity.getClass().getDeclaredFields()) {
-            System.out.println(field.getGenericType());
+            Type t = field.getGenericType();
+            System.out.println(t);
             System.out.println(field.getType());
         }
     }

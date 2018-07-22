@@ -15,6 +15,7 @@ import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -34,12 +35,12 @@ public class JsonDeepUtil {
         return jsonDeepUtil.jsonParse(json, c);
     }
 
-    public <T> T[] parses(String json, Class<T> c) {
-        return jsonDeepUtil.jsonParses(json, c);
-    }
-
     public <T> T parse(String json,Type type){
         return jsonDeepUtil.jsonParse(json,type);
+    }
+
+    public <T> T[] parses(String json, Class<T> c) {
+        return jsonDeepUtil.jsonParses(json, c);
     }
 
     public void setConsumer(Consumer<Object> consumer) {
@@ -61,15 +62,24 @@ public class JsonDeepUtil {
         if(type instanceof Class){
             return jsonParse(json,(Class<T>)type);
         }else if(type instanceof ParameterizedType){
-            Class<T> c = (Class<T>)((ParameterizedType) type).getRawType();
+            ParameterizedType parameterizedType =(ParameterizedType) type;
+            Class<T> c = (Class<T>)parameterizedType.getRawType();
+            Type typeArguments = parameterizedType.getActualTypeArguments()[0];
             T t = ReflectUtil.newInstance(c);
             for (Field field : c.getDeclaredFields()) {
-                Type fieldType = field.getType();
-                Timber.i(fieldType.getTypeName());
+                Type type1 = field.getGenericType();
+                Method method = ReflectUtil.beanSetMethod(field,c);
+                Object object = getValue(json,field);
+                if(type1 instanceof TypeVariable){
+                    if(object instanceof JSONObject){
+                        ReflectUtil.invoke(method,t,accept(jsonParse((JSONObject)object,typeArguments)));
+                    }else if(object instanceof JSONArray){
+                        ReflectUtil.invoke(method,t,jsonParses((JSONArray)object,typeArguments));
+                    }else{
+                        ReflectUtil.invoke(method,t,object);
+                    }
+                }
             }
-//            for (Type type1 : ((ParameterizedType) type).getActualTypeArguments()) {
-//
-//            }
             return t;
         }
         return null;
