@@ -124,7 +124,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             es.addAll(0, list);
         if (containsList(p, list))
             es.addAll(0, list.subList(0,p));
-        holderList.clear();
         holderList.addAll(es);
         return es;
     }
@@ -133,6 +132,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         diffResult.dispatchUpdatesTo(getAdapter());
         getAdapter().getList().clear();
         getAdapter().getList().addAll(holderList);
+        holderList.clear();
     }
 
     @Override
