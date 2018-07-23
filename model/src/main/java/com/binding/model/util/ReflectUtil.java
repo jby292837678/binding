@@ -336,6 +336,13 @@ public class ReflectUtil {
         }
     }
 
+    public static Type getActualTypeArguments(Type type,int position){
+        if(type instanceof ParameterizedType){
+            return ((ParameterizedType) type).getActualTypeArguments()[position];
+        }
+        return null;
+    }
+
     public static String arrayToString(Object[] args) {
         if (args == null) return "";
         StringBuilder builder = new StringBuilder();

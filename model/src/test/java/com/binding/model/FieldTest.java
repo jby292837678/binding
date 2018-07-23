@@ -4,7 +4,6 @@ package com.binding.model;
 import com.binding.model.data.util.JsonDeepUtil;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -14,8 +13,6 @@ import java.lang.reflect.TypeVariable;
 import java.lang.reflect.WildcardType;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author zhangquanit
@@ -103,50 +100,5 @@ public class FieldTest {
         }
     }
 
-    public static class TestEntity{
-
-    }
-
-
-    public static class InfoEntity<T>{
-        private T data;
-        private String msg;
-        private int code;
-
-        public T getData() {
-            return data;
-        }
-
-        public void setData(T data) {
-            this.data = data;
-        }
-
-        public String getMsg() {
-            return msg;
-        }
-
-        public void setMsg(String msg) {
-            this.msg = msg;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public void setCode(int code) {
-            this.code = code;
-        }
-    }
-
-
-    @Test
-    public void test1(){
-        InfoEntity<TestEntity> infoEntity = new InfoEntity<>();
-        for (Field field : infoEntity.getClass().getDeclaredFields()) {
-            Type t = field.getGenericType();
-            System.out.println(t);
-            System.out.println(field.getType());
-        }
-    }
 
 }

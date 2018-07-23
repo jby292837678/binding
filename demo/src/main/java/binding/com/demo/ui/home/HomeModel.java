@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.binding.model.adapter.pager.FragmentAdapter;
+import com.binding.model.data.util.JsonDeepUtil;
 import com.binding.model.layout.pager.PagerModel;
 import com.binding.model.model.ModelView;
 
@@ -43,22 +44,108 @@ public class HomeModel extends PagerModel<HomeActivity,ActivityHomeBinding,HomeE
     }
 
     public void onClick(View view){
-
-//        Observable.fromArray(text).map();
-//        api.baidu().compose(new RestfulT)
+        jsonTest();
     }
 
-    String text = "";
 
-    public static class TestEntity{
+    private String json = "{\n" +
+            "  \"sites\": {\n" +
+            "    \"site\": [[[\n" +
+            "      {\n" +
+            "        \"id\": \"1\",\n" +
+            "        \"name\": \"菜鸟教程\",\n" +
+            "        \"url\": \"www.runoob.com\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"id\": \"2\",\n" +
+            "        \"name\": \"菜鸟工具\",\n" +
+            "        \"url\": \"c.runoob.com\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"id\": \"3\",\n" +
+            "        \"name\": \"Google\",\n" +
+            "        \"url\": \"www.google.com\"\n" +
+            "      }\n" +
+            "    ]]]\n" +
+            "  }\n" +
+            "}";
 
+    public void jsonTest(){
+        DataEntity dataEntity = JsonDeepUtil.parse(json,DataEntity.class);
+        DataEntity.SitesBean bean = dataEntity.getSites();
     }
+
+    public static class DataEntity{
+
+
+        private SitesBean sites;
+
+        public SitesBean getSites() {
+            return sites;
+        }
+
+        public void setSites(SitesBean sites) {
+            this.sites = sites;
+        }
+
+        public static class SitesBean {
+            private List<SiteBean[][]> site;
+
+            public  List<SiteBean[][]>  getSite() {
+                return site;
+            }
+
+            public void setSite( List<SiteBean[][]>  site) {
+                this.site = site;
+            }
+
+            public static class SiteBean {
+                /**
+                 * id : 1
+                 * name : 菜鸟教程
+                 * url : www.runoob.com
+                 */
+
+                private String id;
+                private String name;
+                private String url;
+
+                public String getId() {
+                    return id;
+                }
+
+                public void setId(String id) {
+                    this.id = id;
+                }
+
+                public String getName() {
+                    return name;
+                }
+
+                public void setName(String name) {
+                    this.name = name;
+                }
+
+                public String getUrl() {
+                    return url;
+                }
+
+                public void setUrl(String url) {
+                    this.url = url;
+                }
+            }
+        }
+    }
+
 
     @Override
     public void onRightClick(View view) {
         super.onRightClick(view);
         ArouterUtil.navigation(address);
     }
+
+
+
 
 
 }

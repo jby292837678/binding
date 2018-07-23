@@ -16,6 +16,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.sql.Ref;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -23,6 +24,7 @@ import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
 import static com.binding.model.util.ReflectUtil.arrayToString;
+import static com.binding.model.util.ReflectUtil.getActualTypeArguments;
 import static com.binding.model.util.ReflectUtil.invoke;
 
 @SuppressWarnings("unchecked")
@@ -31,15 +33,12 @@ public class JsonDeepUtil {
     private static JsonDeepUtil jsonDeepUtil = new JsonDeepUtil();
     private Consumer<Object> consumer;
 
-    public static <T> T parse(String json, Class<T> c) {
-        return jsonDeepUtil.jsonParse(json, c);
-    }
 
-    public <T> T parse(String json,Type type){
+    public static <T> T parse(String json,Type type){
         return jsonDeepUtil.jsonParse(json,type);
     }
 
-    public <T> T[] parses(String json, Class<T> c) {
+    public static <T> T[] parses(String json, Type c) {
         return jsonDeepUtil.jsonParses(json, c);
     }
 
@@ -47,59 +46,21 @@ public class JsonDeepUtil {
         this.consumer = consumer;
     }
 
-
-
     public <T> T jsonParse(String json,Type type){
-        try {
-            return jsonParse(new JSONObject(json),type);
-        } catch (JSONException e) {
-            Timber.w("please use json jsonParse data");
-        }
-        return null;
-    }
-
-    public <T> T jsonParse(JSONObject json,Type type){
-        if(type instanceof Class){
-            return jsonParse(json,(Class<T>)type);
-        }else if(type instanceof ParameterizedType){
-            ParameterizedType parameterizedType =(ParameterizedType) type;
-            Class<T> c = (Class<T>)parameterizedType.getRawType();
-            Type typeArguments = parameterizedType.getActualTypeArguments()[0];
-            T t = ReflectUtil.newInstance(c);
-            for (Field field : c.getDeclaredFields()) {
-                Type type1 = field.getGenericType();
-                Method method = ReflectUtil.beanSetMethod(field,c);
-                Object object = getValue(json,field);
-                if(type1 instanceof TypeVariable){
-                    if(object instanceof JSONObject){
-                        ReflectUtil.invoke(method,t,accept(jsonParse((JSONObject)object,typeArguments)));
-                    }else if(object instanceof JSONArray){
-                        ReflectUtil.invoke(method,t,jsonParses((JSONArray)object,typeArguments));
-                    }else{
-                        ReflectUtil.invoke(method,t,object);
-                    }
-                }
-            }
-            return t;
-        }
-        return null;
-    }
-
-    public <T> T jsonParse(String json, Class<T> c) {
         if (TextUtils.isEmpty(json)) return null;
         try {
             if (json.trim().charAt(0) == '{') {
-                return accept(jsonParse(new JSONObject(json), c));
+                return accept(jsonParse(new JSONObject(json), type));
             } else if (json.trim().charAt(0) == '[') {
                 Timber.w("please use method jsonParses(json,type)");
             }
         } catch (JSONException e) {
-            Timber.w("please use json jsonParse data");
+            Timber.w("please use json jsonParse data e:%1s",e.getMessage());
         }
         return null;
     }
 
-    public <T> T[] jsonParses(String json, Class<T> c) {
+    public <T> T[] jsonParses(String json, Type c) {
         if (TextUtils.isEmpty(json)) return null;
         try {
             if (json.charAt(0) == '[') {
@@ -108,7 +69,7 @@ public class JsonDeepUtil {
                 Timber.w("please use method jsonParse(json,class)");
             }
         } catch (JSONException e) {
-            Timber.w("please use json jsonParse data");
+            Timber.w("please use json jsonParse data e:%1s",e.getMessage());
         }
         return null;
     }
@@ -171,10 +132,9 @@ public class JsonDeepUtil {
                 if (type instanceof ParameterizedType) {
                     Type rawType = ((ParameterizedType) type).getRawType();
                     if (Collection.class.isAssignableFrom((Class) rawType)) {
-                        Type type1 = ((ParameterizedType) type).getActualTypeArguments()[0];
-                        return (E) Arrays.asList(jsonParses(jsonArray.getJSONArray(position), type1));
+                        return (E) Arrays.asList(jsonParses(jsonArray.getJSONArray(position), getActualTypeArguments(type, 0)));
                     }else{
-                        return jsonParse(jsonArray.getJSONObject(position),rawType);
+                        return accept(jsonParse(jsonArray.getJSONObject(position),rawType));
                     }
                 }
             }
@@ -184,33 +144,43 @@ public class JsonDeepUtil {
         return null;
     }
 
-
-    public <T> T jsonParse(JSONObject json, Class<T> c) {
+    public <T> T jsonParse(JSONObject json,Type type){
+        Class<T> c;
+        Type typeArguments = null;
+        if(type instanceof Class){
+            c = (Class<T>)type;
+        }else if(type instanceof ParameterizedType){
+            ParameterizedType parameterizedType =(ParameterizedType) type;
+            c = (Class<T>)parameterizedType.getRawType();
+            typeArguments = parameterizedType.getActualTypeArguments()[0];
+        }else return null;
         T entity = ReflectUtil.newInstance(c);
         for (Field field : c.getDeclaredFields()) {
             String fName = field.getName();
-            if (TextUtils.isEmpty(fName) || json.isNull(fName)) continue;
-            Object object = getValue(json, field);
+            if (json.isNull(fName)) continue;
+            Object object = getValue(json,field);
             if (ReflectUtil.isFieldNull(object)) continue;
-            Method declareMethod = ReflectUtil.beanSetMethod(field, c);
-            if (ReflectUtil.isBaseType(object)) {
-                invoke(declareMethod, entity, object);
-            } else if (object instanceof JSONArray) {
-                if (c.isArray())
-                    invoke(declareMethod, entity, new Object[]{jsonParses((JSONArray) object, c.getComponentType())});
-                else {
-                    Type type = field.getGenericType();
-                    if (type instanceof ParameterizedType)
-                        invoke(declareMethod, entity, Arrays.asList(jsonParses((JSONArray) object,
-                                ((ParameterizedType) type).getActualTypeArguments()[0])));
+            Method method = ReflectUtil.beanSetMethod(field,c);
+            Type genericType = field.getGenericType();
+            if(object instanceof JSONObject){
+                typeArguments =  (genericType instanceof TypeVariable)?typeArguments:genericType;
+                object = accept(jsonParse((JSONObject)object,typeArguments));
+            }else if(object instanceof JSONArray){
+                if(genericType instanceof Class&&((Class)genericType).isArray()){
+                    typeArguments =  ((Class) genericType).getComponentType();
+                    object = new Object[]{jsonParses((JSONArray)object,typeArguments)};
+                }else if(genericType instanceof GenericArrayType){
+                    typeArguments = ((GenericArrayType) genericType).getGenericComponentType();
+                    object = jsonParses((JSONArray)object,typeArguments);
+                }else if(genericType instanceof ParameterizedType){
+                    typeArguments = getActualTypeArguments(genericType,0);
+                    object = Arrays.asList(jsonParses((JSONArray)object,typeArguments));
                 }
-            } else {
-                invoke(declareMethod, entity, accept(jsonParse((JSONObject) object, field.getType())));
             }
+            ReflectUtil.invoke(method,entity,object);
         }
-        Timber.v("pares:%1s", entity + "");
         return entity;
-}
+    }
 
     public <E> E[] jsonParses(JSONArray jsonArray, Type type) {
         Class<E> c = null;
@@ -228,7 +198,7 @@ public class JsonDeepUtil {
         for (int i = 0; i < jsonArray.length(); i++) {
             array[i] = getArrayValue(jsonArray, type, i);
         }
-        Timber.v("pares:%1s", arrayToString(array));
+//        Timber.v("pares:%1s", arrayToString(array));
         return array;
     }
 
@@ -257,3 +227,30 @@ public class JsonDeepUtil {
         return e;
     }
 }
+//
+//    public <T> T jsonParse(JSONObject json, Class<T> c) {
+//        T entity = ReflectUtil.newInstance(c);
+//        for (Field field : c.getDeclaredFields()) {
+//            String fName = field.getName();
+//            if (TextUtils.isEmpty(fName) || json.isNull(fName)) continue;
+//            Object object = getValue(json, field);
+//            if (ReflectUtil.isFieldNull(object)) continue;
+//            Method declareMethod = ReflectUtil.beanSetMethod(field, c);
+//            if (ReflectUtil.isBaseType(object)) {
+//                invoke(declareMethod, entity, object);
+//            } else if (object instanceof JSONArray) {
+//                if (c.isArray())
+//                    invoke(declareMethod, entity, new Object[]{jsonParses((JSONArray) object, c.getComponentType())});
+//                else {
+//                    Type type = field.getGenericType();
+//                    if (type instanceof ParameterizedType)
+//                        invoke(declareMethod, entity, Arrays.asList(jsonParses((JSONArray) object,
+//                                ((ParameterizedType) type).getActualTypeArguments()[0])));
+//                }
+//            } else {
+//                invoke(declareMethod, entity, accept(jsonParse((JSONObject) object, field.getType())));
+//            }
+//        }
+//        Timber.v("pares:%1s", entity + "");
+//        return entity;
+//    }
