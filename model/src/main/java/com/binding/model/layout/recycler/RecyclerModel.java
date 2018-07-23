@@ -4,6 +4,7 @@ import android.databinding.ObservableField;
 import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.v7.util.DiffUtil;
+import android.support.v7.util.ListUpdateCallback;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -40,10 +41,10 @@ import static com.binding.model.util.BaseUtil.containsList;
  */
 
 public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate>
-        extends ViewArrayModel<C, Binding, E, RecyclerAdapter<E>> {
+        extends ViewArrayModel<C, Binding, E, RecyclerAdapter<E>> implements ListUpdateCallback{
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
-    private final List<E> holderList =new ArrayList<>();
+    protected final List<E> holderList =new ArrayList<>();
 
     public RecyclerModel(RecyclerAdapter<E> adapter) {
         super(adapter);
@@ -109,6 +110,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         if (MainLooper.isUiThread()) super.http(rcHttp, p, refresh);
         else addDisposable(rcHttp.http(p, refresh)
                 .map(es -> refresh(p, es))
+                .doOnNext(es -> doNext(getAdapter().getList(),es))
                 .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
                 .flatMap(ViewHttpModel::fromToMain)
                 .subscribe(this::setToAdapter,
@@ -117,6 +119,9 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
                         this::onSubscribe));
     }
 
+    protected void doNext(List<E> oldList,List<E> newList) {
+
+    }
 
     public List<E> refresh(int p, List<E> es) {
         List<E> list = getAdapter().getList();
@@ -124,12 +129,13 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             es.addAll(0, list);
         if (containsList(p, list))
             es.addAll(0, list.subList(0,p));
+        holderList.clear();
         holderList.addAll(es);
         return es;
     }
 
-    private void setToAdapter(DiffUtil.DiffResult diffResult) {
-        diffResult.dispatchUpdatesTo(getAdapter());
+    protected void setToAdapter(DiffUtil.DiffResult diffResult) {
+        diffResult.dispatchUpdatesTo(this);
         getAdapter().getList().clear();
         getAdapter().getList().addAll(holderList);
         holderList.clear();
@@ -138,6 +144,26 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     @Override
     public final RecyclerAdapter<E> getAdapter() {
         return super.getAdapter();
+    }
+
+    @Override
+    public void onInserted(int position, int count) {
+        getAdapter().notifyItemRangeInserted(position, count);
+    }
+
+    @Override
+    public void onRemoved(int position, int count) {
+        getAdapter().notifyItemRangeRemoved(position, count);
+    }
+
+    @Override
+    public void onMoved(int fromPosition, int toPosition) {
+        getAdapter().notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onChanged(int position, int count, Object payload) {
+        getAdapter().notifyItemRangeChanged(position, count, payload);
     }
 }
 
