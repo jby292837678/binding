@@ -58,6 +58,9 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         return MainLooper.isUiThread()?Observable.fromArray(t):fromToMain(t);
     }
 
+    public static <T> Observable<T> origin(T  t){
+        return Observable.fromArray(t);
+    }
     public static <T> Observable<T> fromToMain(T  t){
         return Observable.fromArray(t).observeOn(AndroidSchedulers.mainThread());
     }

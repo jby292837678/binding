@@ -26,6 +26,9 @@ import com.binding.model.model.inter.Recycler;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 import static com.binding.model.util.BaseUtil.containsList;
 
 /**
@@ -41,10 +44,10 @@ import static com.binding.model.util.BaseUtil.containsList;
  */
 
 public class RecyclerModel<C extends Container, Binding extends ViewDataBinding, E extends Inflate>
-        extends ViewArrayModel<C, Binding, E, RecyclerAdapter<E>> implements ListUpdateCallback{
+        extends ViewArrayModel<C, Binding, E, RecyclerAdapter<E>> implements ListUpdateCallback {
     public ObservableField<RecyclerView.LayoutManager> layoutManager = new ObservableField<>();
     private boolean pageFlag = true;
-    protected final List<E> holderList =new ArrayList<>();
+    protected final List<E> holderList = new ArrayList<>();
 
     public RecyclerModel(RecyclerAdapter<E> adapter) {
         super(adapter);
@@ -90,10 +93,8 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             if (getAdapter() == null) return;
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 >= getAdapter().size()
-                    && !loading.get()) {
-                if (pageFlag && dy > 0) {
-                    onHttp(getAdapter().size(), 0);
-                }
+                    && !loading.get() && pageFlag && dy >= 0) {
+                onHttp(getAdapter().size(), 0);
             }
         }
 
@@ -107,38 +108,42 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
 
     @Override
     protected void http(HttpObservable<List<E>> rcHttp, int p, int refresh) {
-        if (MainLooper.isUiThread()) super.http(rcHttp, p, refresh);
-        else addDisposable(rcHttp.http(p, refresh)
-                .map(es -> refresh(p, es))
-                .doOnNext(es -> doNext(getAdapter().getList(),es))
-                .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
-                .flatMap(ViewHttpModel::fromToMain)
-                .subscribe(this::setToAdapter,
-                        this::onThrowable,
-                        this::onComplete,
-                        this::onSubscribe));
+        addDisposable(rcHttp.http(p, refresh)
+                .flatMap(entities ->
+                        MainLooper.isUiThread()
+                                ?origin(entities).doOnNext(super::accept)
+                                :origin(entities)
+                                .map(es -> refresh(p, es))
+//                                .doOnNext(es -> doNext(getAdapter().getList(), es))
+                                .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .map(this::setToAdapter))
+                .subscribe(this::onNext, this::onThrowable, this::onComplete)
+        );
     }
 
-    protected void doNext(List<E> oldList,List<E> newList) {
+    private void onNext(List<E> es) {
 
     }
+
+
 
     public List<E> refresh(int p, List<E> es) {
-        List<E> list = getAdapter().getList();
-        if (p == list.size() || list.isEmpty())
-            es.addAll(0, list);
-        if (containsList(p, list))
-            es.addAll(0, list.subList(0,p));
         holderList.clear();
         holderList.addAll(es);
-        return es;
+        List<E> list = getAdapter().getList();
+        if (p == list.size() || list.isEmpty())
+            holderList.addAll(0, list);
+        if (containsList(p, list))
+            holderList.addAll(0, list.subList(0, p));
+        return holderList;
     }
 
-    protected void setToAdapter(DiffUtil.DiffResult diffResult) {
+    protected List<E> setToAdapter(DiffUtil.DiffResult diffResult) {
         diffResult.dispatchUpdatesTo(this);
         getAdapter().getList().clear();
         getAdapter().getList().addAll(holderList);
-        holderList.clear();
+        return holderList;
     }
 
     @Override
