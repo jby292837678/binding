@@ -113,7 +113,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
                         MainLooper.isUiThread()
                                 ?origin(entities).doOnNext(super::accept)
                                 :origin(entities)
-                                .map(es -> refresh(p, es))
+                                .map(es -> refresh(offset, es))
 //                                .doOnNext(es -> doNext(getAdapter().getList(), es))
                                 .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
                                 .observeOn(AndroidSchedulers.mainThread())
