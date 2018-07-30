@@ -20,7 +20,7 @@ import com.binding.model.util.BaseUtil;
  */
 
 
-public class ViewParse implements Parse {
+public class ViewParse  implements Parse {
     private transient ModelView modelView;
     private transient int modelIndex = 0;
 

@@ -10,18 +10,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;
-import com.binding.model.adapter.IRecyclerAdapter;
 import com.binding.model.adapter.recycler.DiffUtilCallback;
 import com.binding.model.adapter.recycler.RecyclerAdapter;
-import com.binding.model.adapter.recycler.RecyclerBaseAdapter;
 import com.binding.model.cycle.Container;
 import com.binding.model.cycle.MainLooper;
 import com.binding.model.model.ViewArrayModel;
-import com.binding.model.model.ViewHttpModel;
-import com.binding.model.model.ViewInflate;
 import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.Inflate;
-import com.binding.model.model.inter.Recycler;
+import com.binding.model.model.request.RecyclerStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +72,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     }
 
     public final void onHttp(View view) {
-        onHttp(0, 3);
+        onHttp(0, RecyclerStatus.click);
     }
 
     public final void addEventAdapter(IEventAdapter<E> iEventAdapter) {
@@ -94,7 +90,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             if (newState == RecyclerView.SCROLL_STATE_IDLE
                     && lastVisibleItem + 1 >= getAdapter().size()
                     && !loading.get() && pageFlag && dy >= 0) {
-                onHttp(getAdapter().size(), 0);
+                onHttp(getAdapter().size(), RecyclerStatus.loadBottom);
             }
         }
 
@@ -111,10 +107,10 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         addDisposable(rcHttp.http(p, refresh)
                 .flatMap(entities ->
                         MainLooper.isUiThread()
-                                ?origin(entities).doOnNext(super::accept)
-                                :origin(entities)
+                                ? Observable.just(entities).doOnNext(super::accept)
+                                :Observable.just(entities)
                                 .map(es -> refresh(offset, es))
-//                                .doOnNext(es -> doNext(getAdapter().getList(), es))
+                                .doOnNext(this::compare)
                                 .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .map(this::setToAdapter))
@@ -122,7 +118,11 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         );
     }
 
-    private void onNext(List<E> es) {
+    public void compare(List<E> es) {
+
+    }
+
+    public void onNext(List<E> es) {
 
     }
 

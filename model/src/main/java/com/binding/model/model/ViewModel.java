@@ -44,6 +44,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     private Bundle bundle;
     private final ListCompositeDisposable disposables = new ListCompositeDisposable();
 
+
     public final Binding attachContainer(T t, ViewGroup co, boolean attachToParent, Bundle savedInstanceState) {
         Binding binding = attachView(t.getDataActivity(), co, attachToParent, null);
         attachView(savedInstanceState, t);
@@ -106,6 +107,7 @@ public class ViewModel<T extends Container, Binding extends ViewDataBinding> ext
     public final void addDisposable(Disposable disposable){
         disposables.add(disposable);
     }
+
 
 
     public void goPath(){

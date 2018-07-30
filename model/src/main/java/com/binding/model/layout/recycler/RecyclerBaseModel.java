@@ -13,6 +13,7 @@ import com.binding.model.cycle.Container;
 import com.binding.model.model.ViewArrayModel;
 import com.binding.model.model.inter.Inflate;
 import com.binding.model.model.inter.Recycler;
+import com.binding.model.model.request.RecyclerStatus;
 
 /**
  * project：cutv_ningbo
@@ -53,7 +54,7 @@ public class RecyclerBaseModel<C extends Container, Binding extends ViewDataBind
     }
 
     public void onHttp(View view) {
-        onHttp(0,3);
+        onHttp(0, RecyclerStatus.click);
     }
 
     public void addEventAdapter(IEventAdapter<S> iEventAdapter) {
@@ -72,7 +73,7 @@ public class RecyclerBaseModel<C extends Container, Binding extends ViewDataBind
                     && lastVisibleItem + 1 >= getAdapter().size()
                     && !loading.get()) {
                 if (pageFlag && dy > 0) {
-                    onHttp(getAdapter().size(),0);
+                    onHttp(getAdapter().size(),RecyclerStatus.loadBottom);
                 }
             }
         }

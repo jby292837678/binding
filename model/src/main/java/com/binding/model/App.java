@@ -69,6 +69,16 @@ public class App implements Application.ActivityLifecycleCallbacks {
         return false;
     }
 
+    public static void finishhWithoutAll(Class<? extends Activity>... cs){
+        for (Activity activity : app.stack) {
+            boolean a = false;
+            for (Class<? extends Activity> c : cs) {
+                if(a = activity.getClass().isAssignableFrom(c))break;
+            }
+            if (!a) activity.finish();
+        }
+    }
+
     public static boolean finish(Class c){
         for (Activity activity : app.stack) {
             if (activity.getClass().isAssignableFrom(c)){

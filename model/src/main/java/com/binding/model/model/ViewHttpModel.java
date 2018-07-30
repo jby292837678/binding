@@ -13,11 +13,15 @@ import com.binding.model.cycle.Container;
 import com.binding.model.cycle.MainLooper;
 import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.HttpObservableRefresh;
+import com.binding.model.model.request.RecyclerRefresh;
+import com.binding.model.model.request.RecyclerStatus;
 import com.binding.model.util.BaseUtil;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+
+import static com.binding.model.model.request.RecyclerStatus.init;
 
 /**
  * project：cutv_ningbo
@@ -47,7 +51,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
     public void setRoHttp(HttpObservable<R> rcHttp) {
         this.rcHttp = rcHttp;
-        onHttp(0, 1);
+        onHttp(0, init);
     }
 
     public boolean isPageWay() {
@@ -55,17 +59,14 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     }
 
     public static <T> Observable<T> from(T t){
-        return MainLooper.isUiThread()?Observable.fromArray(t):fromToMain(t);
+        return MainLooper.isUiThread()?Observable.just(t):fromToMain(t);
     }
 
-    public static <T> Observable<T> origin(T  t){
-        return Observable.fromArray(t);
-    }
     public static <T> Observable<T> fromToMain(T  t){
-        return Observable.fromArray(t).observeOn(AndroidSchedulers.mainThread());
+        return Observable.just(t).observeOn(AndroidSchedulers.mainThread());
     }
 
-    public final void onHttp(int offset, int refresh) {
+    public final void onHttp(int offset,@RecyclerRefresh int refresh) {
         if(refresh>0)offset = 0;
         this.offset = offset;
         int p = pageWay ? offset / pageCount + 1 : offset;
@@ -81,7 +82,6 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
                         this::onComplete,
                         this::onSubscribe));
     }
-
 
     @CallSuper
     public void onThrowable(Throwable throwable) {
@@ -104,7 +104,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume(){
         if(!loading.get()&& !TextUtils.isEmpty(error.get())){
-            onHttp(0, 1);
+            onHttp(0, RecyclerStatus.resumeError);
         }
     }
 
@@ -115,12 +115,12 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     }
 
 
-    public void onHttp(int refresh) {
+    public void onHttp(@RecyclerRefresh int refresh) {
         onHttp(offset, refresh);
     }
 
     public void onRefresh() {
-        onHttp(2);
+        onHttp(RecyclerStatus.loadTop);
     }
 
     public void setEnable(boolean enable) {
