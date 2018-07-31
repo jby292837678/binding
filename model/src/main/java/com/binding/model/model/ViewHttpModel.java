@@ -47,12 +47,6 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
     public final void setRcHttp(HttpObservableRefresh<? extends R> rcHttp1){
         setRoHttp((offset1, refresh) ->  rcHttp1.http(offset1,refresh>0));
-//        setRoHttp(new HttpObservable<R>() {
-//            @Override
-//            public Observable<? extends R> http(int offset, int refresh) {
-//                return rcHttp1.http(offset,refresh>0);
-//            }
-//        });
     }
 
     public void setRoHttp(HttpObservable<? extends R> rcHttp) {
