@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import com.binding.model.util.ReflectUtil;
+import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,8 +35,8 @@ public class JsonDeepUtil {
     private Consumer<Object> consumer;
 
 
-    public static <T> T parse(String json,Type type){
-        return jsonDeepUtil.jsonParse(json,type);
+    public static <T> T parse(String json, Type type) {
+        return jsonDeepUtil.jsonParse(json, type);
     }
 
     public static <T> T[] parses(String json, Type c) {
@@ -46,7 +47,7 @@ public class JsonDeepUtil {
         this.consumer = consumer;
     }
 
-    public <T> T jsonParse(String json,Type type){
+    public <T> T jsonParse(String json, Type type) {
         if (TextUtils.isEmpty(json)) return null;
         try {
             if (json.trim().charAt(0) == '{') {
@@ -55,7 +56,7 @@ public class JsonDeepUtil {
                 Timber.w("please use method jsonParses(json,type)");
             }
         } catch (JSONException e) {
-            Timber.w("please use json jsonParse data e:%1s",e.getMessage());
+            Timber.w("please use json jsonParse data e:%1s", e.getMessage());
         }
         return null;
     }
@@ -69,7 +70,7 @@ public class JsonDeepUtil {
                 Timber.w("please use method jsonParse(json,class)");
             }
         } catch (JSONException e) {
-            Timber.w("please use json jsonParse data e:%1s",e.getMessage());
+            Timber.w("please use json jsonParse data e:%1s", e.getMessage());
         }
         return null;
     }
@@ -78,12 +79,12 @@ public class JsonDeepUtil {
      * 遍历json中的key值，让其与实体类属性名匹配,匹配成功则取出值
      *
      * @param jsonObject 需要解析的json
-     * @param field      value的类型
+     * @param clazz      value的类型
+     * @param key        key
      * @return obj value的值
      */
-    public Object getValue(JSONObject jsonObject, Field field) {
-        String key = field.getName();
-        Class clazz = field.getType();
+    public Object getValue(JSONObject jsonObject, String key, Class clazz) {
+//        Timber.i("key:%1s type:%2s", key, clazz.getSimpleName());
         try {
             if (clazz == String.class) {
                 return jsonObject.getString(key);
@@ -101,7 +102,8 @@ public class JsonDeepUtil {
                 return jsonObject.getJSONObject(key);
             }
         } catch (Exception e) {
-            Timber.w(" getValue:key:" + key + "  json:" + jsonObject.toString());
+            Timber.w(" getValue:key:%1s msg:%2s type:%3s json:%4s",
+                    key, e.getMessage(), clazz.getTypeName(), jsonObject.toString());
         }
         return null;
     }
@@ -124,7 +126,7 @@ public class JsonDeepUtil {
                 return (E) i;
             } else if (type instanceof Class) {
                 Class<E> c = (Class<E>) type;
-                if (c.isArray()) return (E)jsonParses(jsonArray.getJSONArray(position), c);
+                if (c.isArray()) return (E) jsonParses(jsonArray.getJSONArray(position), c);
                 else if (!Collection.class.isAssignableFrom(c)) {
                     return accept(jsonParse(jsonArray.getJSONObject(position), c));
                 }
@@ -133,53 +135,71 @@ public class JsonDeepUtil {
                     Type rawType = ((ParameterizedType) type).getRawType();
                     if (Collection.class.isAssignableFrom((Class) rawType)) {
                         return (E) Arrays.asList(jsonParses(jsonArray.getJSONArray(position), getActualTypeArguments(type, 0)));
-                    }else{
-                        return accept(jsonParse(jsonArray.getJSONObject(position),rawType));
+                    } else {
+                        return accept(jsonParse(jsonArray.getJSONObject(position), rawType));
                     }
                 }
             }
         } catch (Exception e) {
-            Timber.w(" getArrayValue:key:" + position + "  json:" + jsonArray.toString());
+            Timber.w("getArrayValue:position:%1s msg:%2s type:%3s json:%4s", position, e.getMessage(), type.getTypeName(), jsonArray.toString());
         }
         return null;
     }
 
-    public <T> T jsonParse(JSONObject json,Type type){
+    public <T> T jsonParse(JSONObject json, Type type) {
         Class<T> c;
         Type typeArguments = null;
-        if(type instanceof Class){
-            c = (Class<T>)type;
-        }else if(type instanceof ParameterizedType){
-            ParameterizedType parameterizedType =(ParameterizedType) type;
-            c = (Class<T>)parameterizedType.getRawType();
+        if (type instanceof Class) {
+            c = (Class<T>) type;
+        } else if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            c = (Class<T>) parameterizedType.getRawType();
             typeArguments = parameterizedType.getActualTypeArguments()[0];
-        }else return null;
+        } else return null;
         T entity = ReflectUtil.newInstance(c);
         for (Field field : c.getDeclaredFields()) {
             String fName = field.getName();
-            if (json.isNull(fName)) continue;
-            Object object = getValue(json,field);
-            if (ReflectUtil.isFieldNull(object)) continue;
-            Method method = ReflectUtil.beanSetMethod(field,c);
-            Type genericType = field.getGenericType();
-            if(object instanceof JSONObject){
-                typeArguments =  (genericType instanceof TypeVariable)?typeArguments:genericType;
-                object = accept(jsonParse((JSONObject)object,typeArguments));
-            }else if(object instanceof JSONArray){
-                if(genericType instanceof Class&&((Class)genericType).isArray()){
-                    typeArguments =  ((Class) genericType).getComponentType();
-                    object = new Object[]{jsonParses((JSONArray)object,typeArguments)};
-                }else if(genericType instanceof GenericArrayType){
-                    typeArguments = ((GenericArrayType) genericType).getGenericComponentType();
-                    object = jsonParses((JSONArray)object,typeArguments);
-                }else if(genericType instanceof ParameterizedType){
-                    typeArguments = getActualTypeArguments(genericType,0);
-                    object = Arrays.asList(jsonParses((JSONArray)object,typeArguments));
+            if (json.isNull(fieldName(field))) continue;
+//            field.getGenericType() instanceof TypeVariable ? typeArguments:field.getGenericType()
+            Class<?> fieldClass = field.getType();
+            if (field.getGenericType() instanceof TypeVariable) {
+                if (typeArguments instanceof Class) {
+                    fieldClass = (Class<?>) typeArguments;
+                } else if (typeArguments instanceof ParameterizedType) {
+                    fieldClass = (Class<?>) ((ParameterizedType) typeArguments).getRawType();
                 }
             }
-            ReflectUtil.invoke(method,entity,object);
+            Object object = getValue(json, fieldName(field), fieldClass);
+            if (ReflectUtil.isFieldNull(object)) continue;
+            Method method = ReflectUtil.beanSetMethod(field, c);
+            Type genericType = field.getGenericType();
+            if (object instanceof JSONObject) {
+                typeArguments = (genericType instanceof TypeVariable) ? typeArguments : genericType;
+                object = accept(jsonParse((JSONObject) object, typeArguments));
+            } else if (object instanceof JSONArray) {
+                if (genericType instanceof Class && ((Class) genericType).isArray()) {
+                    typeArguments = ((Class) genericType).getComponentType();
+                    object = new Object[]{jsonParses((JSONArray) object, typeArguments)};
+                } else if (genericType instanceof GenericArrayType) {
+                    typeArguments = ((GenericArrayType) genericType).getGenericComponentType();
+                    object = jsonParses((JSONArray) object, typeArguments);
+                } else {
+                    if(typeArguments != null){
+                        typeArguments = getActualTypeArguments(typeArguments, 0);
+                    }else if (genericType instanceof ParameterizedType) {
+                        typeArguments = getActualTypeArguments(genericType, 0);
+                    }
+                    object = Arrays.asList(jsonParses((JSONArray) object, typeArguments));
+                }
+            }
+            ReflectUtil.invoke(method, entity, object);
         }
         return entity;
+    }
+
+    private String fieldName(Field field) {
+        SerializedName serializedName = field.getAnnotation(SerializedName.class);
+        return serializedName == null ? field.getName() : serializedName.value();
     }
 
     public <E> E[] jsonParses(JSONArray jsonArray, Type type) {
@@ -198,7 +218,6 @@ public class JsonDeepUtil {
         for (int i = 0; i < jsonArray.length(); i++) {
             array[i] = getArrayValue(jsonArray, type, i);
         }
-//        Timber.v("pares:%1s", arrayToString(array));
         return array;
     }
 
@@ -213,44 +232,17 @@ public class JsonDeepUtil {
                 return array;
             }
         } catch (Exception e) {
-            Timber.w(" getArrayValue:t:" + t + "  json:" + jsonArray.toString());
+            Timber.w(" getGenericArray: msg:%1s json:%2s,type:%3s", e.getMessage(), jsonArray.toString(), t.getTypeName());
         }
         return (E[]) new Object[0];
     }
 
-    private <E>E accept(E e){
+    private <E> E accept(E e) {
         try {
-            if(consumer!=null)consumer.accept(e);
+            if (consumer != null) consumer.accept(e);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
         return e;
     }
 }
-//
-//    public <T> T jsonParse(JSONObject json, Class<T> c) {
-//        T entity = ReflectUtil.newInstance(c);
-//        for (Field field : c.getDeclaredFields()) {
-//            String fName = field.getName();
-//            if (TextUtils.isEmpty(fName) || json.isNull(fName)) continue;
-//            Object object = getValue(json, field);
-//            if (ReflectUtil.isFieldNull(object)) continue;
-//            Method declareMethod = ReflectUtil.beanSetMethod(field, c);
-//            if (ReflectUtil.isBaseType(object)) {
-//                invoke(declareMethod, entity, object);
-//            } else if (object instanceof JSONArray) {
-//                if (c.isArray())
-//                    invoke(declareMethod, entity, new Object[]{jsonParses((JSONArray) object, c.getComponentType())});
-//                else {
-//                    Type type = field.getGenericType();
-//                    if (type instanceof ParameterizedType)
-//                        invoke(declareMethod, entity, Arrays.asList(jsonParses((JSONArray) object,
-//                                ((ParameterizedType) type).getActualTypeArguments()[0])));
-//                }
-//            } else {
-//                invoke(declareMethod, entity, accept(jsonParse((JSONObject) object, field.getType())));
-//            }
-//        }
-//        Timber.v("pares:%1s", entity + "");
-//        return entity;
-//    }
