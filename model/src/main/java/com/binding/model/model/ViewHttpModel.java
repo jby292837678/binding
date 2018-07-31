@@ -41,15 +41,21 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     public final ObservableField<String> error = new ObservableField<>();
     private int pageCount = 16;
     protected int offset = 0;
-    private HttpObservable<R> rcHttp;
+    private HttpObservable<? extends R> rcHttp;
     private boolean pageWay = App.pageWay;
 
 
-    public final void setRcHttp(HttpObservableRefresh<R> rcHttp1){
-        setRoHttp((offset1, refresh) -> rcHttp1.http(offset1,refresh>0));
+    public final void setRcHttp(HttpObservableRefresh<? extends R> rcHttp1){
+        setRoHttp((offset1, refresh) ->  rcHttp1.http(offset1,refresh>0));
+//        setRoHttp(new HttpObservable<R>() {
+//            @Override
+//            public Observable<? extends R> http(int offset, int refresh) {
+//                return rcHttp1.http(offset,refresh>0);
+//            }
+//        });
     }
 
-    public void setRoHttp(HttpObservable<R> rcHttp) {
+    public void setRoHttp(HttpObservable<? extends R> rcHttp) {
         this.rcHttp = rcHttp;
         onHttp(0, init);
     }
@@ -73,7 +79,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         if(rcHttp!=null)http(rcHttp,p,refresh);
     }
 
-    protected void http(HttpObservable<R> rcHttp, int p, int refresh) {
+    protected void http(HttpObservable<? extends R> rcHttp, int p, int refresh) {
         addDisposable(rcHttp.http(p, refresh)
                 .flatMap(ViewHttpModel::from)
                 .subscribe(

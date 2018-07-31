@@ -17,5 +17,5 @@ import io.reactivex.Observable;
  */
 
 
-public interface HttpObservable<R> extends Http<Observable<R>> {
+public interface HttpObservable<R> extends Http<Observable<? extends R>> {
 }

@@ -15,10 +15,10 @@ import static com.binding.model.util.BaseUtil.containsList;
 
 public class DiffUtilCallback<E extends Parse> extends DiffUtil.Callback {
 
-    private List<E> oldList;
-    private List<E> newList;
+    private List<? extends E> oldList;
+    private List<? extends E> newList;
 
-    public DiffUtilCallback(List<E> oldList, List<E> newList) {
+    public DiffUtilCallback(List<? extends E> oldList, List<?  extends E> newList) {
         this.oldList = oldList;
         this.newList = newList;
     }

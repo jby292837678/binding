@@ -103,7 +103,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     };
 
     @Override
-    protected void http(HttpObservable<List<E>> rcHttp, int p, int refresh) {
+   protected void http(HttpObservable<? extends List<? extends E>> rcHttp, int p, int refresh) {
         addDisposable(rcHttp.http(p, refresh)
                 .flatMap(entities ->
                         MainLooper.isUiThread()
@@ -118,17 +118,19 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         );
     }
 
-    public void compare(List<E> es) {
+
+
+    public void compare(List<? extends E> es) {
 
     }
 
-    public void onNext(List<E> es) {
+    public void onNext(List<? extends E> es) {
 
     }
 
 
 
-    public List<E> refresh(int p, List<E> es) {
+    public List<E> refresh(int p, List<? extends E> es) {
         holderList.clear();
         holderList.addAll(es);
         List<E> list = getAdapter().getList();

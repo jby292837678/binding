@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.cycle.Container;
+import com.binding.model.model.inter.HttpObservable;
 import com.binding.model.model.inter.Parse;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 
 
 public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding, E extends Parse,Adapter extends IModelAdapter<E>>
-        extends ViewHttpModel<C, Binding, List<E>> {
+        extends ViewHttpModel<C, Binding, List<? extends E>> {
     public ObservableBoolean empty = new ObservableBoolean(true);
     private final Adapter adapter;
 
@@ -37,8 +38,15 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     }
 
 
+
+
+//    @Override
+//    public void setRoHttp(HttpObservable<List<? super E>> rcHttp) {
+//        super.setRoHttp(rcHttp);
+//    }
+
     @Override
-    public void accept(List<E> es) throws Exception {
+    public void accept(List<? extends E> es) throws Exception {
         int position = isPageWay() ? offset / getPageCount() * getPageCount(): offset;
         adapter.setList(position, es,AdapterType.refresh);
     }

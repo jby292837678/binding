@@ -23,4 +23,6 @@ public class RecyclerAdapter<E extends Inflate>
     boolean setISEntity(IModelAdapter<E> eventAdapter, int position, E e, int type, View view) {
         return eventAdapter.setIEntity(position, e, type, view);
     }
+
+
 }

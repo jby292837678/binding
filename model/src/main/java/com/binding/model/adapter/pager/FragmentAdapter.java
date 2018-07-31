@@ -67,7 +67,7 @@ public class FragmentAdapter<F extends Item<? extends Fragment>> extends Fragmen
     }
 
     @Override
-    public boolean setList(int position, List<F> e, int type) {
+    public boolean setList(int position, List<? extends F> e, int type) {
         boolean done = BaseUtil.setList(list, position, e, type);
         if (done) notifyDataSetChanged();
         return done;

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.binding.model.R;
 import com.binding.model.adapter.IEventAdapter;
 import com.binding.model.model.ViewParse;
 import com.binding.model.model.inter.Inflate;
@@ -25,19 +26,28 @@ public class ViewGroupBindingAdapter {
     public static <E extends Inflate>void removeInflate(ViewGroup viewGroup, E inflate){
         if(inflate == null)return;
         inflate.setIEventAdapter(null);
-        viewGroup.removeView(inflate.getDataBinding().getRoot());
+        for (int i = 0; i < viewGroup.getChildCount(); i++) {
+            View view = viewGroup.getChildAt(i);
+            Object object = view.getTag(R.id.addInflate);
+            if(inflate.getDataBinding().getRoot() == view || inflate.equals(object)){
+                viewGroup.removeView(view);
+                break;
+            }
+        }
     }
 
     @BindingAdapter(value = {"addInflate","eventAdapter"})
     public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
         inflate.setIEventAdapter(eventAdapter);
+        View view;
         if(inflate instanceof Measure){
-            View view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
+            view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
             ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,viewGroup);
             viewGroup.addView(view,params);
         }else {
-            inflate.attachView(viewGroup.getContext(), viewGroup, true, null);
+            view  = inflate.attachView(viewGroup.getContext(), viewGroup, true, null).getRoot();
         }
+        view.setTag(R.id.addInflate,inflate);
     }
 
     @BindingAdapter("addInflate")

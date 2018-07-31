@@ -581,7 +581,7 @@ public class BaseUtil {
         return true;
     }
 
-    public static <F> boolean setList(List<F> list, int position, List<F> es, int type) {
+    public static <F> boolean setList(List<F> list, int position, List<? extends F> es, int type) {
         switch (type) {
             case AdapterType.add:
                 list.addAll(position, es);

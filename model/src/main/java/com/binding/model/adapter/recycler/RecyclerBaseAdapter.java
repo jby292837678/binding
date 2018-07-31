@@ -101,7 +101,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
     }
 
     @Override
-    public boolean setList(int position, List<E> es, @AdapterHandle int type) {
+    public boolean setList(int position, List<? extends E> es, @AdapterHandle int type) {
         if (es == null) return false;
         switch (type) {
             case AdapterType.refreshAsync:
@@ -125,7 +125,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
         }
     }
 
-    public final boolean setListAdapter(int position, List<E> es) {
+    public final boolean setListAdapter(int position, List<?extends E> es) {
         if(!isDisposed())return false;
         if (position >= holderList.size()) return addListAdapter(position, es);
         else if (position + es.size() >= holderList.size())
@@ -138,7 +138,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
     }
 
 
-    public final boolean removeListAdapter(int position, List<E> es) {
+    public final boolean removeListAdapter(int position, List<?extends E> es) {
         if(!isDisposed())return false;
         int rang = isRang(position, es, holderList);
         if (rang >= 0) {
@@ -191,7 +191,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
         return true;
     }
 
-    public final boolean addListAdapter(int position, List<E> es) {
+    public final boolean addListAdapter(int position, List<? extends E> es) {
         if(!isDisposed())return false;
         if (!containsList(position, holderList)) {
             position = holderList.size();
@@ -202,34 +202,46 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
     }
 
 
-    private boolean refresh(int position,List<E> es) {
+//    public List<E> refresh(int p, List<? extends E> es) {
+//        holderList.clear();
+//        holderList.addAll(es);
+//        List<E> list = getAdapter().getList();
+//        if (p == list.size() || list.isEmpty())
+//            holderList.addAll(0, list);
+//        if (containsList(p, list))
+//            holderList.addAll(0, list.subList(0, p));
+//        return holderList;
+//    }
+
+
+    private boolean refresh(int position,List<? extends E> es) {
         if(!isDisposed())return false;
-        if(position == holderList.size()||holderList.isEmpty())
-            return addListAdapter(position,es);
-        if(containsList(position,holderList))
-            es.addAll(0,holderList.subList(0,position));
-        disposable = Observable.fromArray(es)
+        if(position == holderList.size()||holderList.isEmpty()) return addListAdapter(position,es);
+        List<E> eList = new ArrayList<>();
+        if(containsList(position,holderList)) eList.addAll(holderList.subList(0,position));
+        eList.addAll(es);
+        disposable = Observable.fromArray(eList)
                 .map(s -> DiffUtil.calculateDiff(new DiffUtilCallback<>(holderList, s)))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(diffResult -> {
                             diffResult.dispatchUpdatesTo(this);
                             holderList.clear();
-                            holderList.addAll(es);
+                            holderList.addAll(eList);
                         }
                 );
         return disposable.isDisposed();
     }
 
 
-    public final boolean refreshListAdapter(int position, List<E> es) {
-        if(position == holderList.size()||holderList.isEmpty())
-            return addListAdapter(position,es);
-        if(containsList(position,holderList))
-            es.addAll(0,holderList.subList(0,position));
+    public final boolean refreshListAdapter(int position, List<? extends E> es) {
+        if(position == holderList.size()||holderList.isEmpty()) return addListAdapter(position,es);
+        List<E> eList = new ArrayList<>();
+        if(containsList(position,holderList)) eList.addAll(0,holderList.subList(0,position));
+        eList.addAll(es);
         notifyDataSetChanged();
         holderList.clear();
-        holderList.addAll(es);
+        holderList.addAll(eList);
         return true;
     }
 
@@ -242,7 +254,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
         this.count = count;
     }
 
-    public final boolean moveListAdapter(int position, List<E> es) {
+    public final boolean moveListAdapter(int position, List<? extends E> es) {
         if(!isDisposed())return false;
         for (int i = 0; i < es.size(); i++)
             moveToAdapter(position + i, es.get(i));
@@ -279,8 +291,8 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
 
 
 
-    public void addEventAdapter(IEventAdapter<I> eventAdapter) {
-        eventAdapters.add(0, eventAdapter);
+    public void addEventAdapter(IEventAdapter<? extends I> eventAdapter) {
+        eventAdapters.add(0, (IEventAdapter<I>) eventAdapter);
     }
 
     @Override

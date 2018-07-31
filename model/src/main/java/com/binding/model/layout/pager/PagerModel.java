@@ -59,7 +59,7 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
     }
 
     @Override
-    public void accept(List<E> es) throws Exception {
+    public void accept(List<? extends E> es) throws Exception {
         super.accept(es);
         pagerEntity = new PagerEntity<>(es, this);
         if (rotate) TimeUtil.getInstance().add(pagerEntity);

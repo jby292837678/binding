@@ -13,6 +13,7 @@
     <item name="radio_group_layout" type="id" />
     <item name="tab_layout" type="id" />
     <item name="holder_position" type="id" />
+    <item name="addInflate" type="id" />
     <!--<item name="main_home" type="id" />-->
     <!--<item name="main_news" type="id" />-->
     <!--<item name="main_mall" type="id" />-->

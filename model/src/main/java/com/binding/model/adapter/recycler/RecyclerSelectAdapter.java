@@ -43,7 +43,7 @@ public class RecyclerSelectAdapter<E extends Recycler>
     }
 
     @Override
-    public boolean setList(int position, List<E> es, @AdapterHandle int type) {
+    public boolean setList(int position, List<? extends E> es, @AdapterHandle int type) {
         if (es == null) return false;
         switch (type) {
             case AdapterType.select:

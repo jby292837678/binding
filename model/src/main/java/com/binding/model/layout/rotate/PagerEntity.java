@@ -21,11 +21,11 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
     private Inflate inflate;
     private List<PagerRotateListener<E>> pagerRotateListeners = new ArrayList<>();
 
-    public PagerEntity(List<E> list, Inflate inflate)  {
+    public PagerEntity(List<? extends E> list, Inflate inflate)  {
         this(3, list,inflate );
     }
 
-    public PagerEntity(int totalTime, List<E> list, Inflate inflate) {
+    public PagerEntity(int totalTime, List<? extends E> list, Inflate inflate) {
         this.inflate = inflate;
         this.totalTime = totalTime;
         if (list != null) {

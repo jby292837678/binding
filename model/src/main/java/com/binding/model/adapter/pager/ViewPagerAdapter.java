@@ -66,7 +66,7 @@ public class ViewPagerAdapter<E extends Inflate> extends PagerAdapter implements
     }
 
     @Override
-    public boolean setList(int position, List<E> e, int type) {
+    public boolean setList(int position, List<? extends E> e, int type) {
         boolean done = BaseUtil.setList(list, position, e, type);
         if (done) notifyDataSetChanged();
         return done;

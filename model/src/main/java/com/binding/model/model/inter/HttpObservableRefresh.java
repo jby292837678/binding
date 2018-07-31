@@ -7,5 +7,5 @@ import io.reactivex.Observable;
  */
 
 public interface HttpObservableRefresh<R> {
-    Observable<R> http(int offset, boolean refresh);
+    Observable<? extends R> http(int offset, boolean refresh);
 }

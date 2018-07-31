@@ -26,10 +26,12 @@ public class HomePageModel extends RecyclerModel<HomePageFragment,FragmentHomePa
     public void attachView(Bundle savedInstanceState, HomePageFragment homePageFragment) {
         super.attachView(savedInstanceState, homePageFragment);
         getDataBinding().layoutRecycler.setVm(this);
-        List<HomePageEntity> list = new ArrayList<>();
+        List<HomeChildEntity> list = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            list.add(new HomePageEntity());
+            list.add(new HomeChildEntity());
         }
         setRcHttp((offset1, refresh) -> Observable.fromIterable(list).toList().toObservable());
     }
+
+
 }

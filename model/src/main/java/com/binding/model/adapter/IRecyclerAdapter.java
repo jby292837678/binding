@@ -9,12 +9,12 @@ import java.util.List;
  */
 
 public interface IRecyclerAdapter<E extends Inflate> extends IModelAdapter<E>,IEventAdapter<E> {
-    void addEventAdapter(IEventAdapter<E> eventAdapter);
-    boolean setListAdapter(int position, List<E> es);
-    boolean removeListAdapter(int position, List<E> es);
-    boolean addListAdapter(int position, List<E> es);
-    boolean refreshListAdapter(int position, List<E> es);
-    boolean moveListAdapter(int position, List<E> es);
+    void addEventAdapter(IEventAdapter<?extends E> eventAdapter);
+    boolean setListAdapter(int position, List<? extends E> es);
+    boolean removeListAdapter(int position, List<? extends E> es);
+    boolean addListAdapter(int position, List<? extends E> es);
+    boolean refreshListAdapter(int position, List<? extends E> es);
+    boolean moveListAdapter(int position, List<? extends E> es);
 
     boolean setToAdapter(int position, E e);
     boolean addToAdapter(int position, E e);

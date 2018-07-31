@@ -17,6 +17,6 @@ public interface IListAdapter<E> {
      *             0x30: change the data
      * @return success or failed
      */
-    boolean setList(int position, List<E> e, @AdapterHandle int type);
+    boolean setList(int position, List<? extends E> e, @AdapterHandle int type);
 
 }

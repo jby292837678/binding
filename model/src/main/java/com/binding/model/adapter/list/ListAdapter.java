@@ -32,13 +32,18 @@ import static com.binding.model.util.BaseUtil.containsList;
 
 public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecyclerAdapter<E>, IEventAdapter<E> {
     private final List<E> holderList = new ArrayList<>();
-    private final IEventAdapter<E> iEventAdapter = this;
+    private final IEventAdapter<? extends E> iEventAdapter = this;
     private final List<IEventAdapter<E>> eventAdapters = new ArrayList<>();
     private int count = 0;
 
     @Override
     public int getCount() {
         return count == 0 || count > holderList.size() ? holderList.size() : count;
+    }
+
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override
@@ -72,6 +77,89 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
     }
 
     @Override
+    public void addEventAdapter(IEventAdapter<? extends E> eventAdapter) {
+        eventAdapters.add(0, (IEventAdapter<E>) eventAdapter);
+    }
+
+    @Override
+    public boolean setListAdapter(int position, List<? extends E> es) {
+        return false;
+    }
+
+    @Override
+    public boolean removeListAdapter(int position, List<? extends E> es) {
+        return false;
+    }
+
+    @Override
+    public boolean addListAdapter(int position, List<? extends E> es) {
+        if (containsList(position, holderList))
+            holderList.addAll(position, es);
+        else holderList.addAll(es);
+        notifyDataSetChanged();
+        return containsList(position, es);
+    }
+
+    @Override
+    public boolean refreshListAdapter(int position, List<? extends E> es) {
+        List<? extends E> l;
+        if (containsList(position, holderList)) {
+            l = holderList.subList(0, position);
+        } else if (holderList.size() != position || holderList.size() == 0) {
+            return addListAdapter(position, es);
+        } else l = es;
+        holderList.clear();
+        holderList.addAll(l);
+        notifyDataSetChanged();
+        return true;
+    }
+
+
+    @Override
+    public boolean moveListAdapter(int position, List<? extends E> es) {
+        return false;
+    }
+
+    @Override
+    public boolean setToAdapter(int position, E e) {
+        if (containsList(position, holderList)) {
+            holderList.set(position, e);
+            notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean addToAdapter(int position, E e) {
+        if (containsList(position, holderList))
+            holderList.add(position, e);
+        else holderList.add(e);
+        notifyDataSetChanged();
+        return true;
+    }
+
+    @Override
+    public boolean removeToAdapter(int position, E e) {
+        if (holderList.contains(e)) position = holderList.indexOf(e);
+        if (containsList(position, holderList)) holderList.remove(e);
+        notifyDataSetChanged();
+        return containsList(position, holderList);
+    }
+
+    @Override
+    public boolean moveToAdapter(int position, E e) {
+        if (position >= holderList.size()) position = holderList.size() - 1;
+        if (containsList(position, holderList)) {
+            int from = holderList.indexOf(e);
+            if (from != position && holderList.remove(e)) holderList.add(position, e);
+            notifyDataSetChanged();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public boolean setEntity(int position, E e, int type, View view) {
         for (IEventAdapter<E> eventAdapter : eventAdapters) {
             if (eventAdapter instanceof IModelAdapter)
@@ -82,8 +170,19 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
     }
 
     @Override
-    public void addEventAdapter(IEventAdapter<E> eventAdapter) {
-        eventAdapters.add(0, eventAdapter);
+    public int size() {
+        return holderList.size();
+    }
+
+    @Override
+    public void clear() {
+        holderList.clear();
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public List<E> getList() {
+        return holderList;
     }
 
     @Override
@@ -107,9 +206,8 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
         }
     }
 
-
     @Override
-    public boolean setList(int position, List<E> es, int type) {
+    public boolean setList(int position, List<? extends E> es, int type) {
         switch (type) {
             case AdapterType.add:
                 return addListAdapter(position, es);
@@ -127,100 +225,10 @@ public class ListAdapter<E extends Inflate> extends BaseAdapter implements IRecy
                 return false;
         }
     }
-
-
-    public boolean addToAdapter(int position, E e) {
-        if (containsList(position, holderList))
-            holderList.add(position, e);
-        else holderList.add(e);
-        notifyDataSetChanged();
-        return true;
-    }
-
-    public boolean removeToAdapter(int position, E e) {
-        if (holderList.contains(e)) position = holderList.indexOf(e);
-        if (containsList(position, holderList)) holderList.remove(e);
-        notifyDataSetChanged();
-        return containsList(position, holderList);
-    }
-
-
-    public boolean setToAdapter(int position, E e) {
-        if (containsList(position, holderList)) {
-            holderList.set(position, e);
-            notifyDataSetChanged();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean moveToAdapter(int position, E e) {
-        if (position >= holderList.size()) position = holderList.size() - 1;
-        if (containsList(position, holderList)) {
-            int from = holderList.indexOf(e);
-            if (from != position && holderList.remove(e)) holderList.add(position, e);
-            notifyDataSetChanged();
-            return true;
-        }
-        return false;
-    }
-
-
-    public boolean addListAdapter(int position, List<E> es) {
-        if (containsList(position, holderList))
-            holderList.addAll(position, es);
-        else holderList.addAll(es);
-        notifyDataSetChanged();
-        return containsList(position, es);
-    }
-
-    public boolean refreshListAdapter(int position, List<E> es) {
-        List<E> l;
-        if (containsList(position, holderList)) {
-            l = holderList.subList(0, position);
-        } else if (holderList.size() != position || holderList.size() == 0) {
-            return addListAdapter(position, es);
-        } else l = es;
-        holderList.clear();
-        holderList.addAll(l);
-        notifyDataSetChanged();
-        return true;
-    }
-
-
-    @Override
-    public List<E> getList() {
-        return holderList;
-    }
-
-    @Override
-    public int size() {
-        return holderList.size();
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-
-    @Override
-    public void clear() {
-        holderList.clear();
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean setListAdapter(int position, List<E> list) {
-        return false;
-    }
-
-    @Override
-    public boolean removeListAdapter(int position, List<E> list) {
-        return false;
-    }
-
-    @Override
-    public boolean moveListAdapter(int position, List<E> list) {
-        return false;
-    }
 }
+
+
+
+
+
+
