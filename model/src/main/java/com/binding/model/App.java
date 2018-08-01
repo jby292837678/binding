@@ -70,7 +70,7 @@ public class App implements Application.ActivityLifecycleCallbacks {
         return false;
     }
 
-    public static void finishhWithoutAll(Class<? extends Activity>... cs){
+    public static void finishAllWithout(Class<? extends Activity>... cs){
         for (Activity activity : app.stack) {
             boolean a = false;
             for (Class<? extends Activity> c : cs) {
