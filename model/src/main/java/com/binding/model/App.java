@@ -74,20 +74,20 @@ public class App implements Application.ActivityLifecycleCallbacks {
         for (Activity activity : app.stack) {
             boolean a = false;
             for (Class<? extends Activity> c : cs) {
-                if(a = activity.getClass().isAssignableFrom(c))break;
+                if(a = c.isAssignableFrom(activity.getClass()))break;
             }
             if (!a) activity.finish();
         }
     }
 
-    public static boolean finish(Class c){
+    public static void finish(Class<? extends Activity>... cs){
         for (Activity activity : app.stack) {
-            if (activity.getClass().isAssignableFrom(c)){
-                activity.finish();
-                return true;
+            boolean a = false;
+            for (Class<? extends Activity> c : cs) {
+                if(a = c.isAssignableFrom(activity.getClass()))break;
             }
+            if (!a) activity.finish();
         }
-        return false;
     }
 
     public void init(Application application) {
