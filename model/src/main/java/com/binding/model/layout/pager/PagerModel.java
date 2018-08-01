@@ -59,12 +59,13 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
     }
 
     @Override
-    public void accept(List<? extends E> es) throws Exception {
-        super.accept(es);
+    public void onNext(List<? extends E> es) {
+        super.onNext(es);
         pagerEntity = new PagerEntity<>(es, this);
         if (rotate) TimeUtil.getInstance().add(pagerEntity);
         pagerEntity.addRotateListener(this);
     }
+
 
     @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
     @Override public void onPageSelected(int position) {}

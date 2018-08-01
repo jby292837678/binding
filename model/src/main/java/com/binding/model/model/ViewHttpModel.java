@@ -18,6 +18,7 @@ import com.binding.model.model.request.RecyclerStatus;
 import com.binding.model.util.BaseUtil;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
@@ -35,36 +36,15 @@ import static com.binding.model.model.request.RecyclerStatus.init;
  * @version 2.0
  */
 
-public abstract class ViewHttpModel<T extends Container, Binding extends ViewDataBinding, R> extends ViewModel<T, Binding> {
+public abstract class ViewHttpModel<T extends Container, Binding extends ViewDataBinding, R> extends ViewModel<T, Binding>
+        implements Observer<R>{
+
+
     public final ObservableBoolean loading = new ObservableBoolean(false);
     public final ObservableBoolean enable = new ObservableBoolean(true);
     public final ObservableField<String> error = new ObservableField<>();
     private int pageCount = 16;
     protected int offset = 0;
-    private HttpObservable<? extends R> rcHttp;
-    private boolean pageWay = App.pageWay;
-
-
-    public final void setRcHttp(HttpObservableRefresh<? extends R> rcHttp1){
-        setRoHttp((offset1, refresh) ->  rcHttp1.http(offset1,refresh>0));
-    }
-
-    public void setRoHttp(HttpObservable<? extends R> rcHttp) {
-        this.rcHttp = rcHttp;
-        onHttp(0, init);
-    }
-
-    public boolean isPageWay() {
-        return pageWay;
-    }
-
-    public static <T> Observable<T> from(T t){
-        return MainLooper.isUiThread()?Observable.just(t):fromToMain(t);
-    }
-
-    public static <T> Observable<T> fromToMain(T  t){
-        return Observable.just(t).observeOn(AndroidSchedulers.mainThread());
-    }
 
     public final void onHttp(int offset,@RecyclerRefresh int refresh) {
         if(refresh>0)offset = 0;
@@ -74,31 +54,26 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     }
 
     protected void http(HttpObservable<? extends R> rcHttp, int p, int refresh) {
-        addDisposable(rcHttp.http(p, refresh)
-                .flatMap(ViewHttpModel::from)
-                .subscribe(
-                        this::accept,
-                        this::onThrowable,
-                        this::onComplete,
-                        this::onSubscribe));
-    }
-
-    @CallSuper
-    public void onThrowable(Throwable throwable) {
-        loading.set(false);
-        String msg = throwable.getMessage();
-        if(TextUtils.isEmpty(msg))msg = "获取数据失败";
-        error.set(msg);
-        BaseUtil.toast(throwable);
+        rcHttp.http(p, refresh)
+                .flatMap(BaseUtil::from)
+                .subscribe(this);
     }
 
     @CallSuper
     public void onSubscribe(Disposable disposable) {
         loading.set(true);
+        addDisposable(disposable);
     }
 
-    public abstract void accept(R r) throws Exception;
 
+    @Override
+    public void onError(Throwable e) {
+        loading.set(false);
+        String msg = e.getMessage();
+        if(TextUtils.isEmpty(msg))msg = "获取数据失败";
+        error.set(msg);
+        BaseUtil.toast(e);
+    }
 
     @CallSuper
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -139,4 +114,21 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
         return pageCount;
     }
 
+
+    private HttpObservable<? extends R> rcHttp;
+    private boolean pageWay = App.pageWay;
+
+
+    public final void setRcHttp(HttpObservableRefresh<? extends R> rcHttp1){
+        setRoHttp((offset1, refresh) ->  rcHttp1.http(offset1,refresh>0));
+    }
+
+    public void setRoHttp(HttpObservable<? extends R> rcHttp) {
+        this.rcHttp = rcHttp;
+        onHttp(0, init);
+    }
+
+    public boolean isPageWay() {
+        return pageWay;
+    }
 }

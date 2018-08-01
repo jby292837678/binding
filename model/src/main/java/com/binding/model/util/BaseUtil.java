@@ -70,6 +70,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import timber.log.Timber;
 
@@ -687,5 +689,14 @@ public class BaseUtil {
     public static boolean isEncoded(Field field) {
         Params key = field.getAnnotation(Params.class);
         return key==null||key.encode();
+    }
+
+
+    public static <T> Observable<T> from(T t){
+        return MainLooper.isUiThread()?Observable.just(t):fromToMain(t);
+    }
+
+    public static <T> Observable<T> fromToMain(T  t){
+        return Observable.just(t).observeOn(AndroidSchedulers.mainThread());
     }
 }

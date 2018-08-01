@@ -38,18 +38,12 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     }
 
 
-
-
-//    @Override
-//    public void setRoHttp(HttpObservable<List<? super E>> rcHttp) {
-//        super.setRoHttp(rcHttp);
-//    }
-
     @Override
-    public void accept(List<? extends E> es) throws Exception {
+    public void onNext(List<? extends E> es) {
         int position = isPageWay() ? offset / getPageCount() * getPageCount(): offset;
         adapter.setList(position, es,AdapterType.refresh);
     }
+
 
     @Override
     public void onComplete() {

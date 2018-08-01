@@ -103,21 +103,19 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     };
 
     @Override
-   protected void http(HttpObservable<? extends List<? extends E>> rcHttp, int p, int refresh) {
-        addDisposable(rcHttp.http(p, refresh)
+    protected void http(HttpObservable<? extends List<? extends E>> rcHttp, int p, int refresh) {
+        rcHttp.http(p, refresh)
                 .flatMap(entities ->
                         MainLooper.isUiThread()
-                                ? Observable.just(entities).doOnNext(super::accept)
-                                :Observable.just(entities)
+                                ? Observable.just(entities).doOnNext(super::onNext)
+                                : Observable.just(entities)
                                 .map(es -> refresh(offset, es))
                                 .doOnNext(this::compare)
                                 .map(es -> DiffUtil.calculateDiff(new DiffUtilCallback<>(getAdapter().getList(), es)))
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .map(this::setToAdapter))
-                .subscribe(this::onNext, this::onThrowable, this::onComplete)
-        );
+                .subscribe(this);
     }
-
 
 
     public void compare(List<? extends E> es) {
@@ -127,7 +125,6 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     public void onNext(List<? extends E> es) {
 
     }
-
 
 
     public List<E> refresh(int p, List<? extends E> es) {

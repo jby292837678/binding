@@ -15,6 +15,7 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.EnvironmentCompat;
 import android.util.DisplayMetrics;
@@ -136,6 +137,10 @@ public class App implements Application.ActivityLifecycleCallbacks {
         stack.remove(activity);
     }
 
+    public static String getString(@StringRes int resId){
+        return App.getCurrentActivity().getString(resId);
+    }
+
     public static Drawable getDrawable(@DrawableRes int id) {
         return ContextCompat.getDrawable(getCurrentActivity(), id);
     }
@@ -147,7 +152,6 @@ public class App implements Application.ActivityLifecycleCallbacks {
     public static boolean startActivities(@NonNull Intent[] intents) {
         return ContextCompat.startActivities(getCurrentActivity(), intents);
     }
-
 
     public static boolean startActivities(@NonNull Intent[] intents, @Nullable Bundle options) {
         return ContextCompat.startActivities(App.getCurrentActivity(), intents, options);
