@@ -1,6 +1,7 @@
 package com.binding.model.util;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -19,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
@@ -33,7 +35,6 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 //import com.alibaba.android.arouter.facade.Postcard;
 //import com.alibaba.android.arouter.launcher.ARouter;
@@ -48,6 +49,7 @@ import com.binding.model.layout.rotate.TimeUtil;
 import com.binding.model.model.ViewModel;
 import com.binding.model.data.exception.ApiException;
 import com.binding.model.model.inter.Inflate;
+import com.binding.model.rxjava.ModelObserver;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.io.Closeable;
@@ -141,9 +143,7 @@ public class BaseUtil {
             } else if (view instanceof DrawerLayout) {
                 params = new DrawerLayout.LayoutParams(width, height);
             } else if (view instanceof Toolbar) {
-                if (Build.VERSION.SDK_INT > 20) {
                     params = new Toolbar.LayoutParams(width, height);
-                } else params = new ViewGroup.LayoutParams(width, height);
             } else if (view instanceof RecyclerView) {
                 params = new RecyclerView.LayoutParams(width, height);
             } else if (view instanceof SwipeRefreshLayout) {
@@ -691,12 +691,23 @@ public class BaseUtil {
         return key==null||key.encode();
     }
 
-
     public static <T> Observable<T> from(T t){
         return MainLooper.isUiThread()?Observable.just(t):fromToMain(t);
     }
 
     public static <T> Observable<T> fromToMain(T  t){
         return Observable.just(t).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer){
+        return new ModelObserver<>(model,consumer);
+    }
+
+    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,View click,View animatorView){
+        return new ModelObserver<>(model,consumer,click,animatorView);
+    }
+
+    public static <T>ModelObserver<T> observer(ViewModel model, Consumer<T> consumer, Animator animator,View click, View animatorView){
+        return new ModelObserver<>(model,consumer,click,animator,animatorView);
     }
 }

@@ -38,6 +38,7 @@ public class ViewGroupBindingAdapter {
 
     @BindingAdapter(value = {"addInflate","eventAdapter"})
     public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
+        if(inflate == null)return;
         inflate.setIEventAdapter(eventAdapter);
         View view;
         if(inflate instanceof Measure){
