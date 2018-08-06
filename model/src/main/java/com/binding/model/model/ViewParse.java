@@ -20,7 +20,7 @@ import com.binding.model.util.BaseUtil;
  */
 
 
-public class ViewParse  implements Parse {
+public class ViewParse implements Parse {
     private transient ModelView modelView;
     private transient int modelIndex = 0;
 
@@ -37,6 +37,11 @@ public class ViewParse  implements Parse {
         int[] layout = getModelView().value();
         int length = layout.length;
         return layout[getModelIndex() < length ? getModelIndex() : 0];
+    }
+
+    public <T extends ViewParse> T modelIndex(int modelIndex){
+        setModelIndex(modelIndex);
+        return (T)this;
     }
 
     @Override

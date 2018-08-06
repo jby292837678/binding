@@ -88,7 +88,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
             super.onScrollStateChanged(recyclerView, newState);
             if (getAdapter() == null) return;
             if (newState == RecyclerView.SCROLL_STATE_IDLE
-                    && lastVisibleItem + 1 >= getAdapter().size()
+                    && lastVisibleItem + 1 > getAdapter().size()
                     && !loading.get() && pageFlag && dy >= 0) {
                 onHttp(getAdapter().size(), RecyclerStatus.loadBottom);
             }

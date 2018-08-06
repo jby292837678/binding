@@ -86,7 +86,7 @@ public class App implements Application.ActivityLifecycleCallbacks {
             for (Class<? extends Activity> c : cs) {
                 if(a = c.isAssignableFrom(activity.getClass()))break;
             }
-            if (!a) activity.finish();
+            if (a) activity.finish();
         }
     }
 
