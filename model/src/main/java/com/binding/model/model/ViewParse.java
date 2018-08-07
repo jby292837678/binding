@@ -39,11 +39,6 @@ public class ViewParse implements Parse {
         return layout[getModelIndex() < length ? getModelIndex() : 0];
     }
 
-    public <T extends ViewParse> T modelIndex(int modelIndex){
-        setModelIndex(modelIndex);
-        return (T)this;
-    }
-
     @Override
     public final ModelView getModelView() {
         if(modelView == null){

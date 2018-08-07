@@ -29,7 +29,7 @@ public class ViewGroupBindingAdapter {
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View view = viewGroup.getChildAt(i);
             Object object = view.getTag(R.id.addInflate);
-            if(inflate.getDataBinding().getRoot() == view || inflate.equals(object)){
+            if( inflate.equals(object)){
                 viewGroup.removeView(view);
                 break;
             }
