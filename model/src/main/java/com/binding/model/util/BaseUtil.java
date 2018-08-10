@@ -39,6 +39,7 @@ import android.widget.Toast;
 //import com.alibaba.android.arouter.facade.Postcard;
 //import com.alibaba.android.arouter.launcher.ARouter;
 import com.binding.model.App;
+import com.binding.model.Config;
 import com.binding.model.R;
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.cycle.MainLooper;
@@ -49,6 +50,8 @@ import com.binding.model.layout.rotate.TimeUtil;
 import com.binding.model.model.ViewModel;
 import com.binding.model.data.exception.ApiException;
 import com.binding.model.model.inter.Inflate;
+import com.binding.model.model.inter.Model;
+import com.binding.model.rxjava.LoadingAnimator;
 import com.binding.model.rxjava.ModelObserver;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
@@ -268,9 +271,15 @@ public class BaseUtil {
         return null;
     }
 
+
+//    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,Animator animator,View animatorView){
+//        return new ModelObserver<>(model,consumer,);
+//    }
+
+
     public static String getPhoneError(String mobiles) {
         if (TextUtils.isEmpty(mobiles)) return "手机号不能为空";
-        Pattern p = Pattern.compile("^((19[0-9])|(13[0-9])|(17[0-9])|(15[^4,\\D])|(18[0-9]))\\d{8}$");
+        Pattern p = Pattern.compile(Config.phone);
         Matcher m = p.matcher(mobiles);
         boolean valid = m.matches();
         return valid ? null : "不合法的手机号";
@@ -278,7 +287,7 @@ public class BaseUtil {
 
     public static String getIdentityError(String identity_num) {
         if (TextUtils.isEmpty(identity_num)) return "身份证号码不能为空";
-        Pattern p = Pattern.compile("^(\\d{6})(\\d{4})(\\d{2})(\\d{2})(\\d{3})([0-9]|X)$");
+        Pattern p = Pattern.compile(Config.identity);
         Matcher m = p.matcher(identity_num);
         boolean valid = m.matches();
         return valid ? null : "身份证号码不合法";
@@ -699,15 +708,24 @@ public class BaseUtil {
         return Observable.just(t).observeOn(AndroidSchedulers.mainThread());
     }
 
+
+    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,Animator animator,View animatorView,View... clickView){
+        return new ModelObserver<>(model,consumer,animator,animatorView,clickView);
+    }
+
+    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,View animatorView,View... clickView){
+        return new ModelObserver<>(model,consumer,animatorView,clickView);
+    }
+    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,View... clickView){
+        return new ModelObserver<>(model,consumer,null,clickView);
+    }
+
     public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer){
         return new ModelObserver<>(model,consumer);
     }
 
-    public static <T>ModelObserver<T> observer(ViewModel model,Consumer<T> consumer,View click,View animatorView){
-        return new ModelObserver<>(model,consumer,click,animatorView);
+    public static <T>ModelObserver<T> observer(ViewModel model, Consumer<T> consumer, LoadingAnimator animator){
+        return new ModelObserver<>(model,consumer,animator);
     }
 
-    public static <T>ModelObserver<T> observer(ViewModel model, Consumer<T> consumer, Animator animator,View click, View animatorView){
-        return new ModelObserver<>(model,consumer,click,animator,animatorView);
-    }
 }

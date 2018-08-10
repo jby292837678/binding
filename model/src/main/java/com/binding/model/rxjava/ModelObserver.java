@@ -31,32 +31,29 @@ public class ModelObserver<T> implements Observer<T> {
         this.loadingAnimator = loadingAnimator;
     }
 
-    public ModelObserver(@NonNull ViewModel model, @NonNull Consumer<T> consumer, @NonNull View clickView, @Nullable View animatorView) {
+    public ModelObserver(@NonNull ViewModel model, @NonNull Consumer<T> consumer , @Nullable View animatorView, @NonNull View... clickView) {
         ValueAnimator animator =   ObjectAnimator.ofFloat(animatorView,"Rotation",0,360);
         animator.setRepeatMode(ValueAnimator.RESTART);
         animator.setRepeatCount(ValueAnimator.INFINITE);
         animator.setDuration(1000);
         this.model = model;
         this.consumer = consumer;
-        this.loadingAnimator = (b,throwable) -> onLoading(clickView, animator, b, animatorView);
+        this.loadingAnimator = (b,throwable) -> onLoading( animator, b, animatorView,clickView);
     }
 
-    public ModelObserver(@NonNull ViewModel model, @NonNull Consumer<T> consumer, @NonNull View clickView, @NonNull Animator animator, @Nullable View animatorView) {
+    public ModelObserver(@NonNull ViewModel model, @NonNull Consumer<T> consumer, @NonNull Animator animator, @Nullable View animatorView, @NonNull View... clickView) {
         this.model = model;
         this.consumer = consumer;
-        this.loadingAnimator = (b,throwable) -> onLoading(clickView, animator, b, animatorView);
+        this.loadingAnimator = (b,throwable) -> onLoading(animator, b, animatorView,clickView);
     }
 
-    public ModelObserver(@NonNull ViewModel model,@NonNull Consumer<T> consumer, @NonNull View clickView, @NonNull Animator animator) {
-        this(model,consumer, clickView, animator, null);
-    }
 
     private void onLoading(boolean b, Throwable throwable) {
 
     }
 
-    private void onLoading(@NonNull View view, @NonNull Animator animator, boolean b, @Nullable View animatorView) {
-        view.setEnabled(!b);
+    private void onLoading( @NonNull Animator animator, boolean b, @Nullable View animatorView,@NonNull View... views) {
+        for (View view : views) view.setEnabled(!b);
         if (b) animator.start();
         else animator.end();
         if (animatorView != null) animatorView.setVisibility(b ? View.VISIBLE : View.GONE);
