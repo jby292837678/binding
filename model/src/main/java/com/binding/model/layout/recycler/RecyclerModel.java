@@ -80,16 +80,13 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     }
 
     private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
-        private int lastVisibleItem = 0;
-        private int dy = 0;
+        private boolean isLast;
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
             if (getAdapter() == null) return;
-            if (newState == RecyclerView.SCROLL_STATE_IDLE
-                    && lastVisibleItem + 1 > getAdapter().size()
-                    && !loading.get() && pageFlag && dy >= 0) {
+            if (newState == RecyclerView.SCROLL_STATE_IDLE && isLast) {
                 onHttp(getAdapter().size(), RecyclerStatus.loadBottom);
             }
         }
@@ -97,8 +94,9 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastVisibleItemPosition();
-            this.dy = dy;
+            int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition();
+//            int lastVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findLastCompletelyVisibleItemPosition()findLastVisibleItemPosition();
+            isLast = dy>0&& pageFlag&&!loading.get()&&lastVisibleItem+1>=getAdapter().size();
         }
     };
 
