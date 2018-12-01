@@ -36,14 +36,17 @@ public class ViewArrayModel<C extends Container, Binding extends ViewDataBinding
     public List<E> getData() {
         return adapter.getList();
     }
-
+    private int headIndex = 0;
 
     @Override
     public void onNext(List<? extends E> es) {
-        int position = isPageWay() ? offset / getPageCount() * getPageCount(): offset;
+        int position = isPageWay() ? offset / getPageCount() * getPageCount()+headIndex: offset;
         adapter.setList(position, es,AdapterType.refresh);
     }
 
+    public void setHeadIndex(int headIndex) {
+        this.headIndex = headIndex;
+    }
 
     @Override
     public void onComplete() {
