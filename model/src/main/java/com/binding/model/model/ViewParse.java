@@ -36,7 +36,7 @@ public class ViewParse implements Parse {
     public final @LayoutRes int getLayoutId(int viewType){
         int[] layout = getModelView().value();
         int length = layout.length;
-        return layout[getModelIndex() < length ? getModelIndex() : 0];
+        return layout[viewType < length ?viewType : 0];
     }
 
     @Override
