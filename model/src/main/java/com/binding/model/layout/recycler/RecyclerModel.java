@@ -72,7 +72,7 @@ public class RecyclerModel<C extends Container, Binding extends ViewDataBinding,
     }
 
     public final void onHttp(View view) {
-        onHttp(headIndex, RecyclerStatus.click);
+        onHttp(0, RecyclerStatus.click);
     }
 
     public final void addEventAdapter(IEventAdapter<E> iEventAdapter) {

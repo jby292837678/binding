@@ -54,7 +54,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
 
     public final void onHttp(int offset,@RecyclerRefresh int refresh) {
-        if(refresh>0)offset = headIndex;
+        if(refresh>0)offset = 0;
         this.offset = offset;
         int o = offset>headIndex?offset-headIndex:0;
         int p = pageWay ? o/ pageCount + 1 : o;
@@ -87,7 +87,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     public void onResume(){
         if(!loading.get()&& !TextUtils.isEmpty(error.get())){
-            onHttp(headIndex, RecyclerStatus.resumeError);
+            onHttp(0, RecyclerStatus.resumeError);
         }
     }
 
@@ -133,7 +133,7 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
     public void setRoHttp(HttpObservable<? extends R> rcHttp) {
         this.rcHttp = rcHttp;
-        onHttp(headIndex, init);
+        onHttp(0, init);
     }
 
     public boolean isPageWay() {
