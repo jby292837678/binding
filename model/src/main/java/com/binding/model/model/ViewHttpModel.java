@@ -54,9 +54,9 @@ public abstract class ViewHttpModel<T extends Container, Binding extends ViewDat
 
 
     public final void onHttp(int offset,@RecyclerRefresh int refresh) {
-        if(refresh>0)offset = 0;
+        if(refresh>0)offset = headIndex;
         this.offset = offset;
-        int o = offset-headIndex;
+        int o = offset>headIndex?offset-headIndex:0;
         int p = pageWay ? o/ pageCount + 1 : o;
         if(rcHttp!=null)http(rcHttp,p,refresh);
     }
