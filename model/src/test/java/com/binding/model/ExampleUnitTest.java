@@ -1,13 +1,8 @@
 package com.binding.model;
 
-import android.util.SparseArray;
-
-import com.binding.model.util.ReflectUtil;
-
 import org.junit.Test;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
-    }
 
+    }
 
     public static <T> T newInstance(Class<T> tClass, Object... args) {
         Class[] cs = new Class[args.length];

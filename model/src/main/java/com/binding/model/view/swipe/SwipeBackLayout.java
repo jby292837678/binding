@@ -298,7 +298,7 @@ public class SwipeBackLayout extends ViewGroup {
     }
 
     public void finish() {
-        ((Activity) getContext()).finish();
+        ((Activity) getContext()).onBackPressed();
     }
 
     private boolean isSwipeEnabled() {

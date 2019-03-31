@@ -6,9 +6,6 @@ public class Test {
 
 	private static Random random = new Random();
 
-
-
-//	@org.junit.Test
 	public void main() {
 		// -20<x<20
 		// 0<y+x<20
@@ -17,7 +14,7 @@ public class Test {
 
 		int x = 20 - random.nextInt(40);
 		int y = 0;
-		int z=random.nextInt(num+1);//�������ֵ�λ��
+		int z=random.nextInt(num+1);
 		System.out.print(x);
 		x=getNum(y+=x);
 		for (int i = 1; i < num; i++) {
@@ -31,9 +28,8 @@ public class Test {
 	}
 
 	public static Integer getNum(int x) {
-		Integer y = 0;
-		if(x<0)
-		y=random.nextInt(20+x)-x;
+		Integer y;
+		if(x<0) y=random.nextInt(20+x)-x;
 		else y = random.nextInt(20)-x;
 		return y;
 	}

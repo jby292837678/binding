@@ -281,7 +281,7 @@ public abstract class RecyclerBaseAdapter<E extends Inflate, I extends Inflate>
         if (!isDisposed()||position < 0) return false;
         if (position >= holderList.size()) position = holderList.size() - 1;
         int from = holderList.indexOf(e);
-        if (from != position && holderList.remove(e)) {
+        if (from>=0&&from != position && holderList.remove(e)) {
             notifyItemMoved(from, position);
             holderList.add(position, e);
             return true;

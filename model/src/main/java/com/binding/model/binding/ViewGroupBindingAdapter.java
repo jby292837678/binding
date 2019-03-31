@@ -6,6 +6,7 @@ import android.databinding.ViewDataBinding;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 
 import com.binding.model.R;
 import com.binding.model.adapter.IEventAdapter;
@@ -37,31 +38,41 @@ public class ViewGroupBindingAdapter {
     }
 
     @BindingAdapter(value = {"addInflate","eventAdapter"})
-    public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
+    public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
+        addInflate(viewGroup, inflate,eventAdapter,0);
+    }
+
+    public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter,int i){
         if(inflate == null)return;
         inflate.setIEventAdapter(eventAdapter);
         View view;
+        view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
+        if(view instanceof RadioButton) view.setId(i);
         if(inflate instanceof Measure){
-            view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
             ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,viewGroup);
             viewGroup.addView(view,params);
         }else {
-            view  = inflate.attachView(viewGroup.getContext(), viewGroup, true, null).getRoot();
+            viewGroup.addView(view);
         }
         view.setTag(R.id.addInflate,inflate);
     }
 
+    public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate,int i){
+        addInflate(viewGroup, inflate,null,i);
+    }
+
     @BindingAdapter("addInflate")
     public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate){
-        addInflate(viewGroup, inflate,null);
+        addInflate(viewGroup, inflate,null,0);
     }
 
     @BindingAdapter(value = {"addInflates","eventAdapter"})
     public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates, IEventAdapter<E> eventAdapter) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
+        int i = -1;
         for (E inflate : inflates){
-            addInflate(group,inflate,eventAdapter);
+            addInflate(group,inflate,eventAdapter,++i);
         }
     }
 
@@ -69,8 +80,9 @@ public class ViewGroupBindingAdapter {
     public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
+        int i =-1;
         for (E inflate : inflates){
-            addInflate(group,inflate);
+            addInflate(group,inflate,++i);
         }
     }
 
