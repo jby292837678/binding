@@ -1,6 +1,6 @@
 package com.binding.model.model.inter;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 
 import com.binding.model.adapter.AdapterHandle;
 

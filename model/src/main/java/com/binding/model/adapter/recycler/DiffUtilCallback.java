@@ -1,6 +1,6 @@
 package com.binding.model.adapter.recycler;
 
-import android.support.v7.util.DiffUtil;
+import androidx.recyclerview.widget.DiffUtil;
 
 import com.binding.model.model.inter.Parse;
 import com.binding.model.model.inter.Recycler;

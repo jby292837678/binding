@@ -1,7 +1,7 @@
 package com.binding.model.model;
 
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 
 import com.binding.model.App;
 import com.binding.model.model.inter.Parse;

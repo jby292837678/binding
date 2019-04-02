@@ -1,6 +1,6 @@
 package binding.com.demo.inject.component;
 
-import android.support.design.widget.BottomSheetDialogFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import binding.com.demo.base.cycle.BaseSheetDialogFragment;
 import binding.com.demo.inject.module.FragmentModule;

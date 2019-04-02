@@ -1,9 +1,9 @@
 package com.binding.model.model;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableInt;
-import android.databinding.ViewDataBinding;
-import android.support.v4.view.ViewPager;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ViewDataBinding;
+import androidx.viewpager.widget.ViewPager;
 import android.view.View;
 
 import com.binding.model.adapter.AdapterType;

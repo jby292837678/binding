@@ -13,19 +13,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             app:onRefreshListener="@{vm::onRefresh}"
             app:refreshing="@={vm.loading}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:enabled="@{vm.enabled}">
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 app:adapter="@{vm.adapter}"
                 app:layout_manager="@{vm.layoutManager}"
                 app:scroll_listener="@{vm}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
-        </android.support.v4.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <TextView
             android:text="@{vm.error}"

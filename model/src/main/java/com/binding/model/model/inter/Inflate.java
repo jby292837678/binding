@@ -1,7 +1,7 @@
 package com.binding.model.model.inter;
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.view.ViewGroup;
 
 import com.binding.model.adapter.IEventAdapter;

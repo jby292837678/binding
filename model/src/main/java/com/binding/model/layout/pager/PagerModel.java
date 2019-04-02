@@ -1,9 +1,9 @@
 package com.binding.model.layout.pager;
 
-import android.databinding.ObservableInt;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableInt;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 
 import com.binding.model.adapter.ILayoutAdapter;
 import com.binding.model.cycle.Container;

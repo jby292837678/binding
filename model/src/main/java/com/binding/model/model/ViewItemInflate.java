@@ -1,6 +1,6 @@
 package com.binding.model.model;
 
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.view.ViewGroup;
 
 import com.binding.model.model.inter.Item;

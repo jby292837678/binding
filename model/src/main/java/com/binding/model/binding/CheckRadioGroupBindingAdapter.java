@@ -1,10 +1,10 @@
 package com.binding.model.binding;
 
-import android.databinding.BindingAdapter;
-import android.databinding.InverseBindingListener;
-import android.databinding.InverseBindingMethod;
-import android.databinding.InverseBindingMethods;
-import android.databinding.adapters.ListenerUtil;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingListener;
+import androidx.databinding.InverseBindingMethod;
+import androidx.databinding.InverseBindingMethods;
+import androidx.databinding.adapters.ListenerUtil;
 import android.widget.RadioGroup;
 
 import com.binding.model.R;

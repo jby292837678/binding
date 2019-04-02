@@ -1,7 +1,7 @@
 package com.binding.model.adapter.pager;
 
-import android.databinding.ViewDataBinding;
-import android.support.v4.view.PagerAdapter;
+import androidx.databinding.ViewDataBinding;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 

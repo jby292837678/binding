@@ -5,7 +5,7 @@
     android:background="@android:color/white"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -24,7 +24,7 @@
                 android:layout_marginRight="80dp"
                 android:gravity="center" />
 
-            <android.support.v7.widget.AppCompatRadioButton
+            <androidx.appcompat.widget.AppCompatRadioButton
                 android:id="@+id/toolbar_right"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -35,7 +35,7 @@
                 android:button="@null"
                 android:gravity="center" />
         </FrameLayout>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/network_error"

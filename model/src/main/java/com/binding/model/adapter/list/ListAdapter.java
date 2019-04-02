@@ -1,7 +1,7 @@
 package com.binding.model.adapter.list;
 
 import android.content.Context;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ViewDataBinding;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;

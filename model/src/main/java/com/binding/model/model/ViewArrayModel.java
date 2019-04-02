@@ -1,7 +1,7 @@
 package com.binding.model.model;
 
-import android.databinding.ObservableBoolean;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ViewDataBinding;
 
 import com.binding.model.adapter.AdapterType;
 import com.binding.model.adapter.IModelAdapter;

@@ -1,6 +1,6 @@
 package binding.com.demo.ui.address;
 
-import android.databinding.ObservableBoolean;
+import androidx.databinding.ObservableBoolean;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;

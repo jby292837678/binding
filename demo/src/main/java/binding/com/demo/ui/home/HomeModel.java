@@ -2,7 +2,7 @@ package binding.com.demo.ui.home;
 
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import android.view.View;
 
 import com.binding.model.adapter.pager.FragmentAdapter;

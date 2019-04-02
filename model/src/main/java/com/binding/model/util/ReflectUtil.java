@@ -1,6 +1,6 @@
 package com.binding.model.util;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.binding.model.model.inter.Inflate;

@@ -1,6 +1,6 @@
 package com.binding.model.cycle;
 
-import android.arch.lifecycle.Lifecycle;
+import androidx.lifecycle.Lifecycle;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;

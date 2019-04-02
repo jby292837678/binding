@@ -1,6 +1,6 @@
 package com.binding.model.data.entity;
 
-import android.databinding.BaseObservable;
+import androidx.databinding.BaseObservable;
 import android.text.TextUtils;
 
 import java.lang.reflect.Field;

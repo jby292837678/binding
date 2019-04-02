@@ -1,6 +1,6 @@
 package com.binding.model.cycle;
 
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 
 /**
  * Created by pc on 2017/8/24.

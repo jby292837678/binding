@@ -1,7 +1,7 @@
 package com.binding.model.model.inter;
 
-import android.arch.lifecycle.LifecycleObserver;
-import android.databinding.ViewDataBinding;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
 
 import com.binding.model.cycle.Container;

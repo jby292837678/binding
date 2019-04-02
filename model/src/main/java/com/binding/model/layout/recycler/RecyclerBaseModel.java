@@ -1,10 +1,10 @@
 package com.binding.model.layout.recycler;
 
-import android.databinding.ObservableField;
-import android.databinding.ViewDataBinding;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.binding.model.adapter.IEventAdapter;

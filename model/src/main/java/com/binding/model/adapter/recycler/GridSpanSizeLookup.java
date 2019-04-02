@@ -1,6 +1,6 @@
 package com.binding.model.adapter.recycler;
 
-import android.support.v7.widget.GridLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.binding.model.adapter.IModelAdapter;
 import com.binding.model.model.inter.GridInflate;
