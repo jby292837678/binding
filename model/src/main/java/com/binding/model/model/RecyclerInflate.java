@@ -250,5 +250,8 @@ public class RecyclerInflate<Binding extends ViewDataBinding, E extends Inflate>
         return live;
     }
 
-
+    @Override
+    public int getViewId() {
+        return 0;
+    }
 }
