@@ -69,4 +69,9 @@ public class ViewInflate<Binding extends ViewDataBinding> extends ViewEvent impl
                 inflate.setIEventAdapter(null);
             }
     }
+
+    @Override
+    public int getViewId() {
+        return 0;
+    }
 }

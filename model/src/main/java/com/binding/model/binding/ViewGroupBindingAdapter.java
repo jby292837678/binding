@@ -39,14 +39,10 @@ public class ViewGroupBindingAdapter {
 
     @BindingAdapter(value = {"addInflate","eventAdapter"})
     public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter){
-        addInflate(viewGroup, inflate,eventAdapter,0);
-    }
-
-    public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter,int i){
         if(inflate == null)return;
         inflate.setIEventAdapter(eventAdapter);
         View view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
-        view.setId(i);
+        view.setId(inflate.getViewId());
         if(inflate instanceof Measure){
             ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,viewGroup);
             viewGroup.addView(view,params);
@@ -56,33 +52,23 @@ public class ViewGroupBindingAdapter {
         view.setTag(R.id.addInflate,inflate);
     }
 
-    public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate,int i){
-        addInflate(viewGroup, inflate,null,i);
-    }
-
     @BindingAdapter("addInflate")
     public static <E extends Inflate>void addInflate(ViewGroup viewGroup, E inflate){
-        addInflate(viewGroup, inflate,null,0);
+        addInflate(viewGroup, inflate,null);
     }
 
     @BindingAdapter(value = {"addInflates","eventAdapter"})
     public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates, IEventAdapter<E> eventAdapter) {
         group.removeAllViews();
         if (inflates == null || inflates.isEmpty()) return;
-        int i = -1;
         for (E inflate : inflates){
-            addInflate(group,inflate,eventAdapter,++i);
+            addInflate(group,inflate,eventAdapter);
         }
     }
 
     @BindingAdapter("addInflates")
     public static <E extends Inflate>void addInflates(ViewGroup group, List<E> inflates) {
-        group.removeAllViews();
-        if (inflates == null || inflates.isEmpty()) return;
-        int i =-1;
-        for (E inflate : inflates){
-            addInflate(group,inflate,++i);
-        }
+        addInflates(group,inflates,null);
     }
 
     @BindingAdapter("parses")
