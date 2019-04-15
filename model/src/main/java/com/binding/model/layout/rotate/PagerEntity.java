@@ -11,7 +11,7 @@ import java.util.List;
  * @param <E> model is the view page Model
  */
 public class PagerEntity<E extends Parse> implements TimeEntity{
-    private int totalTime;
+    private int loopTime;
     private int time = 0;
     private int index = 0;
     private int lastIndex = 0;
@@ -25,9 +25,9 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
         this(3, list,inflate );
     }
 
-    public PagerEntity(int totalTime, List<? extends E> list, Inflate inflate) {
+    public PagerEntity(int loopTime, List<? extends E> list, Inflate inflate) {
         this.inflate = inflate;
-        this.totalTime = totalTime;
+        this.loopTime = loopTime;
         if (list != null) {
             this.list.clear();
             this.list.addAll(list);
@@ -61,7 +61,7 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
 
     @Override
     public void getTurn() {
-        if (totalTime == getTime()) {
+        if (loopTime == getTime()) {
             E model = getType();
             if (model != null)
                 if (loop == -1 || --loop > 0) {
@@ -94,13 +94,16 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
         return null;
     }
 
+    public void setLoopTime(int loopTime) {
+        this.loopTime = loopTime;
+    }
 
-    public int getTotalTime() {
-        return totalTime;
+    public int getLoopTime() {
+        return loopTime;
     }
 
     public int getTime() {
-        return time = time == 0 ? totalTime : --time;
+        return time = time == 0 ? loopTime : --time;
     }
 
     public List<E> getList() {
@@ -110,7 +113,7 @@ public class PagerEntity<E extends Parse> implements TimeEntity{
     public void setList(List<E> list) {
         this.list.clear();
         this.list.addAll(list);
-        if (count == 0) count = list.size();
+        count = list.size();
     }
 
     @Override

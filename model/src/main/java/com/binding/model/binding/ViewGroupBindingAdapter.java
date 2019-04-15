@@ -45,9 +45,8 @@ public class ViewGroupBindingAdapter {
     public static <E extends Inflate<?>>void addInflate(ViewGroup viewGroup, E inflate,IEventAdapter<E> eventAdapter,int i){
         if(inflate == null)return;
         inflate.setIEventAdapter(eventAdapter);
-        View view;
-        view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
-        if(view instanceof RadioButton) view.setId(i);
+        View view = inflate.attachView(viewGroup.getContext(), viewGroup, false, null).getRoot();
+        view.setId(i);
         if(inflate instanceof Measure){
             ViewGroup.LayoutParams params = ((Measure) inflate).measure(view,viewGroup);
             viewGroup.addView(view,params);

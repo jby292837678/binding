@@ -13,6 +13,7 @@ import com.binding.model.layout.rotate.PagerRotateListener;
 import com.binding.model.layout.rotate.TimeUtil;
 import com.binding.model.model.inter.Parse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,8 +29,8 @@ import java.util.List;
  */
 
 public class PagerModel<C extends Container, Binding extends ViewDataBinding, E extends Parse>
-        extends ViewArrayModel<C,  Binding,E,ILayoutAdapter<E>>
-        implements PagerRotateListener<E>, ViewPager.OnPageChangeListener{
+        extends ViewArrayModel<C, Binding, E, ILayoutAdapter<E>>
+        implements PagerRotateListener<E>, ViewPager.OnPageChangeListener {
     private int loop = -1;
     private PagerEntity<E> pagerEntity;
     public ObservableInt currentItem = new ObservableInt(-1);
@@ -49,6 +50,10 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
         this.loop = loop;
     }
 
+    public void setLoopTime(int loopTime){
+        if(pagerEntity !=null)pagerEntity.setLoopTime(loopTime);
+    }
+
     @Override
     public void nextRotate(E e) {
         if (rotate && (loop == -1 || --loop > 0)) setCurrentItem(getData().indexOf(e));
@@ -61,16 +66,27 @@ public class PagerModel<C extends Container, Binding extends ViewDataBinding, E 
     @Override
     public void onNext(List<? extends E> es) {
         super.onNext(es);
-        pagerEntity = new PagerEntity<>(es, this);
+        if (pagerEntity == null) {
+            pagerEntity = new PagerEntity<>(es, this);
+            pagerEntity.addRotateListener(this);
+        }else{
+            pagerEntity.setList(new ArrayList<>(es));
+        }
         if (rotate) TimeUtil.getInstance().add(pagerEntity);
-        pagerEntity.addRotateListener(this);
     }
 
 
-    @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-    @Override public void onPageSelected(int position) {}
-    @Override public void onPageScrollStateChanged(int state) {
-        if (rotate&&pagerEntity!=null) TimeUtil.getInstance().switching(pagerEntity, state);
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+        if (rotate && pagerEntity != null) TimeUtil.getInstance().switching(pagerEntity, state);
     }
 
     public void setRotate(boolean rotate) {
